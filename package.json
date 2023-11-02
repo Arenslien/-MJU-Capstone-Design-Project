@@ -1,0 +1,30 @@
+{
+  "name": "mju_workation_platform_backend",
+  "version": "1.0.0",
+  "description": "2023년 2학기 캡스톤디자인 수업\r =============",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hopeintheworld/mju_workation_platform_backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hopeintheworld/mju_workation_platform_backend/issues"
+  },
+  "homepage": "https://github.com/hopeintheworld/mju_workation_platform_backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mysql": "^2.18.1",
+    "passport": "^0.6.0",
+    "passport-kakao": "^1.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
+  }
+}
