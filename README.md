@@ -56,6 +56,8 @@ git pull origin main
 
 ### 2.2 추가 or 수정된 코드 원격 저장소에 업데이트
 
+🚨 push 할 때 **무조건** **자신이 사용하는 브랜치 명**으로 하기
+
 ```bash
 git add *
 git commit -m "변경사항과 관련된 메시지"
