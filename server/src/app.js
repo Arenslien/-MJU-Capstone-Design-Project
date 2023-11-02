@@ -1,13 +1,14 @@
-console.log("[app.js is started]")
+console.log("[app.js is started]");
 
-const express = require("express")
-const cors = require("cors")
-const morgan = require("morgan")
+const express = require("express");
+const cors = require("cors");
+const morgan = require("morgan");
+const path = require("path");
 require('dotenv').config();
 
-const app = express()
+const app = express();
 
-app.use(morgan("combine"))
+app.use(morgan("combined"));
 app.use(express.json()); // Body-Parser 대용, Express에 body-parser가 내장됨.
 app.use(cors());
 
@@ -18,7 +19,7 @@ const { swaggerUI, swaggerSpec } = require("../config/swagger");
 app.get('/swagger.json', function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.send(swaggerSpec);
-});
+})
 
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
@@ -40,11 +41,11 @@ connection.query(`USE ${process.env.DB_DATABASE}`, (err) => {
 
       console.log("[SUCCESS] DATABASE Created");
       connection.query(`USE ${process.env.DB_DATABASE}`);
-      console.log(`[SUCCESS] USE ${process.env.DB_DATABASE}`)
+      console.log(`[SUCCESS] USE ${process.env.DB_DATABASE}`);
       connection.query('CREATE TABLE IF NOT EXISTS Users (user_id INT(10) NOT NULL, kakao_email VARCHAR(50) NOT NULL, name VARCHAR(50), category_1 INT(10), category_2 INT(10), category_3 INT(10), gender BOOL, PRIMARY KEY (user_id));', (err, result) => {
         if (err) throw err;
 
-        console.log("[SUCCESS] TABLE Users Created.")
+        console.log("[SUCCESS] TABLE Users Created.");
         connection.query("INSERT INTO Users (user_id, kakao_email, name, category_1, category_2, category_3, gender) VALUES (1, 'admin', 'admin', 0, 0, 0, TRUE);", (err, result) => {
           if (err) throw err;
 
@@ -61,26 +62,28 @@ connection.query(`USE ${process.env.DB_DATABASE}`, (err) => {
 const port = process.env.PORT;
 const BASE_URI = process.env.BASE_URI;
 
-// NodeJS Start.
-app.get(BASE_URI, (req, res) => {
-  res.send("Hello World!")
+
+// GET
+app.use('/', express.static(path.join(__dirname, '../../client/dist')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
+})
+
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
-// Page Router
-app.get(BASE_URI + "login", (req, res) => {
-  res.send("Login")
+app.get("/category", (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
-app.get(BASE_URI + "category", (req, res) => {
-  res.send("Category")
+app.get("/mypage", (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
-app.get(BASE_URI + "mypage", (req, res) => {
-  res.send("MyPage")
-});
-
-app.get(BASE_URI + "recommend", (req, res) => {
-  res.send("Recommend")
+app.get("/recommend", (req, res) => {
+  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 });
 
 app.get(BASE_URI + 'users', (req, res) => {
