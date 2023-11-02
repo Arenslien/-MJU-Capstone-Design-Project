@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "mju_capstone_design_project_backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Workation Area Recommendation Web Service Backend",
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/app.js --exec \"npm run lint && node\"",
@@ -10,6 +10,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arenslien/MJU-CapstoneDesign-Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Arenslien/MJU-CapstoneDesign-Project/issues"
+  },
+  "homepage": "https://github.com/Arenslien/MJU-CapstoneDesign-Project#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

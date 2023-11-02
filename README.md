@@ -17,7 +17,7 @@ git clone https://github.com/Arenslien/MJU-CapstoneDesign-Project.git
 
 ### 1.2 `.env` 파일 생성
 
-`index.js` 파일이 있는 경로에 `.env` 파일 생성 후 아래 코드 작성
+`server` 폴더 안에 `.env` 파일 생성 후 아래 코드 작성
 
 ```ini
 DB_HOST='localhost' # 작업은 각자 local에서 진행
@@ -36,10 +36,17 @@ LINK: [MySQL 설치 가이드](https://hongong.hanbit.co.kr/mysql-%EB%8B%A4%EC%9
 
 ### 1.4 npm install & npm start
 
-`.index` 경로에서 아래 명령어 실행
+`client` 경로에서 아래 명령어 실행
 
 ```bash
-npm install
+  npm install # 초기 상태 or 사용하는 pacakge가 변경되었을 때 실행
+  npm run dev
+```
+
+`/server/` 경로에서 아래 명령어 실행
+
+```bash
+npm install # 초기 상태 or 사용하는 pacakge가 변경되었을 때 실행
 npm start
 ```
 
@@ -65,3 +72,11 @@ git push origin <자신이 사용하는 브랜치 명>
 ```
 
 --------------
+
+## 3. 작업 디렉토리
+
+Frontend 담당 개발 시 `/client/src/component/` 에서 개발 진행
+필요시 `/client/src` 경로의 다른 디렉토리 개발 가능
+
+Backend 담당 개발 시 `client/src/router` & `/client/src/service` & `/server/` 에서 개발 진행
+필요시 다른 디렉토리에서 개발 가능
