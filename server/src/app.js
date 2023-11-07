@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const path = require("path");
+
 require('dotenv').config();
 
 const app = express();
@@ -11,7 +12,6 @@ const app = express();
 app.use(morgan("combined"));
 app.use(express.json()); // Body-Parser 대용, Express에 body-parser가 내장됨.
 app.use(cors());
-
 
 // Swagger Setting
 const { swaggerUI, swaggerSpec } = require("../config/swagger");
@@ -62,29 +62,12 @@ connection.query(`USE ${process.env.DB_DATABASE}`, (err) => {
 const port = process.env.PORT;
 const BASE_URI = process.env.BASE_URI;
 
-
 // GET
 app.use('/', express.static(path.join(__dirname, '../../client/dist')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
 })
-
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-});
-
-app.get("/category", (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-});
-
-app.get("/mypage", (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-});
-
-app.get("/recommend", (req, res) => {
-  res.sendFile(path.join(__dirname, '../../client/dist/index.html'));
-});
 
 app.get(BASE_URI + 'users', (req, res) => {
   connection.query('SELECT * FROM Users', (error, rows, fields) => {
