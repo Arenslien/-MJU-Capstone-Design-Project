@@ -1,7 +1,10 @@
+
+
 import { createRouter, createWebHistory } from "vue-router";
 import PresentationView from "../views/Presentation/PresentationView.vue";
 import AboutView from "../views/LandingPages/AboutUs/AboutView.vue";
 import ContactView from "../views/LandingPages/ContactUs/ContactView.vue";
+import Recommend from "../views/LandingPages/ContactUs/Recommend.vue";
 import AuthorView from "../views/LandingPages/Author/AuthorView.vue";
 import SignInBasicView from "../views/LandingPages/SignIn/BasicView.vue";
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
@@ -40,6 +43,11 @@ const router = createRouter({
       path: "/pages/landing-pages/contact-us",
       name: "contactus",
       component: ContactView,
+    },
+    {
+      path: "/pages/landing-pages/recommend",
+      name: "recommend",
+      component:Recommend,
     },
     {
       path: "/pages/landing-pages/author",

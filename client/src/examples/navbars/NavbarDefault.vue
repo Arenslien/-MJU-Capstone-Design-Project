@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
-
+import logoDark from "@/assets/img/logo-ct-dark.png";
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import downArrow from "@/assets/img/down-arrow.svg";
@@ -42,6 +42,7 @@ const props = defineProps({
   }
 });
 
+const isLoggedIn = ref(false); // 로그인 상태를 저장하는 변수
 // set arrow  color
 function getArrowColor() {
   if (props.transparent && textDark.value) {
@@ -108,6 +109,7 @@ watch(
           : 'container-fluid px-0'
       "
     >
+      
       <RouterLink
         class="navbar-brand d-none d-md-block"
         :class="[
@@ -120,7 +122,9 @@ watch(
         title="일멍쉬멍 - 워케이션 장소 추천"
         data-placement="bottom"
       >
-        일멍쉬멍
+      <img src="@/assets/img/logo-ct-dark.png" style="width: 20px; height: 20px;">  
+      일멍쉬멍
+        
       </RouterLink>
       <RouterLink
         class="navbar-brand d-block d-md-none"
@@ -395,14 +399,16 @@ watch(
         <!-- 카카오 버튼 -->
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
-            <a id="custom-login-btn" @click="kakaoLogin()">
-              <img
-               src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg"
-               width="100"
-                alt="카카오 로그인 버튼"
-               />
+            <a id="custom-login-btn">
+              <Button style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogin()">카카오 로그인</Button>
+            </a>
+            <a id="custom-login-btn">
+              
+<Button style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogout()">로그아웃</Button>
             </a>
           </li>
+          
+          
         </ul>
       </div>
     </div>
@@ -411,41 +417,48 @@ watch(
 </template>
 <!-- 카카오 스크립트 -->
 <script>
-  export default {
-    methods: {
-      kakaoLogin() {
+export default {
+  data() {
+    return {
+    };
+  },
+  methods: {
+    kakaoLogin() {
+      const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
+      if (isKakaoAuthorized) {
+        alert("로그인 상태입니다!");
+        return;
+      } else {
         window.Kakao.Auth.login({
           scope: "profile_image, account_email",
           success: this.getKakaoAccount,
         });
-      },
-      getKakaoAccount() {
-        window.Kakao.API.request({
-          url: "/v2/user/me",
-          success: (res) => {
-            const kakao_account = res.kakao_account;
-            const ninkname = kakao_account.profile.ninkname;
-            const email = kakao_account.email;
-            console.log("ninkname", ninkname);
-            console.log("email", email);
-  
-            //로그인처리구현
-  
-            alert("로그인 성공!");
-          },
-          fail: (error) => {
-            console.log(error);
-          },
-        });
-      },
-      kakaoLogout() {
-        window.Kakao.Auth.logout((res) => {
-          console.log(res);
-          alert("로그아웃!");
-        });
-      },
+      }
     },
-  };
-  </script>
+    getKakaoAccount() {
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: (res) => {
+          const kakao_account = res.kakao_account;
+          const nickname = kakao_account.profile.nickname;
+          const email = kakao_account.email;
+          console.log("nickname", nickname);
+          console.log("email", email);
+          alert("로그인 성공!");
+          
+        },
+        fail: (error) => {
+          console.log(error);
+        },
+      });
+    },
+    kakaoLogout() {
+      window.Kakao.Auth.logout((res) => {
+        console.log(res);
 
-  
+        alert("로그아웃!");
+      });
+    },
+  },
+};
+</script>
