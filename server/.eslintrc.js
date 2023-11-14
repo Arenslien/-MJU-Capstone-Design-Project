@@ -1,14 +1,18 @@
 module.exports = {
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
     "env": {
         "browser": true,
+        "node": true,
         "commonjs": true,
-        "es2021": true
+        "es6": true,
     },
-    "extends": "plugin:vue/vue3-essential",
+    "extends": "eslint:recommended",
     "overrides": [
         {
             "env": {
-                "node": true
+                "node": true,
             },
             "files": [
                 ".eslintrc.{js,cjs}"
@@ -18,9 +22,6 @@ module.exports = {
             }
         }
     ],
-    "parserOptions": {
-        "ecmaVersion": "latest"
-    },
     "plugins": [
         "vue"
     ],
