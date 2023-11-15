@@ -1,21 +1,13 @@
 <template>
     <div>
       <!-- 사이드바 -->
-      <div class=" sidebar active text-center" style="background-color: white; box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); transform: translateX(0%);">
+      <div class=" sidebar sidebar1 active text-center" style="background-color: white; box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); transform: translateX(0%);">
         
         <div class="row g-1 text-center">
 
         <div class="col text-center " >
           <img src="@/assets/img/travel.png" style="width: 40px; height: 40px;">
-          <p style="font-size: 13px;">관광지</p>
-        </div>
-        <div class="col text-center " >
-            <img src="@/assets/img/study.png" style="width: 40px; height: 40px;">
-          <p  style="font-size: 13px;">업무공간</p>
-        </div>
-        <div class="col text-center " >
-            <img src="@/assets/img/house.png" style="width: 40px; height: 40px;">
-          <p style="font-size: 13px;">숙소</p>
+          <p @click="toggleSidebar2" style="font-size: 13px;">관광지</p>
         </div>
 
         </div>
@@ -23,13 +15,38 @@
         <div class="menu-separator"></div>
 
         <div >
-        <nav class="">
-          <ul>
-            <li><a href="#">메뉴 1</a></li>
-            <li><a href="#">메뉴 2</a></li>
-            <li><a href="#">메뉴 3</a></li>
-          </ul>
-        </nav>
+        <!-- 사이드바1리스트 -->
+          <div  style="height: 450px; border-bottom: 1px solid #ccc;">
+          </div>
+
+
+
+
+        </div>
+        
+      </div>
+      <!-- 사이드바2 -->
+      <div class=" sidebar sidebar2 active text-center" style="background-color: rgb(245, 245, 245); box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); transform: translateX(0%);" :class="{ active: sidebar2Visible }">
+        
+        <div class="row g-1 text-center">
+
+        <div class="col text-center " >
+            <img src="@/assets/img/study.png" style="width: 40px; height: 40px;">
+          <p  style="font-size: 13px;">업무공간</p>
+        </div>
+
+        </div>
+        
+        <div class="menu-separator"></div>
+
+        <div >
+          <!-- 사이드바2리스트 -->
+        <div style="height: 450px; border-bottom: 1px solid #ccc;">
+
+        </div>
+        </div>
+        <div style="margin-top:5px">
+          <Button class="styled-button">저장</Button>
         </div>
         
       </div>
@@ -47,6 +64,7 @@
       return {
         markers: [],
         infowindow: null,
+        sidebar2Visible: false,
       };
     },
     mounted() {
@@ -62,6 +80,16 @@
       }
     },
     methods: {
+      toggleSidebar2() {
+      // 클릭 시 사이드바2의 상태를 토글
+      this.sidebar2Visible = !this.sidebar2Visible;
+
+      // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
+      // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
+      if (!this.sidebar2Visible) {
+        document.querySelector('.sidebar2').style.left = '250px';
+      } 
+    },
       initMap() {
         const container = document.getElementById("map");
         const options = {
@@ -132,7 +160,7 @@
   <style scoped>
   #map {
     width: 100%;
-    height: 717px;
+    height: 647px;
     z-index: 1;
   }
   
@@ -193,4 +221,27 @@
     border-top: 1px solid #555; /* 원하는 선의 스타일 및 색상으로 설정 */
     margin-top: 10px; /* 원하는 여백 설정 */
   }
+  .sidebar1 {
+  z-index: 3; /* 첫 번째 사이드바의 z-index를 더 높게 설정 */
+}
+
+.sidebar2 {
+  transition: left 0.3s ease; /* 애니메이션 효과를 줄 수 있도록 설정 */
+  z-index: 2;
+}
+.styled-button {
+  width: 100px; /* 가로 크기 */
+  height: 35px; /* 세로 크기 */
+  padding: 5px 0; 
+    background-color: rgba(12, 222, 187, 0.873);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .parent-container {
+  position: relative;
+  /* 다른 스타일 설정 */
+}
   </style>

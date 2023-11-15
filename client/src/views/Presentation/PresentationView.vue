@@ -40,6 +40,10 @@ export default {
       return authStore.isLoggedIn;
     },
   },
+  mounted() {
+    // 페이지 로드 시 토큰 확인 및 isLoggedin 반영
+    this.checkTokenOnLoad();
+  },
   data() {
     return {
       showChooseTAPreference: false,
@@ -57,24 +61,31 @@ export default {
       // this.$router.push({ name: 'recommend' });
     },
     kakaoLogin() {
-      const authStore = useAuthStore();
+  const authStore = useAuthStore();
 
-      const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
+  const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
-      if (isKakaoAuthorized) {
-        // 이미 로그인된 상태라면 처리
-        alert("로그인 이미 된거심")
-      } else {
-        
-        // 로그인을 요청
-        window.Kakao.Auth.login({
-          scope: 'profile_image, account_email',
-          success: this.getKakaoAccount,
-        });
-        alert("로그인 완료")
-        this.openModal();
-      }
-    },
+  if (isKakaoAuthorized) {
+    // 이미 로그인된 상태라면 처리
+    alert("로그인 이미 된거심");
+    authStore.setLoggedIn(true);
+    if (authStore.isFirstLogin) {
+      authStore.setIsFirstLogin(false);
+      // 첫 로그인 시에만 mypage.vue로 이동
+      this.$router.push({ name: 'editmyinformation' });
+    } else {
+      // 이미 로그인된 상태이지만 첫 로그인이 아닌 경우의 로직
+      alert("로그인 완료");
+      this.openModal();
+    }
+  } else {
+    // 로그인을 요청
+    window.Kakao.Auth.login({
+      scope: 'profile_image, account_email',
+      success: this.getKakaoAccount,
+    });
+  }
+},
     getKakaoAccount() {
       const authStore = useAuthStore();
 
@@ -88,6 +99,16 @@ export default {
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
           authStore.setUserInfo({ nickname, email });
+          if (authStore.isFirstLogin) {
+            alert("첫 로그인 입니다! 환영해요");
+            authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
+
+            // 첫 로그인 시에만 mypage.vue로 이동
+            this.$router.push({ name: 'editmyinformation' });
+          }else{
+            alert("로그인 완료")
+            this.openModal();
+          }
 
         },
         fail: (error) => {
@@ -95,6 +116,19 @@ export default {
         },
       });
     },
+    checkTokenOnLoad() {
+      const authStore = useAuthStore();
+      const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
+      
+      if (isKakaoAuthorized) {
+        // 토큰이 있는 경우
+        authStore.setLoggedIn(true);
+      } else {
+        // 토큰이 없는 경우
+        authStore.setLoggedIn(false);
+      }
+    },
+
   },
 };
 </script>
@@ -118,7 +152,7 @@ export default {
     </div>
   </div>
       <div class=" margin col container">
-        <div class="text-center mx-auto position-relative left">
+        <div class="mx-auto position-relative left">
           
             <h1
             style="font-size:100px;"
@@ -127,7 +161,7 @@ export default {
           >
             일멍쉬멍
           </h1>
-          <p class="lead text-white px-5 mt-3 mb-5" :style="{ fontWeight: '500' }">
+          <p class="lead text-white  mt-3 mb-5" :style="{ fontWeight: '500' }">
               일도 하고 휴가도 즐기고!<br>
               워케이션을 위한 관광지와 업무 공간을 맞춤 추천해드려요!<br>
               설명설명<br>

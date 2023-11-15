@@ -1,3 +1,4 @@
+import Edit from "../views/LandingPages/MyPage/Sections/EditMyInformation.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import PresentationView from "../views/Presentation/PresentationView.vue";
 import ChooseTAPreference from "../views/LandingPages/RecommendationPage/ChooseTAPreference.vue";
@@ -32,6 +33,11 @@ const router = createRouter({
       path: "/",
       name: "presentation",
       component: PresentationView,
+    },
+    {
+      path: "/lmypage/sections/edit-my-information",
+      name: "editmyinformation",
+      component: Edit,
     },
     {
       path: "/pages/landing-pages/choose-TA-preference",
