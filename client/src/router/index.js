@@ -1,10 +1,9 @@
-
-
 import { createRouter, createWebHistory } from "vue-router";
 import PresentationView from "../views/Presentation/PresentationView.vue";
-import AboutView from "../views/LandingPages/AboutUs/AboutView.vue";
-import ContactView from "../views/LandingPages/ContactUs/ContactView.vue";
-import Recommend from "../views/LandingPages/ContactUs/Recommend.vue";
+import ChooseTAPreference from "../views/LandingPages/RecommendationPage/ChooseTAPreference.vue";
+import Recommend from "../views/LandingPages/RecommendationPage/Recommend.vue";
+import MyInformation from "../views/LandingPages/MyPage/MyInformation.vue";
+import ModifyTAPreference from "../views/LandingPages/MyPage/ModifyTAPreference.vue";
 import AuthorView from "../views/LandingPages/Author/AuthorView.vue";
 import SignInBasicView from "../views/LandingPages/SignIn/BasicView.vue";
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
@@ -35,19 +34,24 @@ const router = createRouter({
       component: PresentationView,
     },
     {
-      path: "/pages/landing-pages/about-us",
-      name: "about",
-      component: AboutView,
-    },
-    {
-      path: "/pages/landing-pages/contact-us",
-      name: "contactus",
-      component: ContactView,
+      path: "/pages/landing-pages/choose-TA-preference",
+      name: "choose-TA-preference",
+      component: ChooseTAPreference,
     },
     {
       path: "/pages/landing-pages/recommend",
       name: "recommend",
-      component:Recommend,
+      component: Recommend,
+    },
+    {
+      path: "/pages/landing-pages/my-information",
+      name: "my-information",
+      component: MyInformation,
+    },
+    {
+      path: "/pages/landing-pages/modify-TA-preference",
+      name: "modify-TA-preference",
+      component: ModifyTAPreference,
     },
     {
       path: "/pages/landing-pages/author",

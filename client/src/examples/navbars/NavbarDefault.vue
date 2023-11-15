@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
-import logoDark from "@/assets/img/logo-ct-dark.png";
+
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import downArrow from "@/assets/img/down-arrow.svg";
@@ -42,7 +42,6 @@ const props = defineProps({
   }
 });
 
-const isLoggedIn = ref(false); // 로그인 상태를 저장하는 변수
 // set arrow  color
 function getArrowColor() {
   if (props.transparent && textDark.value) {
@@ -109,7 +108,6 @@ watch(
           : 'container-fluid px-0'
       "
     >
-      
       <RouterLink
         class="navbar-brand d-none d-md-block"
         :class="[
@@ -122,9 +120,7 @@ watch(
         title="일멍쉬멍 - 워케이션 장소 추천"
         data-placement="bottom"
       >
-      <img src="@/assets/img/logo-ct-dark.png" style="width: 20px; height: 20px;">  
-      일멍쉬멍
-        
+        일멍쉬멍
       </RouterLink>
       <RouterLink
         class="navbar-brand d-block d-md-none"
@@ -135,15 +131,15 @@ watch(
         "
         to="/"
         rel="tooltip"
-        title="Designed and Coded by Creative Tim"
+        title="일멍쉬멍 - 워케이션 장소 추천"
         data-placement="bottom"
       >
-        Material Design
+        일멍쉬멍
       </RouterLink>
       <a
         href="https://www.creative-tim.com/product/vue-material-kit-pro"
         class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block"
-        >Buy Now</a
+        >카카오 로그인</a
       >
       <button
         class="navbar-toggler shadow-none ms-2"
@@ -304,13 +300,13 @@ watch(
                         내 정보
                       </div>
                       <RouterLink
-                        :to="{ name: 'about' }"
+                        :to="{ name: 'my-information' }"
                         class="dropdown-item border-radius-md"
                       >
                         <span>내 정보 수정</span>
                       </RouterLink>
                       <RouterLink
-                        :to="{ name: 'contactus' }"
+                        :to="{ name: 'modify-TA-preference' }"
                         class="dropdown-item border-radius-md"
                       >
                         <span>관광지 취향 수정</span>
@@ -340,36 +336,25 @@ watch(
                 <div
                   class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0"
                 >
-                  Landing Pages
+                  내 정보
                 </div>
                 <RouterLink
-                  :to="{ name: 'about' }"
+                  :to="{ name: 'my-information' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>About Us</span>
+                  <span>내 정보 수정</span>
                 </RouterLink>
                 <RouterLink
-                  :to="{ name: 'contactus' }"
+                  :to="{ name: 'modify-TA-preference' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>Contact Us</span>
+                  <span>관광지 취향 수정</span>
                 </RouterLink>
                 <RouterLink
                   :to="{ name: 'author' }"
                   class="dropdown-item border-radius-md"
                 >
-                  <span>Author</span>
-                </RouterLink>
-                <div
-                  class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-0 mt-3"
-                >
-                  Account
-                </div>
-                <RouterLink
-                  :to="{ name: 'signin-basic' }"
-                  class="dropdown-item border-radius-md"
-                >
-                  <span>Sasd</span>
+                  <span>내가 선택한 장소</span>
                 </RouterLink>
               </div>
             </div>
@@ -400,11 +385,10 @@ watch(
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
             <a id="custom-login-btn">
-              <Button style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogin()">카카오 로그인</Button>
+              <Button v-if="!isLoggedIn" style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogin()">카카오 로그인</Button>
             </a>
             <a id="custom-login-btn">
-              
-<Button style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogout()">로그아웃</Button>
+              <Button v-if="isLoggedIn" style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogout()">로그아웃</Button>
             </a>
           </li>
           
@@ -417,35 +401,47 @@ watch(
 </template>
 <!-- 카카오 스크립트 -->
 <script>
+import { useAuthStore } from '../../stores/index.js';
+
 export default {
-  data() {
-    return {
-    };
+  computed: {
+    isLoggedIn() {
+      const authStore = useAuthStore();
+      return authStore.isLoggedIn;
+    },
   },
   methods: {
     kakaoLogin() {
+      const authStore = useAuthStore();
+
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
+
       if (isKakaoAuthorized) {
-        alert("로그인 상태입니다!");
-        return;
+        // 이미 로그인된 상태라면 처리
+        alert("로그인 이미 된거심")
       } else {
+        alert("로그인 완료")
+        // 로그인을 요청
         window.Kakao.Auth.login({
-          scope: "profile_image, account_email",
+          scope: 'profile_image, account_email',
           success: this.getKakaoAccount,
         });
       }
     },
     getKakaoAccount() {
+      const authStore = useAuthStore();
+
       window.Kakao.API.request({
-        url: "/v2/user/me",
+        url: '/v2/user/me',
         success: (res) => {
           const kakao_account = res.kakao_account;
           const nickname = kakao_account.profile.nickname;
           const email = kakao_account.email;
-          console.log("nickname", nickname);
-          console.log("email", email);
-          alert("로그인 성공!");
-          
+
+          // Set the login status and user info in the store
+          authStore.setLoggedIn(true);
+          authStore.setUserInfo({ nickname, email });
+
         },
         fail: (error) => {
           console.log(error);
@@ -453,11 +449,9 @@ export default {
       });
     },
     kakaoLogout() {
-      window.Kakao.Auth.logout((res) => {
-        console.log(res);
-
-        alert("로그아웃!");
-      });
+      const authStore = useAuthStore();
+      authStore.logout();
+      alert("로그아웃 된거심")
     },
   },
 };

@@ -3,6 +3,7 @@ import { onMounted, onUnmounted } from "vue";
 
 //example components
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
+import ChooseTAPreference from "../LandingPages/RecommendationPage/ChooseTAPreference.vue";
 import DefaultFooter from "../../examples/footers/FooterDefault.vue";
 import Header from "../../examples/Header.vue";
 import FilledInfoCard from "../../examples/cards/infoCards/FilledInfoCard.vue";
@@ -14,10 +15,8 @@ import MaterialSocialButton from "@/components/MaterialSocialButton.vue";
 import PresentationCounter from "./Sections/PresentationCounter.vue";
 import PresentationPages from "./Sections/PresentationPages.vue";
 
-
 //images
 import vueMkHeader from "@/assets/img/sea.jpg";
-
 
 //hooks
 const body = document.getElementsByTagName("body")[0];
@@ -32,52 +31,71 @@ onUnmounted(() => {
 </script>
 
 <script>
+import { useAuthStore } from '../../stores/index.js';
+
 export default {
+  computed: {
+    isLoggedIn() {
+      const authStore = useAuthStore();
+      return authStore.isLoggedIn;
+    },
+  },
   data() {
     return {
+      showChooseTAPreference: false,
     };
   },
   methods: {
-    goToContactUs() {
-      this.$router.push({ name: 'recommend' });
+    openModal() {
+      this.showChooseTAPreference = true;
+    },
+    closeModal() {
+      this.showChooseTAPreference = false;
+    },
+    goToRecommend() {
+      this.showChooseTAPreference = true;
+      // this.$router.push({ name: 'recommend' });
     },
     kakaoLogin() {
+      const authStore = useAuthStore();
+
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
+
       if (isKakaoAuthorized) {
-        this.goToContactUs();
+        // 이미 로그인된 상태라면 처리
+        alert("로그인 이미 된거심")
       } else {
+        
+        // 로그인을 요청
         window.Kakao.Auth.login({
-          scope: "profile_image, account_email",
+          scope: 'profile_image, account_email',
           success: this.getKakaoAccount,
         });
+        alert("로그인 완료")
+        this.openModal();
       }
     },
     getKakaoAccount() {
+      const authStore = useAuthStore();
+
       window.Kakao.API.request({
-        url: "/v2/user/me",
+        url: '/v2/user/me',
         success: (res) => {
           const kakao_account = res.kakao_account;
           const nickname = kakao_account.profile.nickname;
           const email = kakao_account.email;
-          console.log("nickname", nickname);
-          console.log("email", email);
 
-          // Set the login status to true
-          this.isLoggedIn = true;
-          this.$emit('kakaoLoginClicked');
+          // Set the login status and user info in the store
+          authStore.setLoggedIn(true);
+          authStore.setUserInfo({ nickname, email });
 
-          // 로그인 처리 구현
-          alert("로그인 성공!");
         },
         fail: (error) => {
           console.log(error);
         },
       });
     },
-
-
   },
-  
 };
 </script>
 
@@ -94,6 +112,11 @@ export default {
     :style="`background-image: url(${vueMkHeader})`"
     loading="lazy"
   >
+  <div class="black-bg" v-if="showChooseTAPreference" @click="closeModal">
+    <div id="modal">
+      <ChooseTAPreference />
+    </div>
+  </div>
       <div class=" margin col container">
         <div class="text-center mx-auto position-relative left">
           
@@ -112,13 +135,13 @@ export default {
               설명설명<br>
               
           </p>
-          <div >
-            <Button class="styled-button" @click="kakaoLogin">추천페이지</Button>
+          <div>
+            <Button v-if="isLoggedIn" class="styled-button" @click="openModal">추천페이지</Button>
+            <Button v-if="!isLoggedIn" class="styled-button" @click="kakaoLogin">추천페이지</Button>
           </div>
-
         </div>
         <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 right" >
-         <PresentationCounter />
+          <PresentationCounter />
         </div>
       </div>
   </div>
@@ -141,11 +164,33 @@ export default {
     margin-bottom : 50px;
   }
   .styled-button {
-            padding: 10px 20px;
-            background-color: rgba(12, 222, 187, 0.873);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+    padding: 10px 20px;
+    background-color: rgba(12, 222, 187, 0.873);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  body {
+    margin : 0;
+  }
+  #modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .black-bg {
+    width: 100%; height:100%;
+    background: rgba(0,0,0,0.5);
+    position: fixed; padding: 20px;
+    box-sizing: border-box;
+    z-index: 100;
+  }
+  .white-bg {
+    width: 100%; background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
 </style>
