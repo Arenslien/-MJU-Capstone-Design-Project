@@ -5,3 +5,26 @@ export const useAppStore = defineStore("storeId", {
     bootstrap,
   }),
 });
+export const useAuthStore = defineStore('auth', {
+  state: () => ({
+    isLoggedIn: false,
+    userInfo: null,
+  }),
+  actions: {
+    setLoggedIn(status) {
+      this.isLoggedIn = status;
+    },
+    setUserInfo(user) {
+      this.userInfo = user;
+    },
+    resetAuth() {
+      this.isLoggedIn = false;
+      this.userInfo = null;
+    },
+    logout() {
+      window.Kakao.Auth.logout(() => {
+        this.resetAuth();
+      });
+    },
+  },
+});
