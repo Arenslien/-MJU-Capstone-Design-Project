@@ -404,10 +404,18 @@ watch(
 import { useAuthStore } from '../../stores/index.js';
 
 export default {
+  mounted() {
+    // 페이지 로드 시 토큰 확인 및 isLoggedin 반영
+    this.checkTokenOnLoad();
+  },
   computed: {
     isLoggedIn() {
       const authStore = useAuthStore();
       return authStore.isLoggedIn;
+    },
+    isFirstLogin() {
+      const authStore = useAuthStore();
+      return authStore.isFirstLogin;
     },
   },
   methods: {
@@ -418,9 +426,8 @@ export default {
 
       if (isKakaoAuthorized) {
         // 이미 로그인된 상태라면 처리
-        alert("로그인 이미 된거심")
+        alert("로그인 이미 된거심");
       } else {
-        alert("로그인 완료")
         // 로그인을 요청
         window.Kakao.Auth.login({
           scope: 'profile_image, account_email',
@@ -442,6 +449,16 @@ export default {
           authStore.setLoggedIn(true);
           authStore.setUserInfo({ nickname, email });
 
+          if (authStore.isFirstLogin) {
+            alert("첫 로그인 입니다! 환영해요");
+            authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
+
+            // 첫 로그인 시에만 mypage.vue로 이동
+            this.$router.push({ name: 'editmyinformation' });
+          }else{
+            alert("로그인 완료")
+            this.openModal();
+          }
         },
         fail: (error) => {
           console.log(error);
@@ -452,6 +469,18 @@ export default {
       const authStore = useAuthStore();
       authStore.logout();
       alert("로그아웃 된거심")
+    },
+    checkTokenOnLoad() {
+      const authStore = useAuthStore();
+      const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
+      
+      if (isKakaoAuthorized) {
+        // 토큰이 있는 경우
+        authStore.setLoggedIn(true);
+      } else {
+        // 토큰이 없는 경우
+        authStore.setLoggedIn(false);
+      }
     },
   },
 };
