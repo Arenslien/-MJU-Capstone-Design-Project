@@ -5,7 +5,7 @@ import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
 
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
-import downArrow from "@/assets/img/down-arrow.svg";
+// import downArrow from "@/assets/img/down-arrow.svg";
 import DownArrWhite from "@/assets/img/down-arrow-white.svg";
 
 const props = defineProps({
@@ -15,31 +15,32 @@ const props = defineProps({
     color: String,
     label: String,
     default: () => ({
-      route: "/pages/landing-pages/basic",  // 풀 라우터 주소를 써야하나? ex)www.어쩌구
+      route: "/pages/landing-pages/basic",
+      // 풀 라우터 주소를 써야하나? ex)www.어쩌구
       color: "bg-gradient-success",
-      label: "Sign In"
-    })
+      label: "Sign In",
+    }),
   },
   transparent: {
     type: Boolean,
-    default: false
+    default: false,
   },
   light: {
     type: Boolean,
-    default: false
+    default: false,
   },
   dark: {
     type: Boolean,
-    default: false
+    default: false,
   },
   sticky: {
     type: Boolean,
-    default: false
+    default: false,
   },
   darkText: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 // set arrow  color
@@ -98,7 +99,7 @@ watch(
       'my-3 blur border-radius-lg z-index-3 py-2 shadow py-2 start-0 end-0 mx-4 position-absolute mt-4':
         props.sticky,
       'navbar-light bg-white py-3': props.light,
-      ' navbar-dark bg-gradient-dark z-index-3 py-3': props.dark
+      ' navbar-dark bg-gradient-dark z-index-3 py-3': props.dark,
     }"
   >
     <div
@@ -113,7 +114,7 @@ watch(
         :class="[
           (props.transparent && textDark.value) || !props.transparent
             ? 'text-dark font-weight-bolder ms-sm-3'
-            : 'text-white font-weight-bolder ms-sm-3'
+            : 'text-white font-weight-bolder ms-sm-3',
         ]"
         :to="{ name: 'presentation' }"
         rel="tooltip"
@@ -385,14 +386,40 @@ watch(
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
             <a id="custom-login-btn">
-              <Button v-if="!isLoggedIn" style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogin()">카카오 로그인</Button>
+              <Button
+                v-if="!isLoggedIn"
+                style="
+                  background-color: rgba(254, 229, 0);
+                  border: none;
+                  border-radius: 3px;
+                  font-weight: bold;
+                  margin-left: 10px;
+                  width: 80px;
+                  height: 30px;
+                  font-size: 10px;
+                "
+                @click="kakaoLogin()"
+                >카카오 로그인</Button
+              >
             </a>
             <a id="custom-login-btn">
-              <Button v-if="isLoggedIn" style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogout()">로그아웃</Button>
+              <Button
+                v-if="isLoggedIn"
+                style="
+                  background-color: rgba(254, 229, 0);
+                  border: none;
+                  border-radius: 3px;
+                  font-weight: bold;
+                  margin-left: 10px;
+                  width: 80px;
+                  height: 30px;
+                  font-size: 10px;
+                "
+                @click="kakaoLogout()"
+                >로그아웃</Button
+              >
             </a>
           </li>
-          
-          
         </ul>
       </div>
     </div>
@@ -401,7 +428,7 @@ watch(
 </template>
 <!-- 카카오 스크립트 -->
 <script>
-import { useAuthStore } from '../../stores/index.js';
+import { useAuthStore } from "../../stores/index.js";
 
 export default {
   mounted() {
@@ -420,7 +447,7 @@ export default {
   },
   methods: {
     kakaoLogin() {
-      const authStore = useAuthStore();
+      // const authStore = useAuthStore();
 
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
@@ -430,7 +457,7 @@ export default {
       } else {
         // 로그인을 요청
         window.Kakao.Auth.login({
-          scope: 'profile_image, account_email',
+          scope: "profile_image, account_email",
           success: this.getKakaoAccount,
         });
       }
@@ -439,7 +466,7 @@ export default {
       const authStore = useAuthStore();
 
       window.Kakao.API.request({
-        url: '/v2/user/me',
+        url: "/v2/user/me",
         success: (res) => {
           const kakao_account = res.kakao_account;
           const nickname = kakao_account.profile.nickname;
@@ -454,9 +481,9 @@ export default {
             authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
 
             // 첫 로그인 시에만 mypage.vue로 이동
-            this.$router.push({ name: 'editmyinformation' });
-          }else{
-            alert("로그인 완료")
+            this.$router.push({ name: "editmyinformation" });
+          } else {
+            alert("로그인 완료");
             this.openModal();
           }
         },
@@ -468,12 +495,12 @@ export default {
     kakaoLogout() {
       const authStore = useAuthStore();
       authStore.logout();
-      alert("로그아웃 된거심")
+      alert("로그아웃 된거심");
     },
     checkTokenOnLoad() {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
-      
+
       if (isKakaoAuthorized) {
         // 토큰이 있는 경우
         authStore.setLoggedIn(true);
