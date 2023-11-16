@@ -9,26 +9,31 @@ const swaggerDefinition = {
         "title" : "MJU Workation Platform",
         "description" : "2023 명지대학교 캡스톤디자인 4조 백엔드",
     },
-    "host" : process.env.DOMAIN,
-    "basePath": "/api/",
-    "paths": { },
-    "definitions": { },
-    "responses": { },
-    "parameters": { },
-    "securityDefinitions": {
-      "bearerAuth": {
-        "name": "Authorization",
-        "in": "header",
-        "type": "apiKey",
-        "schema": "bearer",
-        "bearerFormat": "JWT",
+    servers: [
+      {
+        url: "http://localhost:8080",
       }
-    }
+    ]
+    // "host" : process.env.DOMAIN,
+    // "basePath": "/api/",
+    // "paths": { },
+    // "definitions": { },
+    // "responses": { },
+    // "parameters": { },
+    // "securityDefinitions": {
+    //   "bearerAuth": {
+    //     "name": "Authorization",
+    //     "in": "header",
+    //     "type": "apiKey",
+    //     "schema": "bearer",
+    //     "bearerFormat": "JWT",
+    //   }
+    // }
 };
 
 const options = {
     swaggerDefinition: swaggerDefinition,
-    apis: ["./routes/*.js"],
+    apis: ["./routes/*.js", "./models/*.js"],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
