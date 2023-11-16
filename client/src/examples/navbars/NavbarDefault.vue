@@ -425,16 +425,27 @@ export default {
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
       if (isKakaoAuthorized) {
-        // 이미 로그인된 상태라면 처리
-        alert("로그인 이미 된거심");
-      } else {
-        // 로그인을 요청
-        window.Kakao.Auth.login({
-          scope: 'profile_image, account_email',
-          success: this.getKakaoAccount,
-        });
-      }
-    },
+  // 이미 로그인된 상태라면 처리
+  alert("로그인 이미 된거심");
+  authStore.setLoggedIn(true);
+
+  if (authStore.isFirstLogin) {
+    authStore.updateFirstLoginStatus(false);
+    // 첫 로그인 시에만 mypage.vue로 이동
+    this.$router.push({ name: 'editmyinformation' });
+  } else {
+    // 이미 로그인된 상태이지만 첫 로그인이 아닌 경우의 로직
+    alert("로그인 완료");
+    this.openModal();
+  }
+} else {
+  // 로그인을 요청
+  window.Kakao.Auth.login({
+    scope: 'profile_image, gender, age_range',
+    success: this.getKakaoAccount,
+  });
+}
+},
     getKakaoAccount() {
       const authStore = useAuthStore();
 
@@ -443,11 +454,12 @@ export default {
         success: (res) => {
           const kakao_account = res.kakao_account;
           const nickname = kakao_account.profile.nickname;
-          const email = kakao_account.email;
+          const gender = kakao_account.gender; // Corrected
+          const age_range = kakao_account.age_range; // Corrected
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({ nickname, email });
+          authStore.setUserInfo({ nickname , gender, age_range });
 
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
