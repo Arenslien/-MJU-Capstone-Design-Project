@@ -64,8 +64,9 @@ export default {
         // 이미 로그인된 상태라면 처리
         alert("로그인 이미 된거심");
         authStore.setLoggedIn(true);
+
         if (authStore.isFirstLogin) {
-          authStore.setIsFirstLogin(false);
+          authStore.updateFirstLoginStatus(false);
           // 첫 로그인 시에만 mypage.vue로 이동
           this.$router.push({ name: "editmyinformation" });
         } else {
@@ -76,7 +77,7 @@ export default {
       } else {
         // 로그인을 요청
         window.Kakao.Auth.login({
-          scope: "profile_image, account_email",
+          scope: "profile_image, gender, age_range",
           success: this.getKakaoAccount,
         });
       }
@@ -89,11 +90,12 @@ export default {
         success: (res) => {
           const kakao_account = res.kakao_account;
           const nickname = kakao_account.profile.nickname;
-          const email = kakao_account.email;
+          const gender = kakao_account.gender; // Corrected
+          const age_range = kakao_account.age_range; // Corrected
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({ nickname, email });
+          authStore.setUserInfo({ nickname, gender, age_range });
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
             authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트

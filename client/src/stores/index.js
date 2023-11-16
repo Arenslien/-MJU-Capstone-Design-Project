@@ -31,5 +31,8 @@ export const useAuthStore = defineStore('auth', {
         this.resetAuth();
       });
     },
+    updateFirstLoginStatus(status) {
+      this.isFirstLogin = status;
+    },
   },
 });
