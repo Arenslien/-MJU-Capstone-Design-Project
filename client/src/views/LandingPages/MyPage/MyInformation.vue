@@ -19,6 +19,30 @@ onMounted(() => {
   setMaterialInput();
 });
 </script>
+<script>
+export default {
+  data() {
+    return {
+      editMode: false,
+      userInfo: {
+        name: "양슬빈",
+        email: "imsm@mju.ac.kr",
+        age: 24,
+        gender: "여자"
+      },
+    };
+  },
+  methods: {
+    changeEditMode() {
+      this.editMode = true;
+    },
+    saveChanges() {
+      console.log(this.userInfo, "로 저장");
+    },
+  },
+};
+</script>
+
 <template>
   <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
@@ -73,28 +97,56 @@ onMounted(() => {
                 </p>
                 <form id="contact-form" method="post" autocomplete="off">
                   <div class="card-body p-0 my-3">
-                    <MaterialInput
-                      class="input-group-outline"
-                      id="name"
-                      :label="{ text: '이름', class: 'form-label' }"
+                    <!--이름 조회 모드-->
+                    <template v-if="!editMode">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">이름:</span> {{ userInfo.name }}
+                      </div>
+                    </template>
+                    <!--이름 수정 모드-->
+                    <MaterialInput v-else
+                      class="input-group-static mb-4"
+                      label="이름"
                       type="text"
+                      v-model="userInfo.name"
                     />
                     <hr>
-                    <MaterialInput
-                      class="input-group-outline"
-                      id="email"
-                      :label="{ text: '이메일', class: 'form-label' }"
+                    <!--이메일 조회 모드-->
+                    <template v-if="!editMode">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">이메일:</span> {{ userInfo.email }}
+                      </div>
+                    </template>
+                    <!--이메일 수정 모드-->
+                    <MaterialInput v-else
+                      class="input-group-static mb-4"
+                      label="이메일"
                       type="email"
+                      v-model="userInfo.email"
                     />
                     <hr>
-                    <MaterialInput
-                      class="input-group-outline"
-                      id="age"
-                      :label="{ text: '나이', class: 'form-label' }"
+                    <!--나이 조회 모드-->
+                    <template v-if="!editMode">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">나이:</span> {{ userInfo.age }}
+                      </div>
+                    </template>
+                    <!--나이 수정 모드-->
+                    <MaterialInput v-else
+                      class="input-group-static mb-4"
+                      label="나이"
                       type="number"
+                      v-model="userInfo.age"
                     />
                     <hr>
-                    <div class="pb-3">
+                    <!--성별 조회 모드-->
+                    <template v-if="!editMode">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">성별:</span> {{ userInfo.gender }}
+                      </div>
+                    </template>
+                    <!--성별 수정 모드-->
+                    <div class="pb-3" v-else>
                       성별
                       <div>
                         <label id="radio">
@@ -108,12 +160,22 @@ onMounted(() => {
                       </div>
                     </div>
                     <div class="col-md-12 text-center">
-                      <MaterialButton
+                      <!--수정 모드 버튼-->
+                      <MaterialButton v-if="!editMode"
                         variant="gradient"
                         color="success"
                         class="mt-3 mb-0"
-                        >수정</MaterialButton
-                      >
+                        @click.prevent="changeEditMode">
+                        수정
+                      </MaterialButton>
+                      <!--저장 모드 버튼-->
+                      <MaterialButton v-else
+                        variant="gradient"
+                        color="success"
+                        class="mt-3 mb-0"
+                        @click.prevent="saveChanges">
+                        저장
+                      </MaterialButton>
                     </div>
                   </div>
                 </form>
