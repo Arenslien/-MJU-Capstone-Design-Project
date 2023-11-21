@@ -44,8 +44,8 @@ app.get('/', (req, res) => {
 })
 
 // routes
-// require("../routes/auth.routes.js")(BASE_URI, app)
-require("../routes/user.routes.js")(BASE_URI, app)
+require("../routes/auth.routes.js")(BASE_URI, app)
+// require("../routes/user.routes.js")(BASE_URI, app)
 
 app.get(BASE_URI + 'auth/login', (req, res) => {
     console.log("[GET] auth/login : START");

@@ -1,28 +1,90 @@
-const controller = require("../controllers/user.controller")
+// const controller = require("../controllers/user.controller")
 
-/** 
+/**
  * @swagger
- * /api/users:
+ * /user:
  *  get:
  *    tags:
  *      - Users
- *    name: GetUsers
- *    summary: Get All Users
- *    description: 
+ *    name: GetUserBy
+ *    summary: get user By kakao email
+ *    description: to retrieves a single user by kakao email.
  *    produces:
  *      - application/json
  *    consumes:
  *      - application/json
  *    parameters:
+ *      - in: query
+ *        name: kakao_email
+ *        schema:
+ *          type: string
+ *        required: true
  *    responses:
  *      '200':
- *        description: Success to get all users
+ *        description: Success to query
+ *      '400':
+ *        description: Bad Request.
  *      '500':
- *        description: Failed to get all users by some reason
+ *        description: Failed to query by a reason.
+ */
+
+/** 
+ * @swagger
+ * /user:
+ *  put:
+ *    tags:
+ *      - Users
+ *    name: UpdateUser
+ *    summary: update a user
+ *    description: to update a user information(취향 포함) by id.
+ *    produces:
+ *      - application/json
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: body
+ *        schema:
+ *          $ref: '#/definitions/user'
+ *    responses:
+ *      '200':
+ *        description: Success to update
+ *      '400':
+ *        description: Bad request
+ *      '500':
+ *        description: Failed to update by a reason.
  * 
 */
 
+ /**
+ * @swagger
+ * /user/{id}:
+ *  delete:
+ *    tags:
+ *      - Users
+ *    name: DeleteUser
+ *    summary: Delete user
+ *    description: to delete a user by id.
+ *    produces:
+ *      - application/json
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: integer
+ *        required: true
+ *    responses:
+ *      '200':
+ *        description: Success to delete
+ *      '400':
+ *        description: Bad request
+ *      '500':
+ *        description: Failed to delete by a reason.
+ */
 
-module.exports = function(BASE_URI, app) {
-    app.get(BASE_URI + "users", controller.getUsers)
-}
+
+// module.exports = function(BASE_URI, app) {
+//     app.put(BASE_URI + "/user", controller.updateUser)
+// }

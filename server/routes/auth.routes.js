@@ -2,7 +2,7 @@ const controller = require("../controllers/auth.controller")
 
 /** 
  * @swagger
- * /api/signup:
+ * /auth/signup:
  *  post:
  *    tags:
  *      - Auth
@@ -39,5 +39,5 @@ const controller = require("../controllers/auth.controller")
 
 
 module.exports = function(BASE_URI, app) {
-    app.post(BASE_URI + "signup", controller.signup)
+    app.post(BASE_URI + "auth/signup", controller.signup)
 }
