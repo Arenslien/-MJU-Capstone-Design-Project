@@ -3,7 +3,7 @@ import PresentationView from "../views/Presentation/PresentationView.vue";
 import ChooseTAPreference from "../views/LandingPages/RecommendationPage/ChooseTAPreference.vue";
 import Recommend from "../views/LandingPages/RecommendationPage/Recommend.vue";
 import MyInformation from "../views/LandingPages/MyPage/MyInformation.vue";
-import AuthorView from "../views/LandingPages/Author/AuthorView.vue";
+import SelectedPlacesView from "../views/LandingPages/MyPage/SelectedPlacesView.vue";
 import SignInBasicView from "../views/LandingPages/SignIn/BasicView.vue";
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
 import PageFeatures from "../layouts/sections/page-sections/features/FeaturesView.vue";
@@ -48,9 +48,9 @@ const router = createRouter({
       component: MyInformation,
     },
     {
-      path: "/pages/landing-pages/author",
-      name: "author",
-      component: AuthorView,
+      path: "/pages/landing-pages/selected-places",
+      name: "selected-places",
+      component: SelectedPlacesView,
     },
     {
       path: "/pages/landing-pages/basic",

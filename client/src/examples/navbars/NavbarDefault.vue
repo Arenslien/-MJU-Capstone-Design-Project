@@ -278,7 +278,7 @@ watch(
                         <span>내 정보</span>
                       </RouterLink>
                       <RouterLink
-                        :to="{ name: 'author' }"
+                        :to="{ name: 'selected-places' }"
                         class="dropdown-item border-radius-md"
                       >
                         <span>내가 선택한 장소</span>
@@ -306,7 +306,7 @@ watch(
                   <span>내 정보</span>
                 </RouterLink>
                 <RouterLink
-                  :to="{ name: 'author' }"
+                  :to="{ name: 'selected-places' }"
                   class="dropdown-item border-radius-md"
                 >
                   <span>내가 선택한 장소</span>
