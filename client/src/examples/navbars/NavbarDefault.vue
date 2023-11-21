@@ -393,11 +393,6 @@ watch(
               <Button v-if="isLoggedIn" style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogout()">로그아웃</Button>
             </a>
           </li>
-          <div class="black-bg" v-if="showInfo" @click="closeModal">
-    <div id="modal">
-      <Info />
-    </div>
-  </div>
           
         </ul>
       </div>
@@ -480,7 +475,7 @@ export default {
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({ nickname , email, gender, age_range });
+          authStore.setUserInfo({nickname ,email, gender, age_range });
 
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
@@ -492,6 +487,7 @@ export default {
             alert("로그인 완료")
             this.openModal();
           }
+          this.$forceUpdate();
         },
         fail: (error) => {
           console.log(error);

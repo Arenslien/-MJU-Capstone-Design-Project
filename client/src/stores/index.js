@@ -25,7 +25,6 @@ export const useAuthStore = defineStore('auth', {
     resetAuth() {
       this.isLoggedIn = false;
       this.isFirstLogin = true;
-      this.userInfo = null;
     },
     logout() {
       window.Kakao.Auth.logout(() => {
