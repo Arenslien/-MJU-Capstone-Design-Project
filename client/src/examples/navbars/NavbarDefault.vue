@@ -2,7 +2,6 @@
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
-import Info from "../Info.vue";
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import downArrow from "@/assets/img/down-arrow.svg";
@@ -411,7 +410,6 @@ export default {
     return {
       showModal: false,
       userInfo: null,
-      showInfo: false,
     };
   },
   mounted() {
@@ -429,12 +427,6 @@ export default {
     },
   },
   methods: {
-    openModal() {
-      this.showInfo = true;
-    },
-    closeModal() {
-      this.showInfo = false;
-    },
     kakaoLogin() {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
@@ -456,7 +448,7 @@ export default {
 } else {
   // 로그인을 요청
   window.Kakao.Auth.login({
-    scope: 'profile_nickname,account_email, gender, age_range',
+    scope: 'profile_nickname, account_email, gender, age_range',
     success: this.getKakaoAccount,
   });
 }
@@ -468,10 +460,11 @@ export default {
         url: '/v2/user/me',
         success: (res) => {
           const kakao_account = res.kakao_account;
-          const nickname = kakao_account.profile_nickname;
+          const properties = res.properties; // 추가: properties 객체 얻기
+          const nickname = properties.nickname;
           const gender = kakao_account.gender; // Corrected
           const age_range = kakao_account.age_range; // Corrected
-          const email = kakao_account.account_email; // Added
+          const email = kakao_account.email; // Added
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);

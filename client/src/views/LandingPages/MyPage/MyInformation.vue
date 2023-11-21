@@ -39,13 +39,6 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <DefaultNavbar
-    :action="{
-      route: 'javascript:;',
-      label: 'Buy Now',
-      color: 'btn-white',
-    }"
-  />
   <div class="card card-body shadow-xl">
     <EditMyInformation/>
   </div>

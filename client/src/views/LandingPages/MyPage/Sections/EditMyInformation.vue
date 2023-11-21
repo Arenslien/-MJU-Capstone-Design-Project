@@ -1,41 +1,3 @@
-<script setup>
-import { onMounted } from "vue";
-//Vue Material Kit 2 components
-import MaterialInput from "@/components/MaterialInput.vue";
-import MaterialButton from "@/components/MaterialButton.vue";
-
-// material-input
-import setMaterialInput from "@/assets/js/material-input";
-onMounted(() => {
-  setMaterialInput();
-});
-</script>
-<script>
-  import { useAuthStore } from "../../../../stores/index.js"; // 실제 경로로 대체
-
-  export default {
-    computed: {
-      // 상태 관리 라이브러리에서 userInfo를 가져옵니다.
-      user() {
-        const authStore = useAuthStore();
-        return authStore.userInfo;
-      },
-    },
-    mounted() {
-      // 페이지 로드 시에도 userInfo를 가져와서 화면에 표시합니다.
-      this.user = this.getStoredUserInfo();
-    },
-    methods: {
-      // 로컬 상태에서 userInfo를 가져오는 메소드
-      getStoredUserInfo() {
-        const authStore = useAuthStore();
-        return authStore.userInfo;
-      },
-    },
-  };
-</script>
-
-
 <template>
   <section class="my-5 pt-5">
     <div class="container">
@@ -46,13 +8,115 @@ onMounted(() => {
           <hr>
           <div class="row">
             <div class="col-8">
-              <p><strong>닉네임:</strong> {{user}}</p>
+              <div style="display: flex; align-items: center;">
+                <p><strong>닉네임 :</strong></p>
+                <div v-if="user.nickname">
+                  {{ user.nickname }}
+                </div>
+                <div v-else>
+                  <input v-model="nicknameInput" type="text" />
+                </div>
+              </div>
             </div>
           </div>
           <hr>
-          <!-- 이메일, 성별, 연령대 부분은 이전과 동일하게 수정하면 됩니다. -->
+          <div class="row">
+            <div class="col-8">
+              <div style="display: flex; align-items: center;">
+                <p><strong>e-mail :</strong></p>
+                <div v-if="user.email">
+                  {{ user.email }}
+                </div>
+                <div v-else>
+                  <input v-model="emailInput" type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-8">
+              <div style="display: flex; align-items: center;">
+                <p><strong>성별 :</strong></p>
+                <div v-if="user.gender">
+                  {{ user.gender }}
+                </div>
+                <div v-else>
+                  <input v-model="genderInput" type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-8">
+              <div style="display: flex; align-items: center;">
+                <p><strong>연령대 :</strong></p>
+                <div v-if="user.age_range">
+                  {{ user.age_range }}
+                </div>
+                <div v-else>
+                  <input v-model="ageRangeInput" type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="col-4">
+              <button @click="saveChanges">저장</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script>
+import { useAuthStore } from "../../../../stores/index.js"; // 실제 경로로 대체
+
+export default {
+  computed: {
+    user() {
+      const authStore = useAuthStore();
+      return authStore.userInfo;
+    },
+  },
+  data() {
+    return {
+      nicknameInput: "",
+      emailInput: "",
+      genderInput: "",
+      ageRangeInput: "",
+    };
+  },
+  methods: {
+    saveChanges() {
+      const authStore = useAuthStore();
+
+      // Check each input field and update the user info if input is not empty
+      if (this.nicknameInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, nickname: this.nicknameInput });
+      }
+      if (this.emailInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, email: this.emailInput });
+      }
+      if (this.genderInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, gender: this.genderInput });
+      }
+      if (this.ageRangeInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, age_range: this.ageRangeInput });
+      }
+
+      // Reset input fields
+      this.nicknameInput = "";
+      this.emailInput = "";
+      this.genderInput = "";
+      this.ageRangeInput = "";
+
+      this.$router.push({ name: 'presentation' });
+    },
+  },
+};
+</script>

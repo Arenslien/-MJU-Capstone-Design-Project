@@ -82,7 +82,7 @@ export default {
 } else {
   // 로그인을 요청
   window.Kakao.Auth.login({
-    scope: 'profile_nickname,account_email, gender, age_range',
+    scope: 'profile_nickname, account_email, gender, age_range',
     success: this.getKakaoAccount,
   });
 }
@@ -94,14 +94,16 @@ export default {
         url: '/v2/user/me',
         success: (res) => {
           const kakao_account = res.kakao_account;
-          const nickname = kakao_account.profile_nickname;
+          const properties = res.properties; // 추가: properties 객체 얻기
+          const nickname = properties.nickname;
           const gender = kakao_account.gender; // Corrected
           const age_range = kakao_account.age_range; // Corrected
-          const email = kakao_account.account_email;
+          const email = kakao_account.email; // Added
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({ nickname ,email, gender, age_range });
+          authStore.setUserInfo({nickname ,email, gender, age_range });
+
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
             authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
@@ -112,7 +114,7 @@ export default {
             alert("로그인 완료")
             this.openModal();
           }
-
+          this.$forceUpdate();
         },
         fail: (error) => {
           console.log(error);
