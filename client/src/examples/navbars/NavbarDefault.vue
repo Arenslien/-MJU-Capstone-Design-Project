@@ -393,7 +393,11 @@ watch(
               <Button v-if="isLoggedIn" style="background-color: rgba(254, 229, 0); border: none; border-radius: 3px; font-weight: bold; margin-left: 10px; width:80px; height:30px; font-size: 10px;" @click="kakaoLogout()">로그아웃</Button>
             </a>
           </li>
-          
+          <div class="black-bg" v-if="showInfo" @click="closeModal">
+    <div id="modal">
+      <Info />
+    </div>
+  </div>
           
         </ul>
       </div>
@@ -412,6 +416,7 @@ export default {
     return {
       showModal: false,
       userInfo: null,
+      showInfo: false,
     };
   },
   mounted() {
@@ -429,6 +434,12 @@ export default {
     },
   },
   methods: {
+    openModal() {
+      this.showInfo = true;
+    },
+    closeModal() {
+      this.showInfo = false;
+    },
     kakaoLogin() {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
