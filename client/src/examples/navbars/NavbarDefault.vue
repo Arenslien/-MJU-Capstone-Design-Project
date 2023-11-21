@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
 import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
-
+import Info from "../Info.vue";
 // images
 import ArrDark from "@/assets/img/down-arrow-dark.svg";
 import downArrow from "@/assets/img/down-arrow.svg";
@@ -90,6 +90,7 @@ watch(
 );
 </script>
 <template>
+  
   <nav
     class="navbar navbar-expand-lg top-0"
     :class="{
@@ -381,6 +382,7 @@ watch(
             </a>
           </li> -->
         </ul>
+        
         <!-- 카카오 버튼 -->
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
@@ -397,13 +399,21 @@ watch(
       </div>
     </div>
   </nav>
+  
   <!-- End Navbar -->
 </template>
 <!-- 카카오 스크립트 -->
 <script>
 import { useAuthStore } from '../../stores/index.js';
-
 export default {
+   components: {
+  },
+  data() {
+    return {
+      showModal: false,
+      userInfo: null,
+    };
+  },
   mounted() {
     // 페이지 로드 시 토큰 확인 및 isLoggedin 반영
     this.checkTokenOnLoad();
@@ -421,7 +431,6 @@ export default {
   methods: {
     kakaoLogin() {
       const authStore = useAuthStore();
-
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
       if (isKakaoAuthorized) {
@@ -441,7 +450,7 @@ export default {
 } else {
   // 로그인을 요청
   window.Kakao.Auth.login({
-    scope: 'profile_image, gender, age_range',
+    scope: 'profile_nickname,account_email, gender, age_range',
     success: this.getKakaoAccount,
   });
 }
@@ -453,13 +462,14 @@ export default {
         url: '/v2/user/me',
         success: (res) => {
           const kakao_account = res.kakao_account;
-          const nickname = kakao_account.profile.nickname;
+          const nickname = kakao_account.profile_nickname;
           const gender = kakao_account.gender; // Corrected
           const age_range = kakao_account.age_range; // Corrected
+          const email = kakao_account.account_email; // Added
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({ nickname , gender, age_range });
+          authStore.setUserInfo({ nickname , email, gender, age_range });
 
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");

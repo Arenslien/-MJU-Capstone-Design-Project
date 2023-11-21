@@ -12,11 +12,14 @@
 
         </div>
         
-        <div class="menu-separator"></div>
+        <div class="menu-separator">
+          
+        </div>
 
         <div >
         <!-- 사이드바1리스트 -->
           <div  style="height: 450px; border-bottom: 1px solid #ccc;">
+            <TravelList @touristSpotClick="handleTouristSpotClick" />
           </div>
 
 
@@ -42,7 +45,7 @@
         <div >
           <!-- 사이드바2리스트 -->
         <div style="height: 450px; border-bottom: 1px solid #ccc;">
-
+          <WorkList @touristSpotClick="handleTouristSpotClick" />
         </div>
         </div>
         <div style="margin-top:5px">
@@ -57,9 +60,17 @@
   </template>
   <script>
   import { toRaw } from "vue";
-  
+  import TravelList from "./TravelList.vue";
+  import WorkList from "./WorkList.vue";
   export default {
+    components: {
+    TravelList,
+    WorkList,
+  },
+
+
     name: "KakaoMap",
+    
     data() {
       return {
         markers: [],
@@ -153,6 +164,11 @@
   
         toRaw(this.map).setCenter(iwPosition);
       },
+      // TravelList에서 발생한 이벤트 핸들링
+    handleTouristSpotClick(touristSpot) {
+      // 여기서 관광지 정보를 활용하여 지도에 마커를 표시하거나 다른 동작을 수행할 수 있습니다.
+      console.log("Clicked on tourist spot:", touristSpot);
+    },
     },
   };
   </script>
