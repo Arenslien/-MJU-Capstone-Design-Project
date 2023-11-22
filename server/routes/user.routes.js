@@ -18,7 +18,7 @@
  *        name: kakao_email
  *        schema:
  *          type: string
- *        required: true
+ *          required: true
  *    responses:
  *      '200':
  *        description: Success to query
