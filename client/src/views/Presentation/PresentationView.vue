@@ -65,23 +65,24 @@ export default {
         alert("로그인 이미 된거심");
         authStore.setLoggedIn(true);
 
-        if (authStore.isFirstLogin) {
-          authStore.updateFirstLoginStatus(false);
-          // 첫 로그인 시에만 mypage.vue로 이동
-          this.$router.push({ name: "editmyinformation" });
-        } else {
-          // 이미 로그인된 상태이지만 첫 로그인이 아닌 경우의 로직
-          alert("로그인 완료");
-          this.openModal();
-        }
-      } else {
-        // 로그인을 요청
-        window.Kakao.Auth.login({
-          scope: "profile_image, gender, age_range",
-          success: this.getKakaoAccount,
-        });
-      }
-    },
+    if (authStore.isFirstLogin) {
+      authStore.updateFirstLoginStatus(false);
+    // 첫 로그인 시에만 mypage.vue로 이동
+      this.$router.push({ name: 'editmyinformation' });
+    } else {
+    // 이미 로그인된 상태이지만 첫 로그인이 아닌 경우의 로직
+      alert("로그인 완료");
+     this.openModal();
+    }
+}   else {
+  // 로그인을 요청
+    window.Kakao.Auth.login({
+      scope: 'profile_nickname, account_email, gender, age_range',
+      success: this.getKakaoAccount,
+    });
+  }
+},
+
     getKakaoAccount() {
       const authStore = useAuthStore();
 
@@ -89,13 +90,16 @@ export default {
         url: "/v2/user/me",
         success: (res) => {
           const kakao_account = res.kakao_account;
-          const nickname = kakao_account.profile.nickname;
+          const properties = res.properties; // 추가: properties 객체 얻기
+          const nickname = properties.nickname;
           const gender = kakao_account.gender; // Corrected
           const age_range = kakao_account.age_range; // Corrected
+          const email = kakao_account.email; // Added
 
           // Set the login status and user info in the store
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({ nickname, gender, age_range });
+          authStore.setUserInfo({nickname ,email, gender, age_range });
+
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
             authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
@@ -106,6 +110,7 @@ export default {
             alert("로그인 완료");
             this.openModal();
           }
+          this.$forceUpdate();
         },
         fail: (error) => {
           console.log(error);

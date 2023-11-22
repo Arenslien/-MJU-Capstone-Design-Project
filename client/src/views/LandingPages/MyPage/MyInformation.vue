@@ -20,16 +20,22 @@ onMounted(() => {
 });
 </script>
 <script>
+import { useAuthStore } from "../../../stores/index.js"; // 실제 경로로 대체
+
 export default {
+  computed: {
+    user() {
+      const authStore = useAuthStore();
+      return authStore.userInfo;
+    },
+  },
   data() {
     return {
       editMode: false,
-      userInfo: {
-        name: "양슬빈",
-        email: "imsm@mju.ac.kr",
-        age: 24,
-        gender: "여자"
-      },
+      nicknameInput: "",
+      emailInput: "",
+      genderInput: "",
+      ageRangeInput: "",
     };
   },
   methods: {
@@ -37,7 +43,29 @@ export default {
       this.editMode = true;
     },
     saveChanges() {
-      console.log(this.userInfo, "로 저장");
+      const authStore = useAuthStore();
+
+      // Check each input field and update the user info if input is not empty
+      if (this.nicknameInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, nickname: this.nicknameInput });
+      }
+      if (this.emailInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, email: this.emailInput });
+      }
+      if (this.genderInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, gender: this.genderInput });
+      }
+      if (this.ageRangeInput) {
+        authStore.setUserInfo({ ...authStore.userInfo, age_range: this.ageRangeInput });
+      }
+
+      // Reset input fields
+      this.nicknameInput = "";
+      this.emailInput = "";
+      this.genderInput = "";
+      this.ageRangeInput = "";
+
+      this.$router.push({ name: 'presentation' });
     },
   },
 };
@@ -45,34 +73,8 @@ export default {
 
 <template>
   <div>
-    <div class="container position-sticky z-index-sticky top-0">
-      <div class="row">
-        <div class="col-12">
-          <DefaultNavbar
-            :sticky="true"
-          />
-        </div>
-      </div>
-    </div>
     <section>
-      <div
-        class="page-header min-vh-100"
-        :style="{ backgroundImage: `url(${image})` }">
-        <div class="container">
-          <div class="row">
-            <!-- <div
-              class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column"
-            >
-              <div
-                class="position-relative h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center"
-                :style="{
-                  backgroundImage: `url(${image})`,
-                  backgroundSize: 'cover',
-                }"
-                loading="lazy"
-              ></div>
-            </div> -->
-            <div
+                  <div
               class="mt-8 col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-auto"
             >
               <div
@@ -87,6 +89,8 @@ export default {
                     <h3 class="text-white text-success mb-0">내 정보</h3>
                   </div>
                 </div>
+
+                
                 <div class="card-body">
                   <p class="pb-3">
                     더 정확한 맞춤 추천을 위해 정보를 입력해주세요!
@@ -96,7 +100,7 @@ export default {
                       <!--이름 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">이름:</span> {{ userInfo.name }}
+                          <span class="fw-bold">이름:</span> {{ user.nickname }}
                         </div>
                       </template>
                       <!--이름 수정 모드-->
@@ -104,13 +108,13 @@ export default {
                         class="input-group-static mb-4"
                         label="이름"
                         type="text"
-                        v-model="userInfo.name"
+                        v-model="nicknameInput"
                       />
                       <hr>
                       <!--이메일 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">이메일:</span> {{ userInfo.email }}
+                          <span class="fw-bold">이메일:</span> {{ user.email }}
                         </div>
                       </template>
                       <!--이메일 수정 모드-->
@@ -118,13 +122,13 @@ export default {
                         class="input-group-static mb-4"
                         label="이메일"
                         type="email"
-                        v-model="userInfo.email"
+                        v-model="emailInput"
                       />
                       <hr>
                       <!--나이 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">나이:</span> {{ userInfo.age }}
+                          <span class="fw-bold">나이:</span> {{ user.age_range }}
                         </div>
                       </template>
                       <!--나이 수정 모드-->
@@ -132,13 +136,13 @@ export default {
                         class="input-group-static mb-4"
                         label="나이"
                         type="number"
-                        v-model="userInfo.age"
+                        v-model="ageRangeInput"
                       />
                       <hr>
                       <!--성별 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">성별:</span> {{ userInfo.gender }}
+                          <span class="fw-bold">성별:</span> {{ user.gender }}
                         </div>
                       </template>
                       <!--성별 수정 모드-->
@@ -177,10 +181,9 @@ export default {
                   </form>
                 </div>
               </div>
+
             </div>
-          </div>
-        </div>
-      </div>
+        
     </section>
     <DefaultFooter />
   </div>
