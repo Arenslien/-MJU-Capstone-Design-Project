@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
 import bootstrap from "bootstrap/dist/js/bootstrap.min.js";
-import axios from 'axios';
+import axios from "axios";
 export const useAppStore = defineStore("storeId", {
   state: () => ({
     bootstrap,
   }),
 });
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLoggedIn: false,
     isFirstLogin: true, // 새로운 속성 추가
@@ -44,13 +44,14 @@ export const useAuthStore = defineStore('auth', {
         email,
       };
 
-      axios.post('YOUR_BACKEND_API_URL', userInfoToSend)
-        .then(response => {
-          console.log('User info sent to backend successfully', response.data);
+      axios
+        .post("YOUR_BACKEND_API_URL", userInfoToSend)
+        .then((response) => {
+          console.log("User info sent to backend successfully", response.data);
           // 이후 필요한 처리를 수행할 수 있습니다.
         })
-        .catch(error => {
-          console.error('Error sending user info to backend', error);
+        .catch((error) => {
+          console.error("Error sending user info to backend", error);
         });
     },
   },
