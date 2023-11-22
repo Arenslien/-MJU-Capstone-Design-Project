@@ -1,5 +1,34 @@
 'use strict';
 const { Model } = require('sequelize');
+
+/**
+ * @swagger
+ * definitions:
+ *  user:
+ *    type: object
+ *    properties:
+ *      user_id:
+ *        type: integer(10)
+ *      kakao_email:
+ *        type: char(50)
+ *      name:
+ *        type: char(50)
+ *      join_date:
+ *        type: date
+ *      category_1:
+ *        type: integer(10)
+ *      category_2:
+ *        type: integer(10)
+ *      category_3:
+ *        type: integer(10)
+ *      gender:
+ *        type: boolean
+ *    requiered:
+ *      - user_id
+ *      - kakao_email
+ *      - join_date
+ */
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
         /**
