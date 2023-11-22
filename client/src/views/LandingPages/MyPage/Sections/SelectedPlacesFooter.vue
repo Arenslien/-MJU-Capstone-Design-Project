@@ -7,46 +7,6 @@
           <h6 class="text-dark font-weight-bolder text-uppercase mb-lg-4 mb-3">
             일멍쉬멍
           </h6>
-          <!-- <ul
-            class="nav flex-row ms-n3 justify-content-lg-start justify-content-center mb-4 mt-sm-0"
-          >
-            <li class="nav-item">
-              <a
-                class="nav-link text-dark opacity-8"
-                href="https://www.creative-tim.com"
-                target="_blank"
-              >
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link text-dark opacity-8"
-                href="https://www.creative-tim.com/presentation"
-                target="_blank"
-              >
-                About
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link text-dark opacity-8"
-                href="https://www.creative-tim.com/blog"
-                target="_blank"
-              >
-                Blog
-              </a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link text-dark opacity-8"
-                href="https://www.creative-tim.com"
-                target="_blank"
-              >
-                Services
-              </a>
-            </li>
-          </ul> -->
           <p class="text-sm text-dark opacity-8 mb-0">
             Copyright © {{ new Date().getFullYear() }} Material Design by
             Creative Tim.

@@ -1,0 +1,14 @@
+1. 메인화면 : MJU-CapstoneDesign-Project\client\src\views\Presentation\PresentationView.vue
+1-1. 메인화면-지도 : MJU-CapstoneDesign-Project\client\src\views\Presentation\Sections\PresentationCounter.vue
+
+2. navbar : MJU-CapstoneDesign-Project\client\src\examples\navbars\NavbarDefault.vue
+
+3. 추천화면 : MJU-CapstoneDesign-Project\client\src\views\LandingPages\RecommendationPage\Recommend.vue
+3-1. 추천화면-지도 : MJU-CapstoneDesign-Project\client\src\examples\kakaomap\KakaoMap.vue
+3-2. 추천화면-관광지: MJU-CapstoneDesign-Project\client\src\examples\kakaomap\TravelList.vue
+3-3. 추천화면-업무공간: MJU-CapstoneDesign-Project\client\src\examples\kakaomap\WorkList.vue
+
+4. 마이페이지 : MJU-CapstoneDesign-Project\client\src\views\LandingPages\MyPage\MyInformation.vue
+
+5. 북마크 : MJU-CapstoneDesign-Project\client\src\views\LandingPages\MyPage\SelectedPlacesView.vue
+5-1. 북마크-리스트 : MJU-CapstoneDesign-Project\client\src\views\LandingPages\MyPage\Sections\SelectedPlacesList.vue
