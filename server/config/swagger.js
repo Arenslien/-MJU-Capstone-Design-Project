@@ -11,7 +11,7 @@ const swaggerDefinition = {
     },
     servers: [
       {
-        url: "http://localhost:8080",
+        url: "http://localhost:8080/api",
       }
     ]
     // "host" : process.env.DOMAIN,

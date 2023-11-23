@@ -2,6 +2,37 @@ const controller = require("../controllers/auth.controller")
 
 /** 
  * @swagger
+ * /auth/login:
+ *  post:
+ *    tags:
+ *      - Auth
+ *    name: login
+ *    summary: login with kakao login and check user existence.
+ *    description: required kakao_email must be String.
+ *    produces:
+ *      - application/json
+ *    consumes:
+ *      - application/json
+ *    parameters:
+ *      - name: body
+ *        in: body
+ *        schema:
+ *          type: object
+ *          properties:
+ *            kakao_email:
+ *              type: string
+ *        required:
+ *          - kakao_email
+ *    responses:
+ *      '200':
+ *        description: Success to create new user
+ *      '500':
+ *        description: Failed to create new user
+ * 
+*/
+
+/** 
+ * @swagger
  * /auth/signup:
  *  post:
  *    tags:
@@ -21,7 +52,7 @@ const controller = require("../controllers/auth.controller")
  *          properties:
  *            kakao_email:
  *              type: string
- *            name:
+ *            nickname:
  *              type: string
  *            gender:
  *              type: boolean
@@ -30,14 +61,15 @@ const controller = require("../controllers/auth.controller")
  *          - name
  *          - gender
  *    responses:
- *      '200':
- *        description: Success to register new user
+ *      '201':
+ *        description: Success to create new user
  *      '500':
- *        description: Failed to register new user
+ *        description: Failed to create new user
  * 
 */
 
 
 module.exports = function(BASE_URI, app) {
-    app.post(BASE_URI + "auth/signup", controller.signup)
+    app.post(BASE_URI + "auth/login", controller.login);
+    app.post(BASE_URI + "auth/signup", controller.signup);
 }
