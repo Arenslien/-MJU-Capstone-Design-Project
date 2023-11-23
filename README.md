@@ -22,17 +22,23 @@ git clone https://github.com/Arenslien/MJU-CapstoneDesign-Project.git
 ```ini
 DB_HOST='localhost' # 작업은 각자 local에서 진행
 DB_USER='root'
-DB_PASSWORD='비밀번호'
+DB_PASSWORD='local 컴퓨터의 mysql의 비밀번호'
 DB_DATABASE='workation_db'
 DOMAIN='localhost:8080' 
 PORT='8080'
 ```
 
-### 1.3 Version 8 이상 MySQL 설치
+### 1.3 Version 8 이상 MySQL 설치 및 DB 수동 생성
 
 아래 링크 or 구글링 후 설치 방법 참고
 
 LINK: [MySQL 설치 가이드](https://hongong.hanbit.co.kr/mysql-%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C-%EB%B0%8F-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0mysql-community-8-0/)
+
+MySQL 실행하여 'workation_db' 생성
+
+```mysql
+CREATE DATABASE workation_db;
+```
 
 ### 1.4 npm install & npm start
 

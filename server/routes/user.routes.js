@@ -56,37 +56,9 @@ const controller = require("../controllers/user.controller")
  * 
 */
 
- /**
- * @swagger
- * /user/{id}:
- *  delete:
- *    tags:
- *      - Users
- *    name: DeleteUser
- *    summary: Delete user
- *    description: to delete a user by id.
- *    produces:
- *      - application/json
- *    consumes:
- *      - application/json
- *    parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: integer
- *        required: true
- *    responses:
- *      '200':
- *        description: Success to delete
- *      '400':
- *        description: Bad request
- *      '500':
- *        description: Failed to delete by a reason.
- */
-
 
 module.exports = function(BASE_URI, app) {
     app.get(BASE_URI + "user", controller.getUserBy);
     app.put(BASE_URI + "user", controller.updateUser);
-    app.delete(BASE_URI + "user/:id", controller.deleteUser);
+    // app.delete(BASE_URI + "user/:id", controller.deleteUser);
 }
