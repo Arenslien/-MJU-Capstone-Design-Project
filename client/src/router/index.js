@@ -4,7 +4,6 @@ import ChooseTAPreference from "../views/LandingPages/RecommendationPage/ChooseT
 import Recommend from "../views/LandingPages/RecommendationPage/Recommend.vue";
 import MyInformation from "../views/LandingPages/MyPage/MyInformation.vue";
 import SelectedPlacesView from "../views/LandingPages/MyPage/SelectedPlacesView.vue";
-import SignInBasicView from "../views/LandingPages/SignIn/BasicView.vue";
 import PageHeaders from "../layouts/sections/page-sections/page-headers/HeadersView.vue";
 import PageFeatures from "../layouts/sections/page-sections/features/FeaturesView.vue";
 import NavigationNavbars from "../layouts/sections/navigation/navbars/NavbarsView.vue";
@@ -51,11 +50,6 @@ const router = createRouter({
       path: "/pages/landing-pages/selected-places",
       name: "selected-places",
       component: SelectedPlacesView,
-    },
-    {
-      path: "/pages/landing-pages/basic",
-      name: "signin-basic",
-      component: SignInBasicView,
     },
     {
       path: "/sections/page-sections/page-headers",
