@@ -9,16 +9,26 @@ const login = async (req, res) => {
         User.findOne({ where: { kakao_email: req.body.kakao_email}})
         .then(user => {
             if (user) {
+                var userInfo = { 
+                    user_id: user.user_id,
+                    kakao_email: user.kakao_email,
+                    nickname: user.name,
+                    gender: user.gender,
+                    join_date: user.join_date,
+                    category_1: user.category_1,
+                    category_2: user.category_2,
+                    category_3: user.category_3,
+                };
                 console.log('[SUCCESS] POST/login - User already existed.');
-                return res.status(200).send({res: true, message: "User already existed."});
+                return res.status(200).send({res: true, message: "Login succeeded. User already existed.", data: userInfo});
             } else {
                 console.log('[SUCCESS] POST/login - User create needed.');
-                return res.status(200).send({res: false, message: "User create needed."});
+                return res.status(200).send({res: false, message: "Login succeeded. User create needed."});
             }
         });
     } catch(err) {
         console.log('[FAIL] POST/login');
-        return res.status(500).send({ res: false, message: `Failed to create account. The reason why ${err}` });
+        return res.status(500).send({ res: false, message: `Failed to login. The reason why ${err}` });
     }
 
 }
@@ -42,8 +52,8 @@ const signup = async (req, res) => {
             gender: req.body.gender,
         });
 
-        console.log('[SUCCESS] POST/signup - Success to create account');
-        return res.status(201).send({res: true, message: "Success to create account."});
+        console.log('[SUCCESS] POST/signup - succeeded to create account');
+        return res.status(201).send({res: true, message: "succeeded to create account."});
 
     } catch(err) {
         console.log('[FAIL] POST/signup');

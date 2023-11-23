@@ -45,6 +45,6 @@ app.get('/', (req, res) => {
 
 // routes
 require("../routes/auth.routes.js")(BASE_URI, app)
-// require("../routes/user.routes.js")(BASE_URI, app)
+require("../routes/user.routes.js")(BASE_URI, app)
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

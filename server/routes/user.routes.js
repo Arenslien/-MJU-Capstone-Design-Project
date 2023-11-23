@@ -1,4 +1,4 @@
-// const controller = require("../controllers/user.controller")
+const controller = require("../controllers/user.controller")
 
 /**
  * @swagger
@@ -85,6 +85,8 @@
  */
 
 
-// module.exports = function(BASE_URI, app) {
-//     app.put(BASE_URI + "/user", controller.updateUser)
-// }
+module.exports = function(BASE_URI, app) {
+    app.get(BASE_URI + "user", controller.getUserBy);
+    app.put(BASE_URI + "user", controller.updateUser);
+    app.delete(BASE_URI + "user/:id", controller.deleteUser);
+}
