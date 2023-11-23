@@ -312,11 +312,11 @@ export default {
         authStore.updateFirstLoginStatus(false);
       }else {
         alert("로그인 완료");
-        this.openModal();
+        this.$router.push({ name: 'getinformation' });
       }
       }else {
         window.Kakao.Auth.login({
-        scope: 'profile_nickname, account_email, gender, age_range',
+        scope: 'profile_nickname, account_email, gender',
         success: this.getKakaoAccount,
       });
       }
@@ -332,18 +332,17 @@ export default {
           const properties = res.properties; 
           const nickname = properties.nickname;
           const gender = kakao_account.gender; 
-          const age_range = kakao_account.age_range; 
           const email = kakao_account.email; 
 
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({nickname ,email, gender, age_range });
+          authStore.setUserInfo({email,nickname , gender });
 
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
             authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
           } else {
             alert("로그인 완료");
-            this.openModal();
+            this.$router.push({ name: 'getinformation' });
           }
           this.$forceUpdate();
         },

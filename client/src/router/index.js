@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import GetInfo from "../views/LandingPages/GetInfo/GetInformation.vue";
 import PresentationView from "../views/Presentation/PresentationView.vue";
 import ChooseTAPreference from "../views/LandingPages/RecommendationPage/ChooseTAPreference.vue";
 import Recommend from "../views/LandingPages/RecommendationPage/Recommend.vue";
@@ -26,6 +27,11 @@ import ElTypography from "../layouts/sections/elements/typography/TypographyView
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: "/pages/landing-pages/getinfo/getinfo",
+      name: "getinformation",
+      component: GetInfo,
+    },
     {
       path: "/",
       name: "presentation",

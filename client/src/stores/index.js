@@ -35,17 +35,16 @@ export const useAuthStore = defineStore("auth", {
       this.isFirstLogin = status;
     },
     sendUserInfoToBackend() {
-      const { nickname, gender, age_range, email } = this.userInfo;
+      const { kakao_email, nickname, gender } = this.userInfo;
 
       const userInfoToSend = {
+        kakao_email,
         nickname,
         gender,
-        age_range,
-        email,
       };
 
       axios
-        .post("YOUR_BACKEND_API_URL", userInfoToSend)
+        .post("http://localhost:8080/api/auth/signup/", userInfoToSend)
         .then((response) => {
           console.log("User info sent to backend successfully", response.data);
           // 이후 필요한 처리를 수행할 수 있습니다.

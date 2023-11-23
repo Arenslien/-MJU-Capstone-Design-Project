@@ -68,7 +68,7 @@ export default {
         }
       }else {
         window.Kakao.Auth.login({
-        scope: 'profile_nickname, account_email, gender, age_range',
+        scope: 'profile_nickname, account_email, gender',
         success: this.getKakaoAccount,
       });
       }
@@ -84,11 +84,10 @@ export default {
           const properties = res.properties; 
           const nickname = properties.nickname;
           const gender = kakao_account.gender; 
-          const age_range = kakao_account.age_range; 
           const email = kakao_account.email;
 
           authStore.setLoggedIn(true);
-          authStore.setUserInfo({nickname ,email, gender, age_range });
+          authStore.setUserInfo({email,nickname , gender });
 
           if (authStore.isFirstLogin) {
             alert("첫 로그인 입니다! 환영해요");
