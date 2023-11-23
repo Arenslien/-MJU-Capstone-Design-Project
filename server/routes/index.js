@@ -3,6 +3,7 @@ const user = require("./user.routes");
 const auth = require("./auth.routes");
 const tourist = require("./tourist.routes");
 const workspace = require("./workspace.routes");
+const bookmark = require("./bookmark.routes");
 
 /**
  * @swagger
@@ -50,5 +51,6 @@ router.use("/user", user);
 router.use("/auth", auth);
 router.use("/tourist", tourist);
 router.use("/workspace", workspace);
+router.use("/bookmark", bookmark);
 
 module.exports = router;

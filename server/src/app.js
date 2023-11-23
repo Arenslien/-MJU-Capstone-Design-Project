@@ -48,5 +48,6 @@ require("../routes/auth.routes.js")(BASE_URI, app);
 require("../routes/user.routes.js")(BASE_URI, app);
 require("../routes/tourist.routes.js")(BASE_URI, app);
 require("../routes/workspace.routes.js")(BASE_URI, app);
+require("../routes/bookmark.routes.js")(BASE_URI, app);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

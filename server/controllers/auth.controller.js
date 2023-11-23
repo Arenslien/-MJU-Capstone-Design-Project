@@ -50,10 +50,14 @@ const signup = async (req, res) => {
             category_2: null,
             category_3: null,
             gender: req.body.gender,
-        });
+        }).then(() => {    
+            console.log('[SUCCESS] POST/signup - succeeded to create account');
+            return res.status(201).send({res: true, message: "succeeded to create account."});
+        }).catch(err => {
+            console.log('[FAIL] POST/signup');
+            return res.status(500).send({ res: false, message: `Failed to create account. The reason why ${err}` });
+        })
 
-        console.log('[SUCCESS] POST/signup - succeeded to create account');
-        return res.status(201).send({res: true, message: "succeeded to create account."});
 
     } catch(err) {
         console.log('[FAIL] POST/signup');

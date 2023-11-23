@@ -1,3 +1,4 @@
+const controller = require("../controllers/bookmark.controller")
 
 
 /**
@@ -111,3 +112,7 @@
  *      '500':
  *        description: Failed to query by a reason.
  */
+
+module.exports = function(BASE_URI, app) {
+    app.get(BASE_URI + "bookmark", controller.getBookmarks);
+}
