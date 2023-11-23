@@ -1,5 +1,9 @@
-const router = require("express").Router()
-const user = require("./user.routes")
+const router = require("express").Router();
+const user = require("./user.routes");
+const auth = require("./auth.routes");
+const tourist = require("./tourist.routes");
+const workspace = require("./workspace.routes");
+const bookmark = require("./bookmark.routes");
 
 /**
  * @swagger
@@ -43,6 +47,10 @@ const user = require("./user.routes")
  *   description: Models CRUD
  */
 
-router.use("/user", user)
+router.use("/user", user);
+router.use("/auth", auth);
+router.use("/tourist", tourist);
+router.use("/workspace", workspace);
+router.use("/bookmark", bookmark);
 
-module.exports = router
+module.exports = router;

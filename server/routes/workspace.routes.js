@@ -1,4 +1,4 @@
-
+const controller = require("../controllers/workspace.controller")
 
 /**
  * @swagger
@@ -27,3 +27,8 @@
  *      '500':
  *        description: Failed to query by a reason.
  */
+
+
+module.exports = function(BASE_URI, app) {
+    app.get(BASE_URI + "workspace", controller.getWorkspaces);
+}

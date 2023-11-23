@@ -359,6 +359,7 @@ export default {
 
       if (isKakaoAuthorized) {
         // 토큰이 있는 경우
+        // 백엔드에서 정보 받기
         authStore.setLoggedIn(true);
       } else {
         // 토큰이 없는 경우

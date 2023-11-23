@@ -47,7 +47,7 @@ export const useAuthStore = defineStore("auth", {
       };
     
       axios
-        .post("/api/auth/signup/", userInfoToSend, {
+        .post("http://localhost:8080/api/auth/signup", userInfoToSend, {
           headers: {
             'Content-Type': 'application/json',
           },

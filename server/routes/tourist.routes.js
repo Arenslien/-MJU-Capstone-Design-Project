@@ -1,4 +1,4 @@
-
+const controller = require("../controllers/tourist.controller")
 
 /**
  * @swagger
@@ -27,3 +27,7 @@
  *      '500':
  *         description: Failed to query by a reason.
  */
+
+module.exports = function(BASE_URI, app) {
+    app.get(BASE_URI + "tourist", controller.getTourists);
+}
