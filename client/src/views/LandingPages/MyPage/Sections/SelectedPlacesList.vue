@@ -22,6 +22,19 @@ export default {
       prodArr: []
     };
   },
+  mounted() {
+    const apiUrl = '/api/getBookmarks';
+    console.log("test code: 들어옵니까")
+    
+    try {
+      axios.get(apiUrl).then((res) => {
+        console.log('API response:', res.data);
+      });
+    } catch (error) {
+      console.error('Invalid API URL:', apiUrl);
+      console.error(error);
+    }
+  },
   methods: {
     editMode() {
       this.visible = true;

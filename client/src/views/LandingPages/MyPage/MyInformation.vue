@@ -10,7 +10,6 @@ import image from "@/assets/img/mypage-bg.jpg";
 
 //material components
 import MaterialInput from "@/components/MaterialInput.vue";
-import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 
 // material-input
@@ -73,8 +72,24 @@ export default {
 
 <template>
   <div>
+    <div>
+      <div class="container position-sticky z-index-sticky top-0">
+        <div class="row">
+          <div class="col-12">
+            <DefaultNavbar
+              :sticky="true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
     <section>
-                  <div
+      <div
+        class="page-header min-vh-100"
+        :style="{ backgroundImage: `url(${image})` }">
+        <div class="container">
+          <div class="row">
+            <div
               class="mt-8 col-xl-5 col-lg-6 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-auto"
             >
               <div
@@ -97,16 +112,16 @@ export default {
                   </p>
                   <form id="contact-form" method="post" autocomplete="off">
                     <div class="card-body p-0 my-3">
-                      <!--이름 조회 모드-->
+                      <!--닉네임 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">이름:</span> {{ user.nickname }}
+                          <span class="fw-bold">닉네임:</span> {{ user.nickname }}
                         </div>
                       </template>
-                      <!--이름 수정 모드-->
+                      <!--닉네임 수정 모드-->
                       <MaterialInput v-else
                         class="input-group-static mb-4"
-                        label="이름"
+                        label="닉네임"
                         type="text"
                         v-model="nicknameInput"
                       />
@@ -118,13 +133,13 @@ export default {
                         </div>
                       </template>
                       <!--이메일 수정 모드-->
-                      <MaterialInput v-else
+                      <!-- <MaterialInput v-else
                         class="input-group-static mb-4"
                         label="이메일"
                         type="email"
                         v-model="emailInput"
                       />
-                      <hr>
+                      <hr> -->
                       <!--나이 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
@@ -132,13 +147,13 @@ export default {
                         </div>
                       </template>
                       <!--나이 수정 모드-->
-                      <MaterialInput v-else
+                      <!-- <MaterialInput v-else
                         class="input-group-static mb-4"
                         label="나이"
                         type="number"
                         v-model="ageRangeInput"
                       />
-                      <hr>
+                      <hr> -->
                       <!--성별 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
@@ -181,9 +196,10 @@ export default {
                   </form>
                 </div>
               </div>
-
             </div>
-        
+          </div>
+        </div>
+      </div>
     </section>
     <DefaultFooter />
   </div>

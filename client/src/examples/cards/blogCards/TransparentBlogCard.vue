@@ -1,9 +1,9 @@
 <script setup>
 defineProps({
-  image: {
-    type: String,
-    required: true,
-  },
+  // image: {
+  //   type: String,
+  //   required: true,
+  // },
   title: {
     type: String,
     required: true,
@@ -29,12 +29,12 @@ defineProps({
   <div class="card card-plain">
     <div class="card-header p-0 position-relative">
       <a class="d-block blur-shadow-image">
-        <img
+        <!-- <img
           :src="image"
           :alt="title"
           class="img-fluid shadow border-radius-lg"
           loading="lazy"
-        />
+        /> -->
       </a>
     </div>
     <div class="card-body px-0">
