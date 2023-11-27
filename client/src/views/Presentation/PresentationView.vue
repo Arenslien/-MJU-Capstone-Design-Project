@@ -73,7 +73,7 @@ export default {
       window.Kakao.API.request({
         url: "/v2/user/me",
         success: (res) => {
-          
+          //데이터불러오기.
 
           if(authStore.email){
             alert("로그인 완료");
@@ -85,8 +85,8 @@ export default {
             const kakao_account = res.kakao_account;
             const properties = res.properties; 
             const nickname = properties.nickname;
-            const gender = kakao_account.gender; 
-            const email = kakao_account.email; 
+            const gender = kakao_account.gender;
+            const email = kakao_account.email;  
             authStore.setUserInfo({email, nickname , gender });
             this.$router.push({ name: 'getinformation' });
           }

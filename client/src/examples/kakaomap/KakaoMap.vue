@@ -7,7 +7,7 @@
 
         <div class="col text-center " >
           <img src="@/assets/img/travel.png" style="width: 40px; height: 40px;">
-          <p @click="toggleSidebar2" style="font-size: 13px;">관광지</p>
+          <p style="font-size: 13px;">관광지</p>
         </div>
 
         </div>
@@ -19,7 +19,7 @@
         <div >
         <!-- 사이드바1리스트 -->
           <div  style="height: 450px; border-bottom: 1px solid #ccc;">
-            <TravelList @touristSpotClick="handleTouristSpotClick" />
+            <TravelList @button-click="handleButtonClick" />
           </div>
 
 
@@ -49,7 +49,7 @@
         </div>
         </div>
         <div style="margin-top:5px">
-          <Button class="styled-button">저장</Button>
+          <Button class="styled-button">업무공간저장</Button>
         </div>
         
       </div>
@@ -62,6 +62,8 @@
   import { toRaw } from "vue";
   import TravelList from "./TravelList.vue";
   import WorkList from "./WorkList.vue";
+  import axios from "axios";
+  
   export default {
     components: {
     TravelList,
@@ -91,8 +93,9 @@
       }
     },
     methods: {
-      toggleSidebar2() {
-      // 클릭 시 사이드바2의 상태를 토글
+      //하위컴포넌트에서 클릭시 사이드바토글관리
+      handleButtonClick() {
+        // 클릭 시 사이드바2의 상태를 토글
       this.sidebar2Visible = !this.sidebar2Visible;
 
       // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
@@ -100,7 +103,7 @@
       if (!this.sidebar2Visible) {
         document.querySelector('.sidebar2').style.left = '250px';
       } 
-    },
+      },
       initMap() {
         const container = document.getElementById("map");
         const options = {
@@ -164,13 +167,10 @@
   
         toRaw(this.map).setCenter(iwPosition);
       },
-      // TravelList에서 발생한 이벤트 핸들링
-    handleTouristSpotClick(touristSpot) {
-      // 여기서 관광지 정보를 활용하여 지도에 마커를 표시하거나 다른 동작을 수행할 수 있습니다.
-      console.log("Clicked on tourist spot:", touristSpot);
-    },
-    },
-  };
+      
+
+  },
+};
   </script>
   
   <style scoped>

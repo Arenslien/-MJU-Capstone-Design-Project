@@ -1,19 +1,59 @@
 <template>
   <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc;">
     <ul>
-      <li v-for="spot in touristSpots" :key="spot.id" @click="handleClick(spot)">
+      <li v-for="spot in touristSpots" :key="spot.id" @click="handleClick(spot)" :class="{ 'selected': isSelected(spot) }">
         <div style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px; margin-top: 10px;">
           <span style="color: black;">{{ spot.name }}</span>
           <span style="color: gray; font-size: 0.8em;">{{ spot.lat }}, {{ spot.lng }}</span>
-          <!-- 다른 요소 추가 가능 -->
         </div>
       </li>
     </ul>
   </div>
+  <div style="margin-top:5px" >
+    <Button class="styled-button" @click="emitButtonClick">관광지 저장</Button>
+  </div>
 </template>
 
-  
-  <script>
+<script>
+import axios from 'axios';
+
+export default {
+  data() {
+    return {
+      selectedSpots: [],  // 선택한 여행지의 상태를 저장할 배열
+      touristSpots: [
+        { id: 1, name: "서울 탑골공원", lat: 37.578548, lng: 126.981799 },
+        { id: 2, name: "부산 해운대", lat: 35.158698, lng: 129.160199 },
+        // 추가 관광지 데이터
+      ],
+    };
+  },
+  methods: {
+    emitButtonClick() {
+      // 버튼 클릭 시 부모 컴포넌트에 이벤트를 발송
+      this.$emit('button-click');
+    },
+    handleClick(spot) {
+      // 클릭한 여행지를 선택 상태에 따라 추가 또는 제거
+      const index = this.selectedSpots.findIndex(selectedSpot => selectedSpot.id === spot.id);
+      if (index === -1) {
+        // 선택되지 않았으면 추가
+        this.selectedSpots.push(spot);
+      } else {
+        // 이미 선택된 상태이면 제거
+        this.selectedSpots.splice(index, 1);
+      }
+    },
+    isSelected(spot) {
+      // 해당 여행지가 선택되었는지 여부를 확인
+      return this.selectedSpots.some(selectedSpot => selectedSpot.id === spot.id);
+    },
+    
+  },
+};
+</script>
+
+<!--<script>
   export default {
     data() {
       return {
@@ -31,7 +71,7 @@
       },
     },
   };
-  </script>
+  </script>-->
 
 <style scoped>
 /* scoped를 사용하여 컴포넌트 내에서만 스타일이 적용되도록 설정 */
@@ -44,7 +84,24 @@ li {
   transition: background-color 0.3s ease;
 }
 
+.selected {
+  background-color: #dcdcdc;
+  color: white;
+}
+
 li:hover {
   background-color: #dcdcdc;
 }
+
+.styled-button {
+  width: 100px; /* 가로 크기 */
+  height: 35px; /* 세로 크기 */
+  padding: 5px 0; 
+    background-color: rgba(12, 222, 187, 0.873);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+  }
 </style>
