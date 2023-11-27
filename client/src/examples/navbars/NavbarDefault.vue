@@ -307,14 +307,8 @@ export default {
         // 이미 로그인된 상태라면 처리
         alert("로그인 이미 된거심");
         authStore.setLoggedIn(true);
-
-      if (authStore.isFirstLogin) {
-        authStore.updateFirstLoginStatus(false);
-      }else {
-        alert("로그인 완료");
-        this.$router.push({ name: 'getinformation' });
       }
-      }else {
+      else {
         window.Kakao.Auth.login({
         scope: 'profile_nickname, account_email, gender',
         success: this.getKakaoAccount,
@@ -328,22 +322,25 @@ export default {
       window.Kakao.API.request({
         url: "/v2/user/me",
         success: (res) => {
-          const kakao_account = res.kakao_account;
-          const properties = res.properties; 
-          const nickname = properties.nickname;
-          const gender = kakao_account.gender; 
-          const email = kakao_account.email; 
+          
 
-          authStore.setLoggedIn(true);
-          authStore.setUserInfo({email,nickname , gender });
-
-          if (authStore.isFirstLogin) {
-            alert("첫 로그인 입니다! 환영해요");
-            authStore.setIsFirstLogin(false); // 첫 로그인 후에는 상태 업데이트
-          } else {
+          if(authStore.email){
             alert("로그인 완료");
+            //백엔드에서 정보 불러오자 구현 필요
+          }else{
+            alert("첫 로그인 입니다! 환영해요");
+            const kakao_account = res.kakao_account;
+            const properties = res.properties; 
+            const nickname = properties.nickname;
+            const gender = kakao_account.gender; 
+            const email = kakao_account.email; 
+            authStore.setUserInfo({email, nickname , gender });
             this.$router.push({ name: 'getinformation' });
           }
+          authStore.setLoggedIn(true);
+
+
+
           this.$forceUpdate();
         },
         fail: (error) => {
@@ -362,6 +359,7 @@ export default {
 
       if (isKakaoAuthorized) {
         // 토큰이 있는 경우
+        // 백엔드에서 정보 받기
         authStore.setLoggedIn(true);
       } else {
         // 토큰이 없는 경우
