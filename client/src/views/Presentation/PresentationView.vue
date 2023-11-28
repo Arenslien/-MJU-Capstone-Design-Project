@@ -4,6 +4,8 @@ import { onMounted, onUnmounted } from "vue";
 //example components
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
 import ChooseTAPreference from "../LandingPages/RecommendationPage/ChooseTAPreference.vue";
+import MaterialButton from "@/components/MaterialButton.vue";
+
 // sections
 import PresentationCounter from "./Sections/PresentationCounter.vue";
 
@@ -35,20 +37,23 @@ export default {
   mounted() {
     this.checkTokenOnLoad();
   },
+  components: {
+    ChooseTAPreference,
+  },
   data() {
     return {
-      showChooseTAPreference: false,
+      isModalOpen: false,
     };
   },
   methods: {
     openModal() {
-      this.showChooseTAPreference = true;
+      this.isModalOpen = true;
     },
     closeModal() {
-      this.showChooseTAPreference = false;
+      this.isModalOpen = false;
     },
     goToRecommend() {
-      this.showChooseTAPreference = true;
+      this.isModalOpen = true;
     },
     kakaoLogin() {
       const authStore = useAuthStore();
@@ -132,9 +137,9 @@ export default {
       :style="`background-image: url(${vueMkHeader})`"
       loading="lazy"
     >
-      <div class="black-bg" v-if="showChooseTAPreference" @click="closeModal">
+      <div class="black-bg" v-if="isModalOpen" >
         <div id="modal">
-          <ChooseTAPreference />
+          <ChooseTAPreference @closeModal="closeModal"/>
         </div>
       </div>
       <div class="margin col container">
@@ -154,12 +159,28 @@ export default {
             설명설명<br />
           </p>
           <div>
-            <Button v-if="isLoggedIn" class="styled-button" @click="openModal"
+            <MaterialButton
+            variant="gradient"
+            color="success"
+            class="mt-2 mb-2"
+            @click.prevent="openModal"
+            v-if="!isLoggedIn">
+            추천페이지
+          </MaterialButton>
+            <!-- <Button v-if="isLoggedIn" class="styled-button" @click="openModal"
               >추천페이지</Button
-            >
-            <Button v-if="!isLoggedIn" class="styled-button" @click="kakaoLogin"
+            > -->
+            <MaterialButton
+            variant="gradient"
+            color="success"
+            class="mt-2 mb-2"
+            @click.prevent="kakaoLogin"
+            v-if="isLoggedIn">
+            추천페이지
+          </MaterialButton>
+            <!-- <Button v-if="!isLoggedIn" class="styled-button" @click="kakaoLogin"
               >추천페이지</Button
-            >
+            > -->
           </div>
         </div>
         <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 right">
@@ -210,13 +231,6 @@ body {
   position: fixed;
   padding: 20px;
   box-sizing: border-box;
-  z-index: 100;
-}
-.white-bg {
-  width: 100%;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-sizing: border-box;
+  z-index: 1030;
 }
 </style>

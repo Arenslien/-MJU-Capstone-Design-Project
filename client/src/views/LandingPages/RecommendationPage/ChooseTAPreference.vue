@@ -2,7 +2,6 @@
 import { onMounted } from "vue";
 
 //material components
-import MaterialCheckbox from "@/components/MaterialCheckbox.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 
 // material-input
@@ -17,9 +16,15 @@ onMounted(() => {
 export default {
   data() {
     return {
-    }
+      selectedStyle1: '',
+      selectedStyle5: '',
+      selectedStyle6: '',
+    };
   },
   methods: {
+    closeModal() {
+      this.$emit("closeModal");
+    },
     moveToRecommend() {
       this.$router.push({ name: 'recommend' });
     }
@@ -47,41 +52,75 @@ export default {
       </p>
       <form id="contact-form" method="post" autocomplete="off">
         <div class="card-body p-0 my-3">
-          <div class="row">
-            <label>여행 스타일1</label>
-            <div class="col-md-6">
-              <MaterialCheckbox>A</MaterialCheckbox>
+          <div class="row mb-4">
+            <label class="bold-text">자연 vs 도시</label>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle1" value="A"> 자연
+              </label>
             </div>
-            <div class="col-md-6">
-              <MaterialCheckbox>B</MaterialCheckbox>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle1" value="N"> 중립
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle1" value="B"> 도시
+              </label>
             </div>
           </div>
-          <div class="row">
-            <label>여행 스타일5</label>
-            <div class="col-md-6">
-              <MaterialCheckbox>A</MaterialCheckbox>
+          <div class="row mb-4">
+            <label class="bold-text">휴양/휴식 vs 체험활동</label>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle5" value="A"> 휴양/휴식
+              </label>
             </div>
-            <div class="col-md-6">
-              <MaterialCheckbox>B</MaterialCheckbox>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle5" value="N"> 중립
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle5" value="B"> 체험활동
+              </label>
             </div>
           </div>
-          <div class="row">
-            <label>여행 스타일6</label>
-            <div class="col-md-6">
-              <MaterialCheckbox>A</MaterialCheckbox>
+          <div class="row mb-4">
+            <label class="bold-text">잘 알려지지 않은 방문지 vs 알려진 방문지</label>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle6" value="A"> 잘 알려지지 않은 방문지
+              </label>
             </div>
-            <div class="col-md-6">
-              <MaterialCheckbox>B</MaterialCheckbox>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle6" value="N"> 중립
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label>
+                <input type="radio" v-model="selectedStyle6" value="B"> 알려진 방문지
+              </label>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12 text-center">
               <MaterialButton
                 variant="gradient"
-                color="success"
+                color="secondary"
                 class="mt-3 mb-0"
+                @click="closeModal"
+                >닫기</MaterialButton
+              >
+              <MaterialButton
+                variant="gradient"
+                color="success"
+                class="mt-3 mb-0 ms-2"
                 @click="moveToRecommend"
-                >저장</MaterialButton
+                >추천</MaterialButton
               >
             </div>
           </div>
@@ -90,3 +129,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style>
+.bold-text{
+  font-weight: bold;
+}
+</style>
