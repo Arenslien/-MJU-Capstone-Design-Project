@@ -35,13 +35,13 @@ export const useAuthStore = defineStore("auth", {
       this.isFirstLogin = status;
     },
     sendUserInfoToBackend() {
-      const { kakao_email, nickname, gender } = this.userInfo;
+      const { email, nickname, gender } = this.userInfo;
     
       // gender를 boolean으로 변환
       const genderToSend = gender.toLowerCase() === 'male'; // 예시: 'male'이면 true, 'female'이면 false
     
       const userInfoToSend = {
-        kakao_email,
+        email,
         nickname,
         gender: genderToSend,
       };
@@ -62,7 +62,51 @@ export const useAuthStore = defineStore("auth", {
         });
     },
 
-    
+
+    loginWithKakao(email) {
+      axios
+        .post('/api/auth/login', { email: email })
+        .then((response) => {
+          const { res, message, data } = response.data;
+          if (res) {
+            // User already exists
+            this.setLoggedIn(true);
+            this.setUserInfo(data);
+
+            // After login, fetch user information
+            this.getUserInfo();
+          } else {
+            // User does not exist, handle accordingly
+            this.setLoggedIn(false);
+          }
+        })
+        .catch((error) => {
+          console.error('Error during login', error);
+        });
+    },
+    getUserInfo() {
+      if (this.userInfo) {
+        console.log("사용자 정보가 성다1234124");
+        const { email } = this.userInfo;
+        console.log("사용자");
+
+        axios
+          .get('/api/user', { params: { email: email } })
+          .then((response) => {
+            const { res, message, data } = response.data;
+            if (res) {
+              // Successfully retrieved user information
+              console.log("사용자 정보가 성다");
+              this.setUserInfo(data);
+            } else {
+              console.log("사용자 정보가 성공적으로 백엔드로 전송되었습니다");
+            }
+          })
+          .catch((error) => {
+            console.error('Error getting user information', error);
+          });
+      }
+    },
     
   },
 });

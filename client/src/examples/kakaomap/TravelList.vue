@@ -10,12 +10,13 @@
     </ul>
   </div>
   <div style="margin-top:5px" >
-    <Button class="styled-button" @click="emitButtonClick">관광지 저장</Button>
+    <Button class="styled-button" @click="sendSelectedSpotsToUserInfo">관광지 저장</Button>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { useAuthStore } from '../../stores/index.js';
 
 export default {
   data() {
@@ -48,7 +49,38 @@ export default {
       // 해당 여행지가 선택되었는지 여부를 확인
       return this.selectedSpots.some(selectedSpot => selectedSpot.id === spot.id);
     },
-    
+    sendSelectedSpotsToUserInfo() {
+      //토글이옹위해
+      this.$emit('button-click');
+      // 선택된 여행지를 userInfo 상태로 업데이트하는 스토어 메서드 호출
+      useAuthStore.setUserInfo({
+        selectedSpots: this.selectedSpots,
+      });
+
+      // 선택된 여행지 정보를 백엔드로 보내는 경우 선택적으로 사용
+      this.sendSelectedSpotsToBackend();
+    },
+    sendSelectedSpotsToBackend() {
+      // 선택된 여행지에서 관련 정보를 추출하고 이를 백엔드로 전송
+      const selectedSpotsInfo = this.selectedSpots.map(spot => ({
+        id: spot.id,
+        name: spot.name,
+        lat: spot.lat,
+        lng: spot.lng,
+      }));
+
+      // 선택된 여행지를 처리하는 API 엔드포인트가 있다고 가정
+      axios.post("http://localhost:8080/api/auth/save-selected-spots", {
+        selectedSpots: selectedSpotsInfo,
+      })
+      .then((response) => {
+        console.log("선택된 여행지가 성공적으로 백엔드로 전송되었습니다", response.data);
+        // 필요한 추가 처리가 있으면 수행
+      })
+      .catch((error) => {
+        console.error("선택된 여행지를 백엔드로 전송 중 오류 발생", error.response);
+      });
+    },
   },
 };
 </script>
