@@ -60,5 +60,5 @@ const controller = require("../controllers/user.controller")
 module.exports = function(BASE_URI, app) {
     app.get(BASE_URI + "user", controller.getUserBy);
     app.put(BASE_URI + "user", controller.updateUser);
-    // app.delete(BASE_URI + "user/:id", controller.deleteUser);
+    app.delete(BASE_URI + "user/:id", controller.deleteUser);
 }

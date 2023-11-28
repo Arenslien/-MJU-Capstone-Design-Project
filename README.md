@@ -24,8 +24,11 @@ DB_HOST='localhost' # 작업은 각자 local에서 진행
 DB_USER='root'
 DB_PASSWORD='local 컴퓨터의 mysql의 비밀번호'
 DB_DATABASE='workation_db'
+
 DOMAIN='localhost:8080' 
-PORT='8080'
+PORT=8080
+
+BASE_URI = '/api/'
 ```
 
 ### 1.3 Version 8 이상 MySQL 설치 및 DB 수동 생성
