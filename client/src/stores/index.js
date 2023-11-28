@@ -8,23 +8,32 @@ export const useAppStore = defineStore("storeId", {
 });
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    isLoggedIn: false,
-    isFirstLogin: true, // 새로운 속성 추가
+    isLoggedIn: null,
     userInfo: null,
   }),
   actions: {
     setLoggedIn(status) {
       this.isLoggedIn = status;
-      if (status) {
-        this.isFirstLogin = false;
-      }
     },
     setUserInfo(user) {
+      // Check if user object has kakao_email property
+      if ('kakao_email' in user) {
+        // Rename kakao_email to email
+        user.email = user.kakao_email;
+        delete user.kakao_email; 
+      }
+    
+      // Check if user object has gender property
+      if ('gender' in user) {
+        user.gender = user.gender === true ? 'male' : 'female';
+      }
+    
       this.userInfo = user;
     },
+    
+    
     resetAuth() {
       this.isLoggedIn = false;
-      this.isFirstLogin = true;
     },
     logout() {
       window.Kakao.Auth.logout(() => {
@@ -61,52 +70,37 @@ export const useAuthStore = defineStore("auth", {
           // 에러 응답에 대한 더 자세한 정보를 로깅
         });
     },
-
-
-    loginWithKakao(email) {
+    loginWithKakao(email1) {
+      
+      const userInfoToSend = {
+        email: email1,
+      };
+    
       axios
-        .post('/api/auth/login', { email: email })
+        .post('http://localhost:8080/api/auth/login', userInfoToSend, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         .then((response) => {
           const { res, message, data } = response.data;
           if (res) {
             // User already exists
-            this.setLoggedIn(true);
+            data.email = email1;
             this.setUserInfo(data);
-
-            // After login, fetch user information
-            this.getUserInfo();
+            console.log(data);
+            this.isLoggedIn = true;
+            console.log(this.isLoggedIn);
           } else {
-            // User does not exist, handle accordingly
-            this.setLoggedIn(false);
+            // User does not exist
+            this.isLoggedIn = false;
           }
         })
         .catch((error) => {
           console.error('Error during login', error);
         });
     },
-    getUserInfo() {
-      if (this.userInfo) {
-        console.log("사용자 정보가 성다1234124");
-        const { email } = this.userInfo;
-        console.log("사용자");
-
-        axios
-          .get('/api/user', { params: { email: email } })
-          .then((response) => {
-            const { res, message, data } = response.data;
-            if (res) {
-              // Successfully retrieved user information
-              console.log("사용자 정보가 성다");
-              this.setUserInfo(data);
-            } else {
-              console.log("사용자 정보가 성공적으로 백엔드로 전송되었습니다");
-            }
-          })
-          .catch((error) => {
-            console.error('Error getting user information', error);
-          });
-      }
-    },
+    
     
   },
 });

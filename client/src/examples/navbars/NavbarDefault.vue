@@ -322,27 +322,23 @@ export default {
       window.Kakao.API.request({
         url: "/v2/user/me",
         success: (res) => {
+          const properties = res.properties; 
+          const nickname = properties.nickname;
+          const kakao_account = res.kakao_account;
+          const gender = kakao_account.gender; 
+          const email = kakao_account.email; 
 
-          authStore.getUserInfo();
-        
-          if(authStore.email){
-            alert("로그인 완료");
-          }else{
+          authStore.loginWithKakao(email);
+
+          if(authStore.userInfo == null){
             alert("첫 로그인 입니다! 환영해요");
-            const kakao_account = res.kakao_account;
-            const properties = res.properties; 
-            const nickname = properties.nickname;
-            const gender = kakao_account.gender; 
-            const email = kakao_account.email; 
             authStore.setUserInfo({email, nickname , gender });
-            authStore.setLoggedIn(true);
             this.$router.push({ name: 'getinformation' });
-          }
+          }else{
+            alert("로그인 완료");
           
-
-
-
-          this.$forceUpdate();
+          }
+          authStore.setLoggedIn(true);
         },
         fail: (error) => {
           console.log(error);
