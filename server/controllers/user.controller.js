@@ -35,7 +35,7 @@ const updateUser = async (req, res) => {
     try {
         User.findOne({ 
             where: { 
-                kakao_email: req.body.kakao_email
+                kakao_email: req.body.email
             }
         }).then((user) => {
             if(user) {

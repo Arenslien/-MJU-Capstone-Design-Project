@@ -36,37 +36,38 @@ const login = async (req, res) => {
 const signup = async (req, res) => {
     console.log('[START] POST/signup');
 
-    console.log(req.body);
-
     try {
         if(req.body.email == null) {
             return res.status(500).send({ res: false, message: 'Failed to create account. Email required.'})
         }
 
-        var id = await User.count() + 1;
-        var today = new Date();
-        var join_date = today.getFullYear() + '-' + ( (today.getMonth()+1) < 9 ? "0" + (today.getMonth()+1) : (today.getMonth()+1) ) + '-' + ( (today.getDate()) < 9 ? "0" + (today.getDate()) : (today.getDate()) );
+        User.findOne({ attributes: ['user_id'], order: [['user_id', 'DESC']]})
+        .then(data => {
+            var _id = data.dataValues.user_id + 1;
+            var today = new Date();
+            var join_date = today.getFullYear() + '-' + ( (today.getMonth()+1) < 9 ? "0" + (today.getMonth()+1) : (today.getMonth()+1) ) + '-' + ( (today.getDate()) < 9 ? "0" + (today.getDate()) : (today.getDate()) );
 
-        User.create({
-            user_id: id,
-            kakao_email: req.body.email,
-            name: req.body.nickname,
-            join_date: join_date,
-            category_1: null,
-            category_2: null,
-            category_3: null,
-            gender: req.body.gender,
-        }).then(() => {    
-            console.log('[SUCCESS] POST/signup - succeeded to create account');
-            return res.status(201).send({res: true, message: "succeeded to create account."});
-        }).catch(err => {
-            console.log('[FAIL] POST/signup');
-            return res.status(500).send({ res: false, message: `Failed to create account. The reason why ${err}` });
-        })
-
-
+            User.create({
+                user_id: _id,
+                kakao_email: req.body.email,
+                name: req.body.nickname,
+                join_date: join_date,
+                category_1: null,
+                category_2: null,
+                category_3: null,
+                gender: req.body.gender,
+            }).then(() => {    
+                console.log('[SUCCESS] POST/signup - succeeded to create account');
+                return res.status(201).send({res: true, message: "succeeded to create account."});
+            }).catch(err => {
+                console.log('[FAIL] POST/signup');
+                console.log(err);
+                return res.status(500).send({ res: false, message: `Failed to create account. The reason why ${err}` });
+            })
+        });
     } catch(err) {
         console.log('[FAIL] POST/signup');
+        console.log(err);
         return res.status(500).send({ res: false, message: `Failed to create account. The reason why ${err}` });
     }  
 }
