@@ -6,12 +6,12 @@ const login = async (req, res) => {
     console.log('[START] POST/login');
 
     try {
-        User.findOne({ where: { kakao_email: req.body.kakao_email}})
+        User.findOne({ where: { kakao_email: req.body.email}})
         .then(user => {
             if (user) {
                 var userInfo = { 
                     user_id: user.user_id,
-                    kakao_email: user.kakao_email,
+                    kakao_email: user.email,
                     nickname: user.name,
                     gender: user.gender,
                     join_date: user.join_date,
@@ -36,14 +36,20 @@ const login = async (req, res) => {
 const signup = async (req, res) => {
     console.log('[START] POST/signup');
 
+    console.log(req.body);
+
     try {
+        if(req.body.email == null) {
+            return res.status(500).send({ res: false, message: 'Failed to create account. Email required.'})
+        }
+
         var id = await User.count() + 1;
         var today = new Date();
         var join_date = today.getFullYear() + '-' + ( (today.getMonth()+1) < 9 ? "0" + (today.getMonth()+1) : (today.getMonth()+1) ) + '-' + ( (today.getDate()) < 9 ? "0" + (today.getDate()) : (today.getDate()) );
 
         User.create({
             user_id: id,
-            kakao_email: req.body.kakao_email,
+            kakao_email: req.body.email,
             name: req.body.nickname,
             join_date: join_date,
             category_1: null,
