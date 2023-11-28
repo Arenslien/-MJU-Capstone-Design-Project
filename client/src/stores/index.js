@@ -35,13 +35,13 @@ export const useAuthStore = defineStore("auth", {
       this.isFirstLogin = status;
     },
     sendUserInfoToBackend() {
-      const { kakao_email, nickname, gender } = this.userInfo;
+      const { email, nickname, gender } = this.userInfo;
     
       // gender를 boolean으로 변환
       const genderToSend = gender.toLowerCase() === 'male'; // 예시: 'male'이면 true, 'female'이면 false
     
       const userInfoToSend = {
-        kakao_email,
+        email,
         nickname,
         gender: genderToSend,
       };
