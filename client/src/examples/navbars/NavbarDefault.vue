@@ -322,11 +322,11 @@ export default {
       window.Kakao.API.request({
         url: "/v2/user/me",
         success: (res) => {
-          
 
+          authStore.getUserInfo();
+        
           if(authStore.email){
             alert("로그인 완료");
-            //백엔드에서 정보 불러오자 구현 필요
           }else{
             alert("첫 로그인 입니다! 환영해요");
             const kakao_account = res.kakao_account;
@@ -335,9 +335,10 @@ export default {
             const gender = kakao_account.gender; 
             const email = kakao_account.email; 
             authStore.setUserInfo({email, nickname , gender });
+            authStore.setLoggedIn(true);
             this.$router.push({ name: 'getinformation' });
           }
-          authStore.setLoggedIn(true);
+          
 
 
 
