@@ -5,9 +5,10 @@ const User = db.User;
 
 const getUserBy = async (req, res) => {
     console.log('[START] GET/getUserBy');
+    console.log("query", req.query.email);
 
     try {
-        User.findOne({ where: { kakao_email: req.body.kakao_email}})
+        User.findOne({ where: { kakao_email: req.query.email}})
         .then(user => 
             {var userInfo = { 
                 user_id: user.user_id,
@@ -24,6 +25,7 @@ const getUserBy = async (req, res) => {
         });
     } catch(err) {
         console.log('[FAIL] GET/getUserBy');
+        console.log(err);
         return res.status(500).send({ res: false, message: `Failed to get user information. The reason why ${err}` });
     }
 
