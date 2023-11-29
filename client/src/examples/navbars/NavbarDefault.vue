@@ -199,12 +199,14 @@ watch(
                       <RouterLink
                         :to="{ name: 'my-information' }"
                         class="dropdown-item border-radius-md"
+                        @click="logincheck"
                       >
                         <span>내 정보</span>
                       </RouterLink>
                       <RouterLink
                         :to="{ name: 'selected-places' }"
                         class="dropdown-item border-radius-md"
+                        @click="logincheck"
                       >
                         <span>내가 선택한 장소</span>
                       </RouterLink>
@@ -216,12 +218,14 @@ watch(
                 <RouterLink
                   :to="{ name: 'my-information' }"
                   class="dropdown-item border-radius-md"
+                  @click="logincheck"
                 >
                   <span>내 정보</span>
                 </RouterLink>
                 <RouterLink
                   :to="{ name: 'selected-places' }"
                   class="dropdown-item border-radius-md"
+                  @click="logincheck"
                 >
                   <span>내가 선택한 장소</span>
                 </RouterLink>
@@ -295,6 +299,15 @@ export default {
     },
   },
   methods: {
+    logincheck() {
+      const authStore = useAuthStore();
+      if(!authStore.isLoggedIn){
+        alert("로그인 해주세요!");
+        return false;
+      }else{
+        return true;
+      }
+    },
     kakaoLogin() {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
@@ -311,23 +324,9 @@ export default {
       });
       }
     },
-    isFirst(){
-      const authStore = useAuthStore();
-      if(!authStore.isLoggedIn){
-            alert("첫 로그인 입니다! 환영해요");
-            authStore.setUserInfo({email, nickname , gender });
-            this.$router.push({ name: 'getinformation' });
-          }else{
-            alert("로그인 완료");
-          
-          }
-          authStore.setLoggedIn(true);
-    },
 
     getKakaoAccount() {
   const authStore = useAuthStore();
-
-  console.log("1");
 
   window.Kakao.API.request({
     url: "/v2/user/me",
@@ -338,14 +337,12 @@ export default {
       const gender = kakao_account.gender; 
       const email = kakao_account.email; 
 
-      console.log("2");
 
       // authStore.loginWithKakao가 Promise를 반환하므로, 해당 Promise가 완료될 때까지 기다림
       await authStore.loginWithKakao(email)
         .then(() => {
           // post 요청이 완료된 후에 실행되는 로직
           if (!authStore.isLoggedIn) {
-            console.log("3");
             // 처음 로그인하는 경우
             alert("첫 로그인 입니다! 환영해요");
             authStore.setUserInfo({ email, nickname, gender });
@@ -356,7 +353,6 @@ export default {
           }
 
           authStore.setLoggedIn(true);
-          console.log("4");
         })
         .catch((error) => {
           console.error('Error during login', error);
