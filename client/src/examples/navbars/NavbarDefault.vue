@@ -293,10 +293,6 @@ export default {
       const authStore = useAuthStore();
       return authStore.isLoggedIn;
     },
-    isFirstLogin() {
-      const authStore = useAuthStore();
-      return authStore.isFirstLogin;
-    },
   },
   methods: {
     kakaoLogin() {
@@ -315,22 +311,9 @@ export default {
       });
       }
     },
-
-    getKakaoAccount() {
+    isFirst(){
       const authStore = useAuthStore();
-
-      window.Kakao.API.request({
-        url: "/v2/user/me",
-        success: (res) => {
-          const properties = res.properties; 
-          const nickname = properties.nickname;
-          const kakao_account = res.kakao_account;
-          const gender = kakao_account.gender; 
-          const email = kakao_account.email; 
-
-          authStore.loginWithKakao(email);
-
-          if(authStore.userInfo == null){
+      if(!authStore.isLoggedIn){
             alert("첫 로그인 입니다! 환영해요");
             authStore.setUserInfo({email, nickname , gender });
             this.$router.push({ name: 'getinformation' });
@@ -339,12 +322,54 @@ export default {
           
           }
           authStore.setLoggedIn(true);
-        },
-        fail: (error) => {
-          console.log(error);
-        },
-      });
     },
+
+    getKakaoAccount() {
+  const authStore = useAuthStore();
+
+  console.log("1");
+
+  window.Kakao.API.request({
+    url: "/v2/user/me",
+    success: async (res) => {
+      const properties = res.properties; 
+      const nickname = properties.nickname;
+      const kakao_account = res.kakao_account;
+      const gender = kakao_account.gender; 
+      const email = kakao_account.email; 
+
+      console.log("2");
+
+      // authStore.loginWithKakao가 Promise를 반환하므로, 해당 Promise가 완료될 때까지 기다림
+      await authStore.loginWithKakao(email)
+        .then(() => {
+          // post 요청이 완료된 후에 실행되는 로직
+          if (!authStore.isLoggedIn) {
+            console.log("3");
+            // 처음 로그인하는 경우
+            alert("첫 로그인 입니다! 환영해요");
+            authStore.setUserInfo({ email, nickname, gender });
+            this.$router.push({ name: 'getinformation' });
+          } else {
+            // 이미 로그인한 경우
+            alert("로그인 완료");
+          }
+
+          authStore.setLoggedIn(true);
+          console.log("4");
+        })
+        .catch((error) => {
+          console.error('Error during login', error);
+        });
+
+      
+    },
+    fail: (error) => {
+      console.log(error);
+    },
+  });
+},
+
     kakaoLogout() {
       const authStore = useAuthStore();
       authStore.logout();

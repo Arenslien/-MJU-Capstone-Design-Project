@@ -8,7 +8,7 @@ export const useAppStore = defineStore("storeId", {
 });
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    isLoggedIn: null,
+    isLoggedIn: false,
     userInfo: null,
   }),
   actions: {
@@ -70,37 +70,33 @@ export const useAuthStore = defineStore("auth", {
           // 에러 응답에 대한 더 자세한 정보를 로깅
         });
     },
-    loginWithKakao(email1) {
-      
-      const userInfoToSend = {
-        email: email1,
-      };
-    
-      axios
-        .post('http://localhost:8080/api/auth/login', userInfoToSend, {
+    async loginWithKakao(email1) {
+      try {
+        const userInfoToSend = {
+          email: email1,
+        };
+
+        const response = await axios.post('http://localhost:8080/api/auth/login', userInfoToSend, {
           headers: {
             'Content-Type': 'application/json',
           },
-        })
-        .then((response) => {
-          const { res, message, data } = response.data;
-          if (res) {
-            // User already exists
-            data.email = email1;
-            this.setUserInfo(data);
-            console.log(data);
-            this.isLoggedIn = true;
-            console.log(this.isLoggedIn);
-          } else {
-            // User does not exist
-            this.isLoggedIn = false;
-          }
-        })
-        .catch((error) => {
-          console.error('Error during login', error);
         });
+
+        const { res, message, data } = response.data;
+        if (res) {
+          // User already exists
+          data.email = email1;
+          this.setUserInfo(data);
+          console.log(data);
+          this.isLoggedIn = true;
+          console.log(this.isLoggedIn);
+        } else {
+          // User does not exist
+          this.isLoggedIn = false;
+        }
+      } catch (error) {
+        console.error('Error during login', error);
+      }
     },
-    
-    
   },
 });
