@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: "user_id",
           onDelete: "cascade",
       });
-      this.belongsToMany(models.Tourlist, {
-          as: "tourlist",
-          through: "TourlistBookmark",
-          foreignKey: "tourlist_id",
+      this.belongsToMany(models.Tourist, {
+          as: "tourist",
+          through: "TouristBookmark",
+          foreignKey: "tourist_id",
           onDelete: "cascade",
       });
       this.belongsToMany(models.Workspace, {
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     user_id: DataTypes.INTEGER,
-    tourlist_ids: DataTypes.JSON,
+    tourist_ids: DataTypes.JSON,
     workspace_ids: DataTypes.JSON,
     bookmark_date: DataTypes.DATE
   }, {
