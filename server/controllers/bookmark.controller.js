@@ -36,16 +36,27 @@ const createBookmarks = async (req, res) => {
 
 const getBookmarks = async (req, res) => {
     console.log('[START] GET/getBookmarks');
+    console.log(req.query);
 
     try {
-        //
+        Bookmark.findOne({ where: { user_id: req.query.user_id }})
+        .then(bookmark => {
+            if (bookmark) {
+                var bookmarkInfo = {
+                    user_id: bookmark.user_id,
+                    boomark_id: bookmark.bookmark_id,
+                    tourist_ids: bookmark.tourist_ids,
+                    workspace_ids: bookmark.workspace_ids
+                }
+
+                console.log("[SUCCESS] GET/getBookmarks");
+                return res.status(200).send({ res: true, message: 'Succeeded to get bookmarks', data: bookmarkInfo });
+            }
+        });
     } catch(err) {
         console.log('[FAIL] GET/getBookmarks');
         return res.status(500).send({ res: false, message: `Failed to get bookmarks information. The reason why ${err}` });
     }
-
-    console.log("[SUCCESS] Connected Well.");
-    res.status(200).send({ res: true, message: "Connected Well."});
 }
 
 const updateBookmarks = async (req, res) => {
