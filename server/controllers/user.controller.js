@@ -7,7 +7,7 @@ const getUserBy = async (req, res) => {
     console.log('[START] GET/getUserBy');
 
     try {
-        User.findOne({ where: { kakao_email: req.body.kakao_email}})
+        User.findOne({ where: { kakao_email: req.query.email}})
         .then(user => 
             {var userInfo = { 
                 user_id: user.user_id,
@@ -24,6 +24,7 @@ const getUserBy = async (req, res) => {
         });
     } catch(err) {
         console.log('[FAIL] GET/getUserBy');
+        console.log(err);
         return res.status(500).send({ res: false, message: `Failed to get user information. The reason why ${err}` });
     }
 
@@ -42,13 +43,10 @@ const updateUser = async (req, res) => {
                 user.update({
                     gender: req.body.gender,
                     name: req.body.nickname,
-                    category_1: req.body.category_1,
-                    category_2: req.body.category_2,
-                    category_3: req.body.category_3,
                 },
                 {
                     where: { 
-                        kakao_email: req.body.kakao_email
+                        kakao_email: req.body.email
                     }
                 });
                 

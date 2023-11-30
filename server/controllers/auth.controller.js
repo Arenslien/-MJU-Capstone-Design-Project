@@ -43,7 +43,7 @@ const signup = async (req, res) => {
 
         User.findOne({ attributes: ['user_id'], order: [['user_id', 'DESC']]})
         .then(data => {
-            var _id = data.dataValues.user_id + 1;
+            var _id = (data ? data.dataValues.user_id : 0) + 1;
             var today = new Date();
             var join_date = today.getFullYear() + '-' + ( (today.getMonth()+1) < 9 ? "0" + (today.getMonth()+1) : (today.getMonth()+1) ) + '-' + ( (today.getDate()) < 9 ? "0" + (today.getDate()) : (today.getDate()) );
 
