@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER(10)
       },
-      tourlist_ids: {
+      tourist_ids: {
         allowNull: false,
         type: Sequelize.JSON
       },

@@ -4,6 +4,7 @@ const Bookmark = db.Bookmark;
 
 const createBookmarks = async (req, res) => {
     console.log('[START] POST/createBookmarks');
+    console.log(req.body);
 
     try {
         Bookmark.findOne({ attributes: ['bookmark_id'], order: [['bookmark_id', 'DESC']]})
@@ -31,9 +32,6 @@ const createBookmarks = async (req, res) => {
         console.log('[FAIL] POST/createBookmarks');
         return res.status(500).send({ res: false, message: `Failed to create bookmarks information. The reason why ${err}` });
     }
-
-    console.log("[SUCCESS] Connected Well.");
-    res.status(200).send({ res: true, message: "Connected Well."});
 }
 
 const getBookmarks = async (req, res) => {
