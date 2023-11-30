@@ -1,4 +1,5 @@
 const db = require("../models");
+const BadRequestError = require('../components/exceptions/exceptions');
 
 const Bookmark = db.Bookmark;
 
@@ -75,16 +76,25 @@ const updateBookmarks = async (req, res) => {
 
 const deleteBookmarks = async (req, res) => {
     console.log('[START] DELETE/deleteBookmarks');
+    const user_id = parseInt(req.params.id);
 
     try {
-        //
+        if (user_id === undefined) throw new BadRequestError('You must include id on uri.');
+
+        Bookmark.destroy({
+            where: {
+                user_id: user_id,
+            }
+        }).then(result => {
+            console.log(result);
+        })
+
+        console.log('[SUCCESS] DELETE/deleteBookmarks');
+        return res.status(200).send({ res: true, message: "Succeeded to delete bookmark."})
     } catch(err) {
         console.log('[FAIL] DELETE/deleteBookmarks');
-        return res.status(500).send({ res: false, message: `Failed to delete bookmarks. The reason why ${err}`});
+        return res.status(500).send({ res: false, message: `Failed to delete bookmark. The reason why ${err}` });
     }
-
-    console.log("[SUCCESS] Connected Well.");
-    res.status(200).send({ res: true, message: "Connected Well."});
 }
 
 module.exports = {
