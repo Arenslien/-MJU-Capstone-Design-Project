@@ -98,5 +98,21 @@ export const useAuthStore = defineStore("auth", {
         console.error('Error during login', error);
       }
     },
+    sendCategoriesToBackend(categories) {
+      axios
+        .post("http://localhost:8080/api/backend-endpoint", categories, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          console.log("Categories successfully sent to the backend", response.data);
+          // Additional handling if needed
+        })
+        .catch((error) => {
+          console.error("Error sending categories to the backend", error.response);
+          // More detailed error logging if necessary
+        });
+    },
   },
 });

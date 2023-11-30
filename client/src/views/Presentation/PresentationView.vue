@@ -59,17 +59,11 @@ export default {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
-      if (isKakaoAuthorized) {
-        // 이미 로그인된 상태라면 처리
-        alert("로그인 이미 된거심");
-        authStore.setLoggedIn(true);
-      }
-      else {
-        window.Kakao.Auth.login({
+      window.Kakao.Auth.login({
         scope: 'profile_nickname, account_email, gender',
         success: this.getKakaoAccount,
       });
-      }
+      
     },
 
     getKakaoAccount() {
