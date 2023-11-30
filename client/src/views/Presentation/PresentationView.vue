@@ -89,8 +89,6 @@ export default {
             authStore.setUserInfo({ email, nickname, gender });
             this.$router.push({ name: 'getinformation' });
           } else {
-            // 이미 로그인한 경우
-            alert("로그인 완료");
             this.openModal();
           }
 

@@ -69,6 +69,11 @@ function getClasses(size, success, error) {
   return `${sizeValue} ${isValidValue}`;
 }
 </script>
+<script>
+export default {
+  value: String,
+}
+</script>
 <template>
   <div class="input-group">
     <label v-if="label" :class="label.class">{{
@@ -82,10 +87,12 @@ function getClasses(size, success, error) {
       :type="type"
       class="form-control"
       :class="[getClasses(size, success, error), inputClass]"
-      :value="value"
+      
       :placeholder="placeholder"
       :isRequired="isRequired"
       :disabled="isDisabled"
+      :value="value" 
+      @input="$emit('input', $event.target.value)"
     />
   </div>
 </template>

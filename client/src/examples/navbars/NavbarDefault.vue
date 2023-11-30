@@ -199,14 +199,14 @@ watch(
                       <RouterLink
                         :to="{ name: 'my-information' }"
                         class="dropdown-item border-radius-md"
-                        @click="logincheck"
+                        
                       >
                         <span>내 정보</span>
                       </RouterLink>
                       <RouterLink
                         :to="{ name: 'selected-places' }"
                         class="dropdown-item border-radius-md"
-                        @click="logincheck"
+                        
                       >
                         <span>내가 선택한 장소</span>
                       </RouterLink>

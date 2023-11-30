@@ -24,7 +24,11 @@ export const useAuthStore = defineStore("auth", {
       }
     
       // Check if user object has gender property
-      if ('gender' in user) {
+      if ('gender' in user && (user.gender === 'male' || user.gender === 'female')) {
+        // 'gender' 속성이 존재하고, 값이 'male' 또는 'female'일 경우에만 작업 수행
+        // 이 경우에는 기존의 값 그대로 유지하고 아무 작업도 수행하지 않음
+      } else if ('gender' in user) {
+        // 'gender' 속성이 존재하나 값이 'male' 또는 'female'이 아닐 경우에 작업 수행
         user.gender = user.gender === true ? 'male' : 'female';
       }
     
@@ -98,21 +102,71 @@ export const useAuthStore = defineStore("auth", {
         console.error('Error during login', error);
       }
     },
-    sendCategoriesToBackend(categories) {
+    saveCategory(user_id, category_1, category_2, category_3) {
+      const categoryData = {
+        user_id,
+        category_1,
+        category_2,
+        category_3,
+      };
+
       axios
-        .post("http://localhost:8080/api/backend-endpoint", categories, {
+        .put("http://localhost:8080/api/category", categoryData, {
           headers: {
             'Content-Type': 'application/json',
           },
         })
         .then((response) => {
-          console.log("Categories successfully sent to the backend", response.data);
-          // Additional handling if needed
+          const { res, message } = response.data;
+          if (res) {
+            console.log(message);
+            // Additional handling if needed
+          } else {
+            console.error(message);
+            // Handle the case where saving the category was not successful
+          }
         })
         .catch((error) => {
-          console.error("Error sending categories to the backend", error.response);
-          // More detailed error logging if necessary
+          console.error("Error saving category", error);
+          // Handle other errors during the category save
         });
+    },
+    async updateUser() {
+      const { email, nickname, gender } = this.userInfo;
+
+      // gender를 boolean으로 변환
+      const genderToSend = gender.toLowerCase() === 'male'; // 예시: 'male'이면 true, 'female'이면 false
+
+      const userInfoToUpdate = {
+        email,
+        nickname,
+        gender: genderToSend,
+      };
+      console.log(this.userInfo);
+      
+
+      try {
+        const response = await axios.put("http://localhost:8080/api/user", userInfoToUpdate, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const { res, message } = response.data;
+        if (res) {
+          console.log(message);
+          // Additional handling if needed
+        } else {
+          console.error(message);
+          // Handle the case where the update was not successful
+        }
+      } catch (error) {
+        console.error("Error updating user", error);
+        // Handle other errors during the update
+      }
+    },
+    updateUserInformation(newUserInfo) {
+      this.userInfo = newUserInfo;
     },
   },
 });
