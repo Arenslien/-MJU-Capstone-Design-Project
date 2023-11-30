@@ -59,53 +59,54 @@ export default {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
-      if (isKakaoAuthorized) {
-        // 이미 로그인된 상태라면 처리
-        alert("로그인 이미 된거심");
-        authStore.setLoggedIn(true);
-      }
-      else {
-        window.Kakao.Auth.login({
+      window.Kakao.Auth.login({
         scope: 'profile_nickname, account_email, gender',
         success: this.getKakaoAccount,
       });
-      }
+      
     },
 
     getKakaoAccount() {
-      const authStore = useAuthStore();
+  const authStore = useAuthStore();
 
-      window.Kakao.API.request({
-        url: "/v2/user/me",
-        success: (res) => {
-          //데이터불러오기.
+  window.Kakao.API.request({
+    url: "/v2/user/me",
+    success: async (res) => {
+      const properties = res.properties; 
+      const nickname = properties.nickname;
+      const kakao_account = res.kakao_account;
+      const gender = kakao_account.gender; 
+      const email = kakao_account.email; 
 
-          if(authStore.email){
+
+      // authStore.loginWithKakao가 Promise를 반환하므로, 해당 Promise가 완료될 때까지 기다림
+      await authStore.loginWithKakao(email)
+        .then(() => {
+          // post 요청이 완료된 후에 실행되는 로직
+          if (!authStore.isLoggedIn) {
+            // 처음 로그인하는 경우
+            alert("첫 로그인 입니다! 환영해요");
+            authStore.setUserInfo({ email, nickname, gender });
+            this.$router.push({ name: 'getinformation' });
+          } else {
+            // 이미 로그인한 경우
             alert("로그인 완료");
             this.openModal();
-            //백엔드에서 정보 불러오자 구현 필요
-            //기간설정 필요.
-          }else{
-            alert("첫 로그인 입니다! 환영해요");
-            const kakao_account = res.kakao_account;
-            const properties = res.properties; 
-            const nickname = properties.nickname;
-            const gender = kakao_account.gender;
-            const email = kakao_account.email;  
-            authStore.setUserInfo({email, nickname , gender });
-            this.$router.push({ name: 'getinformation' });
           }
+
           authStore.setLoggedIn(true);
+        })
+        .catch((error) => {
+          console.error('Error during login', error);
+        });
 
-
-
-          this.$forceUpdate();
-        },
-        fail: (error) => {
-          console.log(error);
-        },
-      });
+      
     },
+    fail: (error) => {
+      console.log(error);
+    },
+  });
+},
     checkTokenOnLoad() {
       const authStore = useAuthStore();
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;

@@ -16,9 +16,9 @@ onMounted(() => {
 export default {
   data() {
     return {
-      selectedStyle1: '',
-      selectedStyle5: '',
-      selectedStyle6: '',
+      category_1: "",
+      category_2: "",
+      category_3: "",
     };
   },
   methods: {
@@ -26,6 +26,12 @@ export default {
       this.$emit("closeModal");
     },
     moveToRecommend() {
+      const authStore = useAuthStore();
+      authStore.sendCategoriesToBackend({
+        category_1: this.category_1,
+        category_2: this.category_2,
+        category_3: this.category_3,
+      });
       this.$router.push({ name: 'recommend' });
     }
   }
@@ -56,17 +62,17 @@ export default {
             <label class="bold-text">자연 vs 도시</label>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle1" value="A"> 자연
+                <input type="radio" v-model="category_1" value="A"> 자연
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle1" value="N"> 중립
+                <input type="radio" v-model="category_1" value="N"> 중립
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle1" value="B"> 도시
+                <input type="radio" v-model="category_1" value="B"> 도시
               </label>
             </div>
           </div>
@@ -74,17 +80,17 @@ export default {
             <label class="bold-text">휴양/휴식 vs 체험활동</label>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle5" value="A"> 휴양/휴식
+                <input type="radio" v-model="category_2" value="A"> 휴양/휴식
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle5" value="N"> 중립
+                <input type="radio" v-model="category_2" value="N"> 중립
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle5" value="B"> 체험활동
+                <input type="radio" v-model="category_2" value="B"> 체험활동
               </label>
             </div>
           </div>
@@ -92,17 +98,17 @@ export default {
             <label class="bold-text">잘 알려지지 않은 방문지 vs 알려진 방문지</label>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle6" value="A"> 잘 알려지지 않은 방문지
+                <input type="radio" v-model="category_3" value="A"> 잘 알려지지 않은 방문지
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle6" value="N"> 중립
+                <input type="radio" v-model="category_3" value="N"> 중립
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="selectedStyle6" value="B"> 알려진 방문지
+                <input type="radio" v-model="category_3" value="B"> 알려진 방문지
               </label>
             </div>
           </div>

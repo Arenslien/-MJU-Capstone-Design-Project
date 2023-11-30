@@ -46,7 +46,6 @@ export default {
       nicknameInput: "",
       emailInput: "",
       genderInput: "",
-      ageRangeInput: "",
     };
   },
   methods: {
@@ -66,15 +65,11 @@ export default {
       if (this.genderInput) {
         authStore.setUserInfo({ ...authStore.userInfo, gender: this.genderInput });
       }
-      if (this.ageRangeInput) {
-        authStore.setUserInfo({ ...authStore.userInfo, age_range: this.ageRangeInput });
-      }
 
       // Reset input fields
       this.nicknameInput = "";
       this.emailInput = "";
       this.genderInput = "";
-      this.ageRangeInput = "";
 
       this.$router.push({ name: 'presentation' });
     },
@@ -136,7 +131,8 @@ export default {
                         label="닉네임"
                         type="text"
                         v-model="nicknameInput"
-                      />
+                      >
+                      </MaterialInput>
                       <hr>
                       <!--이메일 조회 모드-->
                       <template v-if="!editMode">
@@ -145,27 +141,13 @@ export default {
                         </div>
                       </template>
                       <!--이메일 수정 모드-->
-                      <!-- <MaterialInput v-else
+                      <MaterialInput v-else
                         class="input-group-static mb-4"
                         label="이메일"
                         type="email"
                         v-model="emailInput"
                       />
-                      <hr> -->
-                      <!--나이 조회 모드-->
-                      <template v-if="!editMode">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">나이:</span> {{ user.age_range }}
-                        </div>
-                      </template>
-                      <!--나이 수정 모드-->
-                      <!-- <MaterialInput v-else
-                        class="input-group-static mb-4"
-                        label="나이"
-                        type="number"
-                        v-model="ageRangeInput"
-                      />
-                      <hr> -->
+                      <hr>
                       <!--성별 조회 모드-->
                       <template v-if="!editMode">
                         <div class="d-flex justify-content-between align-items-center">
@@ -178,11 +160,11 @@ export default {
                         <div>
                           <label id="radio">
                             <input type="radio" name="gender" value="1">
-                            남자
+                            male
                           </label>
                           <label id="radio">
                             <input type="radio" name="gender" value="2">
-                            여자
+                            female
                           </label>
                         </div>
                       </div>
