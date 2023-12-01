@@ -66,19 +66,16 @@ export default {
       alert("닉네임을 입력해주세요.");
       return; // 함수 종료
     }
-    console.log(this.user.nickname);
 
     if (!this.user.email) {
       alert("이메일을 입력해주세요.");
       return; // 함수 종료
     }
-    console.log(this.user.email);
 
     if (!this.user.gender) {
       alert("성별을 선택해주세요.");
       return; // 함수 종료
     }
-    console.log(this.user.gender);
 
     // 스토어에서 사용자 정보 업데이트
     authStore.updateUserInformation({
@@ -86,7 +83,6 @@ export default {
       email: this.user.email,
       gender: this.user.gender,
     });
-    console.log("111");
     // 백엔드에서 사용자 정보 업데이트
     authStore.updateUser();
     this.$router.push({ name: 'presentation' });
@@ -150,13 +146,8 @@ export default {
         <hr>
         <!-- 이메일 수정 모드 -->
         <div class="mb-4">
-          <label for="emailInput" class="form-label">이메일</label>
-          <input
-            id="emailInput"
-            class="input-group-static"
-            type="email"
-            v-model="user.email"
-          />
+          <label for="emailInput" class="form-label">이메일</label> : {{user.email}}
+          
         </div>
         <hr>
         <!-- 성별 수정 모드 -->
