@@ -25,11 +25,15 @@ export default {
     closeModal() {
       this.$emit("closeModal");
     },
+    openModal() {
+      this.$emit("openModal");
+    },
     async moveToRecommend() {
       const authStore = useAuthStore();
       if (!this.user.category_1 || !this.user.category_2 || !this.user.category_3) {
         alert("카테고리를 모두 선택해주세요.");
-        location.reload();
+        
+        this.closeModal();
         return;
       }
 
@@ -39,49 +43,47 @@ export default {
       let category3Value;
       
       switch (this.user.category_1) {
-  case "A": // 자연
-    category1Value = 0;
-    break;
-  case "N": // 중립
-    category1Value = 1;
-    break;
-  case "B": // 도시
-    category1Value = 2;
-    break;
-  default:
-    alert("잘못된 카테고리 값입니다.");
-    return;
-}
+        case "A": // 자연
+          category1Value = 0;
+          break;
+        case "N": // 중립
+          category1Value = 1;
+          break;
+        case "B": // 도시
+          category1Value = 2;
+          break;
+        default:
+          location.reload();
+      }
 
 switch (this.user.category_2) {
-  case "A": // 자연
+  case "A": 
     category2Value = 0;
     break;
   case "N": // 중립
     category2Value = 1;
     break;
-  case "B": // 도시
+  case "B": 
     category2Value = 2;
     break;
   default:
-    alert("잘못된 카테고리 값입니다.");
-    return;
+    location.reload();
 }
 
 switch (this.user.category_3) {
-  case "A": // 자연
+  case "A": 
     category3Value = 0;
     break;
   case "N": // 중립
     category3Value = 1;
     break;
-  case "B": // 도시
+  case "B": 
     category3Value = 2;
     break;
   default:
-    alert("잘못된 카테고리 값입니다.");
-    return;
+    location.reload();
 }
+
 
 
       // 변환된 값 출력
@@ -95,7 +97,6 @@ switch (this.user.category_3) {
         category_2: category2Value,
         category_3: category3Value,
       });
-      console.log(authStore.userInfo);
       await authStore.saveCategory();
       
 
