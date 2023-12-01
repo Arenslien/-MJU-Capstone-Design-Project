@@ -32,6 +32,10 @@ export default {
         category_2: this.category_2,
         category_3: this.category_3,
       });
+
+  // Call the new action to save categories
+      authStore.saveCategory(authStore.user_id, this.category_1, this.category_2, this.category_3);
+
       this.$router.push({ name: 'recommend' });
     }
   }
