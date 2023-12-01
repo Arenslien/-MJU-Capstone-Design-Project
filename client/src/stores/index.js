@@ -44,9 +44,6 @@ export const useAuthStore = defineStore("auth", {
         this.resetAuth();
       });
     },
-    updateFirstLoginStatus(status) {
-      this.isFirstLogin = status;
-    },
     sendUserInfoToBackend() {
       const { email, nickname, gender } = this.userInfo;
     
@@ -90,10 +87,9 @@ export const useAuthStore = defineStore("auth", {
         if (res) {
           // User already exists
           data.email = email1;
+          data.user_id = parseInt(data.user_id, 10);
           this.setUserInfo(data);
-          console.log(data);
           this.isLoggedIn = true;
-          console.log(this.isLoggedIn);
         } else {
           // User does not exist
           this.isLoggedIn = false;
@@ -102,34 +98,35 @@ export const useAuthStore = defineStore("auth", {
         console.error('Error during login', error);
       }
     },
-    saveCategory(user_id, category_1, category_2, category_3) {
+    async saveCategory() {
+      const { user_id, category_1, category_2, category_3 } = this.userInfo;
+    
       const categoryData = {
         user_id,
         category_1,
         category_2,
         category_3,
       };
-
-      axios
-        .put("http://localhost:8080/api/category", categoryData, {
+      try {
+    
+        const response = await axios.put("http://localhost:8080/api/category", categoryData, {
           headers: {
             'Content-Type': 'application/json',
           },
-        })
-        .then((response) => {
-          const { res, message } = response.data;
-          if (res) {
-            console.log(message);
-            // Additional handling if needed
-          } else {
-            console.error(message);
-            // Handle the case where saving the category was not successful
-          }
-        })
-        .catch((error) => {
-          console.error("Error saving category", error);
-          // Handle other errors during the category save
         });
+    
+        const { res, message } = response.data;
+        if (res) {
+          console.log(message);
+          // Additional handling if needed
+        } else {
+          console.error(message);
+          // Handle the case where saving the category was not successful
+        }
+      } catch (error) {
+        console.error("Error saving category", error);
+        // Handle other errors during the category save
+      }
     },
     async updateUser() {
       const { email, nickname, gender } = this.userInfo;
@@ -142,7 +139,6 @@ export const useAuthStore = defineStore("auth", {
         nickname,
         gender: genderToSend,
       };
-      console.log(this.userInfo);
       
 
       try {
@@ -166,7 +162,10 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     updateUserInformation(newUserInfo) {
-      this.userInfo = newUserInfo;
+      this.userInfo = {
+        ...this.userInfo,
+        ...(newUserInfo || {}),
+      };
     },
   },
 });

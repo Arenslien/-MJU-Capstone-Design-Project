@@ -13,32 +13,95 @@ onMounted(() => {
 </script>
 
 <script>
+import { useAuthStore } from "../../../stores/index.js";
 export default {
-  data() {
-    return {
-      category_1: "",
-      category_2: "",
-      category_3: "",
-    };
+  computed: {
+    user() {
+      const authStore = useAuthStore();
+      return authStore.userInfo;
+    },
   },
   methods: {
     closeModal() {
       this.$emit("closeModal");
     },
-    moveToRecommend() {
+    async moveToRecommend() {
       const authStore = useAuthStore();
-      authStore.sendCategoriesToBackend({
-        category_1: this.category_1,
-        category_2: this.category_2,
-        category_3: this.category_3,
-      });
+      if (!this.user.category_1 || !this.user.category_2 || !this.user.category_3) {
+        alert("카테고리를 모두 선택해주세요.");
+        location.reload();
+        return;
+      }
 
-  // Call the new action to save categories
-      authStore.saveCategory(authStore.user_id, this.category_1, this.category_2, this.category_3);
+      // 카테고리 값 변환 함수
+      let category1Value;
+      let category2Value;
+      let category3Value;
+      
+      switch (this.user.category_1) {
+  case "A": // 자연
+    category1Value = 0;
+    break;
+  case "N": // 중립
+    category1Value = 1;
+    break;
+  case "B": // 도시
+    category1Value = 2;
+    break;
+  default:
+    alert("잘못된 카테고리 값입니다.");
+    return;
+}
+
+switch (this.user.category_2) {
+  case "A": // 자연
+    category2Value = 0;
+    break;
+  case "N": // 중립
+    category2Value = 1;
+    break;
+  case "B": // 도시
+    category2Value = 2;
+    break;
+  default:
+    alert("잘못된 카테고리 값입니다.");
+    return;
+}
+
+switch (this.user.category_3) {
+  case "A": // 자연
+    category3Value = 0;
+    break;
+  case "N": // 중립
+    category3Value = 1;
+    break;
+  case "B": // 도시
+    category3Value = 2;
+    break;
+  default:
+    alert("잘못된 카테고리 값입니다.");
+    return;
+}
+
+
+      // 변환된 값 출력
+      console.log("변환된 값 - 카테고리 1:", category1Value);
+      console.log("변환된 값 - 카테고리 2:", category2Value);
+      console.log("변환된 값 - 카테고리 3:", category3Value);
+
+      // Call the new action to save categories
+      authStore.updateUserInformation({
+        category_1: category1Value,
+        category_2: category2Value,
+        category_3: category3Value,
+      });
+      console.log(authStore.userInfo);
+      await authStore.saveCategory();
+      
 
       this.$router.push({ name: 'recommend' });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -66,17 +129,17 @@ export default {
             <label class="bold-text">자연 vs 도시</label>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_1" value="A"> 자연
+                <input type="radio" v-model="user.category_1" value="A"> 자연
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_1" value="N"> 중립
+                <input type="radio" v-model="user.category_1" value="N"> 중립
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_1" value="B"> 도시
+                <input type="radio" v-model="user.category_1" value="B"> 도시
               </label>
             </div>
           </div>
@@ -84,17 +147,17 @@ export default {
             <label class="bold-text">휴양/휴식 vs 체험활동</label>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_2" value="A"> 휴양/휴식
+                <input type="radio" v-model="user.category_2" value="A"> 휴양/휴식
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_2" value="N"> 중립
+                <input type="radio" v-model="user.category_2" value="N"> 중립
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_2" value="B"> 체험활동
+                <input type="radio" v-model="user.category_2" value="B"> 체험활동
               </label>
             </div>
           </div>
@@ -102,17 +165,17 @@ export default {
             <label class="bold-text">잘 알려지지 않은 방문지 vs 알려진 방문지</label>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_3" value="A"> 잘 알려지지 않은 방문지
+                <input type="radio" v-model="user.category_3" value="A"> 잘 알려지지 않은 방문지
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_3" value="N"> 중립
+                <input type="radio" v-model="user.category_3" value="N"> 중립
               </label>
             </div>
             <div class="col-md-4">
               <label>
-                <input type="radio" v-model="category_3" value="B"> 알려진 방문지
+                <input type="radio" v-model="user.category_3" value="B"> 알려진 방문지
               </label>
             </div>
           </div>
