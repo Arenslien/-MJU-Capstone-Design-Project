@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Tourlist extends Model {
+  class Tourist extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsToMany(models.Bookmark, {
-          as: "tourlist",
-          through: "TourlistBookmark",
-          foreignKey: "tourlist_id",
+          as: "tourist",
+          through: "TouristBookmark",
+          foreignKey: "tourist_id",
           onDelete: "cascade",
       });
     }
   }
-  Tourlist.init({
-    tourlist_id: {
+  Tourist.init({
+    tourist_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
     },
@@ -32,11 +32,11 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     timestamps: false,
     underscored: true,
-    modelName: "Tourlist",
-    tableName: "Tourlist",
+    modelName: "Tourist",
+    tableName: "Tourist",
     paranoid: false,
     collate: "utf8_general_ci",
     charset: "utf8",
   });
-  return Tourlist;
+  return Tourist;
 };

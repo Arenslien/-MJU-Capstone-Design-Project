@@ -3,7 +3,7 @@ const controller = require("../controllers/bookmark.controller")
 
 /**
  * @swagger
- * /bookmarks/{id}:
+ * /bookmarks?user_id={id}:
  *  get:
  *    tags:
  *      - Bookmarks
@@ -16,7 +16,7 @@ const controller = require("../controllers/bookmark.controller")
  *      - application/json
  *    parameters:
  *      - in: query
- *        name: userId
+ *        name: user_id
  *        schema:
  *          type: integer
  *        required: true

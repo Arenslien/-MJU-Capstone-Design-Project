@@ -9,7 +9,7 @@ import DefaultFooter from "@/examples/footers/FooterDefault.vue";
 import image from "@/assets/img/mypage-bg.jpg";
 
 //material components
-import MaterialInput from "@/components/MaterialInput.vue";
+
 import MaterialButton from "@/components/MaterialButton.vue";
 
 // material-input
@@ -20,8 +20,19 @@ onMounted(() => {
 </script>
 <script>
 import { useAuthStore } from "../../../stores/index.js"; // 실제 경로로 대체
-
+import MaterialInput from "@/components/MaterialInput.vue";
 export default {
+  components: {
+    'mate':MaterialInput,
+  },
+  data: function() {
+    const authStore = useAuthStore();
+    return {
+      nicknameInput: "",
+      emailInput: "",
+      genderInput: "",
+    };
+  },
   beforeRouteEnter(to, from, next) {
     const authStore = useAuthStore();
 
@@ -40,47 +51,46 @@ export default {
       return authStore.userInfo;
     },
   },
-  data() {
-    return {
-      editMode: false,
-      nicknameInput: "",
-      emailInput: "",
-      genderInput: "",
-      ageRangeInput: "",
-    };
-  },
+  
   methods: {
+    updateNickname(value) {
+      this.nicknameInput = value;
+    },
     changeEditMode() {
       this.editMode = true;
     },
     saveChanges() {
       const authStore = useAuthStore();
 
-      // Check each input field and update the user info if input is not empty
-      if (this.nicknameInput) {
-        authStore.setUserInfo({ ...authStore.userInfo, nickname: this.nicknameInput });
-      }
-      if (this.emailInput) {
-        authStore.setUserInfo({ ...authStore.userInfo, email: this.emailInput });
-      }
-      if (this.genderInput) {
-        authStore.setUserInfo({ ...authStore.userInfo, gender: this.genderInput });
-      }
-      if (this.ageRangeInput) {
-        authStore.setUserInfo({ ...authStore.userInfo, age_range: this.ageRangeInput });
-      }
+    if (!this.user.nickname) {
+      alert("닉네임을 입력해주세요.");
+      return; // 함수 종료
+    }
 
-      // Reset input fields
-      this.nicknameInput = "";
-      this.emailInput = "";
-      this.genderInput = "";
-      this.ageRangeInput = "";
+    if (!this.user.email) {
+      alert("이메일을 입력해주세요.");
+      return; // 함수 종료
+    }
 
-      this.$router.push({ name: 'presentation' });
+    if (!this.user.gender) {
+      alert("성별을 선택해주세요.");
+      return; // 함수 종료
+    }
+
+    // 스토어에서 사용자 정보 업데이트
+    authStore.updateUserInformation({
+      nickname: this.user.nickname,
+      email: this.user.email,
+      gender: this.user.gender,
+    });
+    // 백엔드에서 사용자 정보 업데이트
+    authStore.updateUser();
+    this.$router.push({ name: 'presentation' });
     },
   },
 };
 </script>
+
 
 <template>
   <div>
@@ -123,89 +133,50 @@ export default {
                     더 정확한 맞춤 추천을 위해 정보를 입력해주세요!
                   </p>
                   <form id="contact-form" method="post" autocomplete="off">
-                    <div class="card-body p-0 my-3">
-                      <!--닉네임 조회 모드-->
-                      <template v-if="!editMode">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">닉네임:</span> {{ user.nickname }}
-                        </div>
-                      </template>
-                      <!--닉네임 수정 모드-->
-                      <MaterialInput v-else
-                        class="input-group-static mb-4"
-                        label="닉네임"
-                        type="text"
-                        v-model="nicknameInput"
-                      />
-                      <hr>
-                      <!--이메일 조회 모드-->
-                      <template v-if="!editMode">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">이메일:</span> {{ user.email }}
-                        </div>
-                      </template>
-                      <!--이메일 수정 모드-->
-                      <!-- <MaterialInput v-else
-                        class="input-group-static mb-4"
-                        label="이메일"
-                        type="email"
-                        v-model="emailInput"
-                      />
-                      <hr> -->
-                      <!--나이 조회 모드-->
-                      <template v-if="!editMode">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">나이:</span> {{ user.age_range }}
-                        </div>
-                      </template>
-                      <!--나이 수정 모드-->
-                      <!-- <MaterialInput v-else
-                        class="input-group-static mb-4"
-                        label="나이"
-                        type="number"
-                        v-model="ageRangeInput"
-                      />
-                      <hr> -->
-                      <!--성별 조회 모드-->
-                      <template v-if="!editMode">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">성별:</span> {{ user.gender }}
-                        </div>
-                      </template>
-                      <!--성별 수정 모드-->
-                      <div class="pb-3" v-else>
-                        성별
-                        <div>
-                          <label id="radio">
-                            <input type="radio" name="gender" value="1">
-                            남자
-                          </label>
-                          <label id="radio">
-                            <input type="radio" name="gender" value="2">
-                            여자
-                          </label>
-                        </div>
-                      </div>
-                      <div class="col-md-12 text-center">
-                        <!--수정 모드 버튼-->
-                        <MaterialButton v-if="!editMode"
-                          variant="gradient"
-                          color="success"
-                          class="mt-3 mb-0"
-                          @click.prevent="changeEditMode">
-                          수정
-                        </MaterialButton>
-                        <!--저장 모드 버튼-->
-                        <MaterialButton v-else
-                          variant="gradient"
-                          color="success"
-                          class="mt-3 mb-0"
-                          @click.prevent="saveChanges">
-                          저장
-                        </MaterialButton>
-                      </div>
-                    </div>
-                  </form>
+      <div class="card-body p-0 my-3">
+        <div class="mb-4">
+          <label for="nicknameInput" class="form-label">닉네임</label>
+          <input
+            id="nicknameInput"
+            class="input-group-static"
+            type="text"
+            v-model="user.nickname"
+          />
+        </div>
+        <hr>
+        <!-- 이메일 수정 모드 -->
+        <div class="mb-4">
+          <label for="emailInput" class="form-label">이메일</label> : {{user.email}}
+          
+        </div>
+        <hr>
+        <!-- 성별 수정 모드 -->
+        <div class="pb-3">
+          성별
+          <div>
+            <label id="radio">
+              <input type="radio" name="gender" value="male" v-model="user.gender">
+              남성
+            </label>
+            <label id="radio">
+              <input type="radio" name="gender" value="female" v-model="user.gender">
+              여성
+            </label>
+          </div>
+        </div>
+        <div class="col-md-12 text-center">
+          <!-- 저장 모드 버튼 -->
+          <MaterialButton
+            variant="gradient"
+            color="success"
+            class="mt-3 mb-0"
+            @click.prevent="saveChanges"
+          >
+            저장
+          </MaterialButton>
+        </div>
+      </div>
+    </form>
                 </div>
               </div>
             </div>
@@ -221,5 +192,29 @@ export default {
 #radio {
   margin-left: 10px;
   margin-right: 170px;
+}
+
+.form-label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.input-group-static {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.input-group-static:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 </style>
