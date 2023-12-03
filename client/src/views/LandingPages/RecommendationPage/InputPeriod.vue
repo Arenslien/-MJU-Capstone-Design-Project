@@ -13,15 +13,9 @@ onMounted(() => {
 </script>
 
 <script>
-import ChooseTAPreference from "./ChooseTAPreference.vue";
-
 export default {
-  components: {
-    ChooseTAPreference,
-  },
   data() {
     return {
-      isTAPreferenceOpen: false,
       startDate: "",
       endDate: "",
     };
@@ -31,6 +25,8 @@ export default {
       this.$emit("closeModal");
     },
     openNextModal() {
+      console.log("startDate:", this.startDate);
+      console.log("endDate:", this.endDate);
       this.$emit('openNextModal');
     },
   },
@@ -88,11 +84,6 @@ export default {
           </div>
         </div>
       </form>
-    </div>
-  </div>
-  <div class="black-bg" v-if="isTAPreferenceOpen">
-    <div id="modal">
-      <ChooseTAPreference />
     </div>
   </div>
 </div>
