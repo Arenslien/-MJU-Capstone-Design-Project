@@ -103,9 +103,6 @@ const getRecommendRequest = async (req, res) => {
         console.log('[FAIL] GET/postRecommendResult');
         return res.status(500).send({ res: false, message: `Failed to get Recommend Result. The reason why ${err}` });
     }
-
-    console.log("[SUCCESS] Connected Well.");
-    res.status(200).send({ res: true, message: "Connected Well."});
 }
 
 
