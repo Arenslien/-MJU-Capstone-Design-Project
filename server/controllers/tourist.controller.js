@@ -93,10 +93,16 @@ const getRecommendRequest = async (req, res) => {
             // Success!
             console.log("Success!");
             console.log(result2.stdout.toString().trim());
+
+            console.log("[SUCCESS] GET/postRecommendResult.");
+            res.status(200).send({ res: true, message: "Succeed to get Recommend"});
         } else {
             // Error!
             console.log("Error!");
             console.log(result2.stderr.toString().trim());
+
+            console.log('[FAIL] GET/postRecommendResult');
+            return res.status(500).send({ res: false, message: "Failed to get Recommend Result." });
         }
 
     } catch(err) {
