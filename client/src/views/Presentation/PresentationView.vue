@@ -3,6 +3,7 @@ import { onMounted, onUnmounted } from "vue";
 
 //example components
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
+import InputPeriod from "../LandingPages/RecommendationPage/InputPeriod.vue";
 import ChooseTAPreference from "../LandingPages/RecommendationPage/ChooseTAPreference.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 
@@ -38,22 +39,31 @@ export default {
     this.checkTokenOnLoad();
   },
   components: {
+    InputPeriod,
     ChooseTAPreference,
   },
   data() {
     return {
-      isModalOpen: false,
+      isInputPeriodOpen: false,
+      isTAPreferenceOpen: false,
     };
   },
   methods: {
     openModal() {
-      this.isModalOpen = true;
+      this.isInputPeriodOpen = true;
     },
-    closeModal() {
-      this.isModalOpen = false;
+    closeInputPeriod() {
+      this.isInputPeriodOpen = false;
+    },
+    openTAPreference() {
+      this.isInputPeriodOpen = false;
+      this.isTAPreferenceOpen = true;
+    },
+    closeTAPreference() {
+      this.isTAPreferenceOpen = false;
     },
     goToRecommend() {
-      this.isModalOpen = true;
+      this.isInputPeriodOpen = true;
     },
     kakaoLogin() {
       const authStore = useAuthStore();
@@ -136,11 +146,23 @@ export default {
       :style="`background-image: url(${vueMkHeader})`"
       loading="lazy"
     >
-      <div class="black-bg" v-if="isModalOpen" >
+
+      <div class="black-bg" v-if="isInputPeriodOpen">
         <div id="modal">
-          <ChooseTAPreference @closeModal="closeModal"/>
+          <InputPeriod
+            @closeModal="closeInputPeriod"
+            @openNextModal="openTAPreference"
+          />
         </div>
       </div>
+      <div class="black-bg" v-if="isTAPreferenceOpen">
+        <div id="modal">
+          <ChooseTAPreference
+            @closeModal="closeTAPreference"
+          />
+        </div>
+      </div>
+
       <div class="margin col container">
         <div class="mx-auto position-relative left">
           <h1
