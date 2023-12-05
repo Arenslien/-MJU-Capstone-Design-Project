@@ -25,82 +25,81 @@ export default {
     closeModal() {
       this.$emit("closeModal");
     },
-    async moveToRecommend() {
-      const authStore = useAuthStore();
-      if (!this.user.category_1 || !this.user.category_2 || !this.user.category_3) {
-        alert("카테고리를 모두 선택해주세요.");
-        location.reload();
-        return;
-      }
-
-      // 카테고리 값 변환 함수
-      let category1Value;
-      let category2Value;
-      let category3Value;
-      
-      switch (this.user.category_1) {
-  case "A": // 자연
-    category1Value = 0;
-    break;
-  case "N": // 중립
-    category1Value = 1;
-    break;
-  case "B": // 도시
-    category1Value = 2;
-    break;
-  default:
-    alert("잘못된 카테고리 값입니다.");
-    return;
-}
-
-switch (this.user.category_2) {
-  case "A": // 자연
-    category2Value = 0;
-    break;
-  case "N": // 중립
-    category2Value = 1;
-    break;
-  case "B": // 도시
-    category2Value = 2;
-    break;
-  default:
-    alert("잘못된 카테고리 값입니다.");
-    return;
-}
-
-switch (this.user.category_3) {
-  case "A": // 자연
-    category3Value = 0;
-    break;
-  case "N": // 중립
-    category3Value = 1;
-    break;
-  case "B": // 도시
-    category3Value = 2;
-    break;
-  default:
-    alert("잘못된 카테고리 값입니다.");
-    return;
-}
-
-
-      // 변환된 값 출력
-      console.log("변환된 값 - 카테고리 1:", category1Value);
-      console.log("변환된 값 - 카테고리 2:", category2Value);
-      console.log("변환된 값 - 카테고리 3:", category3Value);
-
-      // Call the new action to save categories
-      authStore.updateUserInformation({
-        category_1: category1Value,
-        category_2: category2Value,
-        category_3: category3Value,
-      });
-      console.log(authStore.userInfo);
-      await authStore.saveCategory();
-      
-
-      this.$router.push({ name: 'recommend' });
+    openModal() {
+      this.$emit("openModal");
     },
+    async moveToRecommend() {
+  const authStore = useAuthStore();
+  if (!this.user.category_1 || !this.user.category_2 || !this.user.category_3) {
+    alert("카테고리를 모두 선택해주세요.");
+    this.closeModal();
+    return;
+  }
+
+  // 카테고리 값 변환 함수
+  let category1Value;
+  let category2Value;
+  let category3Value;
+
+  switch (this.user.category_1) {
+    case "A": // 자연
+      category1Value = 0;
+      break;
+    case "N": // 중립
+      category1Value = 1;
+      break;
+    case "B": // 도시
+      category1Value = 2;
+      break;
+    default:
+      location.reload();
+  }
+
+  switch (this.user.category_2) {
+    case "A":
+      category2Value = 0;
+      break;
+    case "N": // 중립
+      category2Value = 1;
+      break;
+    case "B":
+      category2Value = 2;
+      break;
+    default:
+      location.reload();
+  }
+
+  switch (this.user.category_3) {
+    case "A":
+      category3Value = 0;
+      break;
+    case "N": // 중립
+      category3Value = 1;
+      break;
+    case "B":
+      category3Value = 2;
+      break;
+    default:
+      location.reload();
+  }
+
+  // 변환된 값 출력
+  console.log("변환된 값 - 카테고리 1:", category1Value);
+  console.log("변환된 값 - 카테고리 2:", category2Value);
+  console.log("변환된 값 - 카테고리 3:", category3Value);
+
+  // Call the new action to save categories
+  authStore.updateUserInformation({
+    category_1: category1Value,
+    category_2: category2Value,
+    category_3: category3Value,
+  });
+
+  authStore.saveCategory();
+
+  // Wait for the router to complete the navigation
+  this.$router.push({ name: 'recommend' });
+},
   },
 };
 </script>
