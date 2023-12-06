@@ -1,19 +1,30 @@
 <template>
-  <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc;">
-    <ul>
-      <li v-for="spot in touristSpots" :key="spot.id" @click="handleClick(spot)" :class="{ 'selected': isSelected(spot) }">
-        <div style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px; margin-top: 10px;">
-          <span style="color: black;">{{ spot.name }}</span>
-          <span style="color: gray; font-size: 0.8em;">{{ spot.lat }}, {{ spot.lng }}</span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div style="margin-top:5px" >
-    <Button class="styled-button" @click="sendSelectedSpotsToUserInfo">관광지 저장</Button>
+  <div>
+    <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc;">
+      <ul>
+        <li v-for="spot in touristSpots" :key="spot.id" @click="handleClick(spot)" :class="{ 'selected': isSelected(spot) }">
+          <div style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px; margin-top: 10px;">
+            <span style="color: black;">{{ spot.name }}</span>
+            <span style="color: gray; font-size: 0.8em;">{{ spot.lat }}, {{ spot.lng }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div style="margin-top:5px">
+      <MaterialButton
+        variant="gradient"
+        color="success"
+        class="mt-2 mb-2"
+        @click="sendSelectedSpotsToUserInfo">
+        관광지 저장
+      </MaterialButton>
+    </div>
   </div>
 </template>
 
+<script setup>
+  import MaterialButton from "@/components/MaterialButton.vue";
+</script>
 <script>
 import axios from 'axios';
 import { useAuthStore } from '../../stores/index.js';
@@ -124,16 +135,4 @@ li {
 li:hover {
   background-color: #dcdcdc;
 }
-
-.styled-button {
-  width: 100px; /* 가로 크기 */
-  height: 35px; /* 세로 크기 */
-  padding: 5px 0; 
-    background-color: rgba(12, 222, 187, 0.873);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-  }
 </style>
