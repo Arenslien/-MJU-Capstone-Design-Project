@@ -62,9 +62,6 @@ export default {
       }
       return touristSpots;
     },
-    emitButtonClick() {
-      this.$emit('button-click');
-    },
     handleClick(spot) {
       const index = this.selectedSpots.findIndex(selectedSpot => selectedSpot.id === spot.id);
       

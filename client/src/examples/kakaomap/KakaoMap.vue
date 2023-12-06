@@ -29,11 +29,8 @@
       <div>
         <!-- 사이드바2리스트 -->
         <div style="height: 450px; border-bottom: 1px solid #ccc;">
-          <WorkList @touristSpotClick="handleTouristSpotClick" />
+          <WorkList @work-click="handleWorkSpotClick" />
         </div>
-      </div>
-      <div style="margin-top:5px">
-        <Button class="styled-button">업무공간저장</Button>
       </div>
     </div>
 
@@ -59,7 +56,8 @@ export default {
   data() {
     return {
       clickedMarker: null,
-      markers: [],
+      workMarkers: [],
+      travelMarkers: [],
       infowindow: null,
       sidebar2Visible: false,
     };
@@ -77,13 +75,26 @@ export default {
   },
 
   methods: {
-    handleTravelSpotClick(coordinates) {
+    handleButtonClick() {
+      // 클릭 시 사이드바2의 상태를 토글
+      this.sidebar2Visible = !this.sidebar2Visible;
+
+      //marker
+
+      // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
+      // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
+      if (!this.sidebar2Visible) {
+        document.querySelector('.sidebar2').style.left = '250px';
+      }
+    },
+
+    handleWorkSpotClick(coordinates) {
       const { x, y, selectedSpots } = coordinates;
       const markerPosition = new kakao.maps.LatLng(x, y);
 
       const marginOfError = 0.00001;
 
-      const existingMarkerIndex = this.markers.findIndex(marker => {
+      const existingMarkerIndex = this.workMarkers.findIndex(marker => {
         const markerPosition = marker.getPosition();
         const markerY = markerPosition.getLng();
         const markerX = markerPosition.getLat();
@@ -92,9 +103,50 @@ export default {
       });
 
       if (existingMarkerIndex !== -1) {
-        const existingMarker = this.markers[existingMarkerIndex];
+        const existingMarker = this.workMarkers[existingMarkerIndex];
         existingMarker.setMap(null);
-        this.markers.splice(existingMarkerIndex, 1);
+        this.workMarkers.splice(existingMarkerIndex, 1);
+      } else {
+        console.log('Creating new marker at:', x, y);
+
+        // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
+        const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'; 
+        const imageSize = new kakao.maps.Size(30, 45); // 마커 이미지 크기
+        const imageOption = { offset: new kakao.maps.Point(15, 45) }; // 마커 이미지 오프셋 설정
+
+        // 마커 이미지를 활용하여 마커 객체 생성
+        const marker = new kakao.maps.Marker({
+          position: markerPosition,
+          image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+          map: toRaw(this.map),
+        });
+
+        kakao.maps.event.addListener(marker, 'click', () => {
+          this.displayInfoWindow(markerPosition);
+        });
+
+        this.workMarkers.push(marker);
+      }
+    },
+
+    handleTravelSpotClick(coordinates) {
+      const { x, y, selectedSpots } = coordinates;
+      const markerPosition = new kakao.maps.LatLng(x, y);
+
+      const marginOfError = 0.00001;
+
+      const existingMarkerIndex = this.travelMarkers.findIndex(marker => {
+        const markerPosition = marker.getPosition();
+        const markerY = markerPosition.getLng();
+        const markerX = markerPosition.getLat();
+
+        return Math.abs(markerX - x) < marginOfError && Math.abs(markerY - y) < marginOfError;
+      });
+
+      if (existingMarkerIndex !== -1) {
+        const existingMarker = this.travelMarkers[existingMarkerIndex];
+        existingMarker.setMap(null);
+        this.travelMarkers.splice(existingMarkerIndex, 1);
       } else {
         console.log('Creating new marker at:', x, y);
         const marker = new kakao.maps.Marker({
@@ -106,7 +158,7 @@ export default {
           this.displayInfoWindow(markerPosition);
         });
 
-        this.markers.push(marker);
+        this.travelMarkers.push(marker);
       }
     },
 
@@ -129,6 +181,8 @@ export default {
   },
 };
 </script>
+
+
 
   
   <style scoped>
