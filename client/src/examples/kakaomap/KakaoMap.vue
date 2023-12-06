@@ -19,7 +19,7 @@
         <div >
         <!-- 사이드바1리스트 -->
           <div  style="height: 450px; border-bottom: 1px solid #ccc;">
-            <TravelList @button-click="handleButtonClick" />
+            <TravelList @button-click="handleButtonClick" @tourist-spot-click="handleTravelSpotClick"/>
           </div>
 
 
@@ -45,11 +45,8 @@
         <div >
           <!-- 사이드바2리스트 -->
         <div style="height: 450px; border-bottom: 1px solid #ccc;">
-          <WorkList @touristSpotClick="handleTouristSpotClick" />
+          <WorkList @work-handle="handleWorkSpotClick" />
         </div>
-        </div>
-        <div style="margin-top:5px">
-          <Button class="styled-button">업무공간저장</Button>
         </div>
         
       </div>
@@ -75,6 +72,7 @@
     
     data() {
       return {
+        clickedMarker: null,
         markers: [],
         infowindow: null,
         sidebar2Visible: false,
@@ -93,10 +91,49 @@
       }
     },
     methods: {
+      handleTravelSpotClick(coordinates) {
+  const { x, y, selectedSpots } = coordinates;
+  const markerPosition = new kakao.maps.LatLng(x, y);
+
+  // 마커 배열에서 기존 마커의 인덱스를 일정한 오차로 찾기
+  const marginOfError = 0.00001; // 필요에 따라 조정하세요
+
+  const existingMarkerIndex = this.markers.findIndex(marker => {
+    const markerPosition = marker.getPosition();
+    const markerY = markerPosition.getLng(); // 마커의 경도
+    const markerX = markerPosition.getLat(); // 마커의 위도
+
+    // 좌표 비교 (마커와 클릭한 장소의 좌표가 일정 오차 이내인 경우)
+    return Math.abs(markerX - x) < marginOfError && Math.abs(markerY - y) < marginOfError;
+  });
+
+  if (existingMarkerIndex !== -1) {
+    // 선택된 장소라면 기존 마커를 지우기
+    const existingMarker = this.markers[existingMarkerIndex];
+    existingMarker.setMap(null);
+    // markers 배열에서 마커 제거
+    this.markers.splice(existingMarkerIndex, 1);
+  } else {
+    // 선택된 장소가 아니라면 새로운 마커 생성 및 표시
+    console.log('새로운 마커 생성:', x, y);
+    const marker = new kakao.maps.Marker({
+      position: markerPosition,
+      map: toRaw(this.map),
+    });
+
+    // 마커를 markers 배열에 저장
+    this.markers.push(marker);
+  }
+},
+handleWorkSpotClick(){
+console.log("dsfsdf");
+},
       //하위컴포넌트에서 클릭시 사이드바토글관리
       handleButtonClick() {
         // 클릭 시 사이드바2의 상태를 토글
       this.sidebar2Visible = !this.sidebar2Visible;
+
+      //marker
 
       // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
       // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
@@ -104,6 +141,7 @@
         document.querySelector('.sidebar2').style.left = '250px';
       } 
       },
+      
       initMap() {
         const container = document.getElementById("map");
         const options = {
@@ -121,54 +159,6 @@
         container.style.height = `${size}px`;
         toRaw(this.map).relayout();
       },
-      displayMarker(markerPositions) {
-        if (this.markers.length > 0) {
-          this.markers.forEach((marker) => marker.setMap(null));
-        }
-  
-        const positions = markerPositions.map(
-          (position) => new kakao.maps.LatLng(...position)
-        );
-  
-        if (positions.length > 0) {
-          this.markers = positions.map(
-            (position) =>
-              new kakao.maps.Marker({
-                map: toRaw(this.map),
-                position,
-              })
-          );
-  
-          const bounds = positions.reduce(
-            (bounds, latlng) => bounds.extend(latlng),
-            new kakao.maps.LatLngBounds()
-          );
-  
-          toRaw(this.map).setBounds(bounds);
-        }
-      },
-      displayInfoWindow() {
-        if (this.infowindow && this.infowindow.getMap()) {
-          //이미 생성한 인포윈도우가 있기 때문에 지도 중심좌표를 인포윈도우 좌표로 이동시킨다.
-          toRaw(this.map).setCenter(this.infowindow.getPosition());
-          return;
-        }
-  
-        var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          iwPosition = new kakao.maps.LatLng(33.450701, 126.570667), //인포윈도우 표시 위치입니다
-          iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-  
-        this.infowindow = new kakao.maps.InfoWindow({
-          map: toRaw(this.map), // 인포윈도우가 표시될 지도
-          position: iwPosition,
-          content: iwContent,
-          removable: iwRemoveable,
-        });
-  
-        toRaw(this.map).setCenter(iwPosition);
-      },
-      
-
   },
 };
   </script>
