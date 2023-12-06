@@ -105,7 +105,7 @@ export default {
         console.log("선택된 여행지가 성공적으로 백엔드로 전송되었습니다", response.data);
       })
       .catch((error) => {
-        console.error("선택된 여행지를 백엔드로 전송 중 오류 발생", error.response);
+        console.error("선택된 여행지를 백엔드로 전송 중 오류 ", error.response);
       });
     },
   },
