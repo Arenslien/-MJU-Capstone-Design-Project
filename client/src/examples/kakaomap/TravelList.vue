@@ -2,12 +2,9 @@
   <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc;">
     <ul>
       <li v-for="spot in touristSpots" :key="spot.id" @click="handleClick(spot)" :class="{ 'selected': isSelected(spot) }">
-        <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
-          <img :src="spot.IMG_URL" alt="Spot Image" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 5px;">
-          <div>
-            <span style="color: black;">{{ spot.VISIT_AREA_NM }}</span>
-            <span style="color: gray; font-size: 0.8em;">{{ spot.ADDRESS }}</span>
-          </div>
+        <div style="display: flex; flex-direction: column; align-items: flex-start; padding: 8px; margin-top: 10px;">
+          <span style="color: black;">{{ spot.name }}</span>
+          <span style="color: gray; font-size: 0.8em;">{{ spot.lat }}, {{ spot.lng }}</span>
         </div>
       </li>
     </ul>
@@ -16,6 +13,7 @@
     <Button class="styled-button" @click="sendSelectedSpotsToUserInfo">관광지 저장</Button>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -28,54 +26,16 @@ export default {
       touristSpots: [],
     };
   },
-  mounted() {
-    this.fetchTouristSpots();
-  },
   methods: {
-    fetchTouristSpots() {
-      axios.get("/travellist.json")
-        .then(response => {
-          this.touristSpots = this.extractTouristSpots(response.data);
-        })
-        .catch(error => {
-          console.error("여행지 데이터를 불러오는 중 오류 발생", error);
-        });
-    },
-    extractTouristSpots(data) {
-      const touristSpots = [];
-      for (const city in data) {
-        if (data.hasOwnProperty(city)) {
-          const citySpots = data[city];
-          for (const spot of citySpots) {
-            if (spot.hasOwnProperty("VISIT_AREA_NM")) {
-              touristSpots.push({
-                id: spot.ITEM_ID,
-                VISIT_AREA_NM: spot.VISIT_AREA_NM,
-                ADDRESS: spot.ADDRESS,
-                X_COORD: spot.X_COORD,
-                Y_COORD: spot.Y_COORD,
-                IMG_URL: spot.IMG_URL,
-              });
-            }
-          }
-        }
-      }
-      return touristSpots;
-    },
     handleClick(spot) {
+      // 클릭한 여행지를 선택 상태에 따라 추가 또는 제거
       const index = this.selectedSpots.findIndex(selectedSpot => selectedSpot.id === spot.id);
-      
       if (index === -1) {
         this.selectedSpots.push(spot);
+        
       } else {
         this.selectedSpots.splice(index, 1);
       }
-
-      this.$emit('tourist-spot-click', {
-        x: spot.X_COORD,
-        y: spot.Y_COORD,
-        selectedSpots: this.selectedSpots,
-      });
     },
     isSelected(spot) {
       return this.selectedSpots.some(selectedSpot => selectedSpot.id === spot.id);
@@ -87,12 +47,13 @@ export default {
       });
       this.sendSelectedSpotsToBackend();
     },
+
     sendSelectedSpotsToBackend() {
       const selectedSpotsInfo = this.selectedSpots.map(spot => ({
         id: spot.id,
-        name: spot.VISIT_AREA_NM,
-        lat: spot.X_COORD,
-        lng: spot.Y_COORD,
+        name: spot.name,
+        lat: spot.lat,
+        lng: spot.lng,
       }));
 
       axios.post("http://localhost:8080/api/auth/save-selected-spots", {
@@ -108,6 +69,26 @@ export default {
   },
 };
 </script>
+
+<!--<script>
+  export default {
+    data() {
+      return {
+        touristSpots: [
+          { id: 1, name: "서울 탑골공원", lat: 37.578548, lng: 126.981799 },
+          { id: 2, name: "부산 해운대", lat: 35.158698, lng: 129.160199 },
+          // 추가 관광지 데이터
+        ],
+      };
+    },
+    methods: {
+      handleClick(spot) {
+        // 관광지 클릭 이벤트 발생
+        this.$emit("touristSpotClick", spot);
+      },
+    },
+  };
+  </script>-->
 
 <style scoped>
 div {
