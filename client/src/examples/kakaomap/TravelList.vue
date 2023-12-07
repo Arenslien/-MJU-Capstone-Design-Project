@@ -93,11 +93,43 @@ export default {
       return this.selectedSpots.some(selectedSpot => selectedSpot.id === spot.id);
     },
     sendSelectedSpotsToUserInfo() {
+      const authStore = useAuthStore();
+      const numberOfDays = authStore.numberOfDays;
+
+      let minSelectedSpots;
+      let maxSelectedSpots;
+      if (numberOfDays >= 3 && numberOfDays <= 7) {
+        minSelectedSpots = 2;
+        maxSelectedSpots = 5;
+      } else if (numberOfDays >= 8 && numberOfDays <= 14) {
+        minSelectedSpots = 6;
+        maxSelectedSpots = 10;
+      } else if (numberOfDays >= 15 && numberOfDays <= 21) {
+        minSelectedSpots = 11;
+        maxSelectedSpots = 15;
+      } else if (numberOfDays >= 22 && numberOfDays <= 30) {
+        minSelectedSpots = 16;
+        maxSelectedSpots = 20;
+      } else {
+        // Handle other cases if needed
+        console.error('Invalid numberOfDays:', numberOfDays);
+        return;
+      }
+
+      if (this.selectedSpots.length < minSelectedSpots) {
+        alert(`최소 ${minSelectedSpots}개의 여행지를 선택해주세요.`);
+        return;
+      }
+
+      if (this.selectedSpots.length > maxSelectedSpots) {
+        alert(`최대 ${maxSelectedSpots}개의 여행지까지 선택 가능합니다.`);
+        return;
+      }
+
+      // 여기서부터는 선택된 여행지를 백엔드로 전송하는 로직입니다.
+      
       this.$emit('button-click');
-      useAuthStore.setUserInfo({
-        selectedSpots: this.selectedSpots,
-      });
-      this.sendSelectedSpotsToBackend();
+
     },
     sendSelectedSpotsToBackend() {
       const selectedSpotsInfo = this.selectedSpots.map(spot => ({

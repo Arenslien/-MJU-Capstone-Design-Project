@@ -25,6 +25,9 @@ export default {
       this.$emit("closeModal");
     },
     openNextModal() {
+      console.log(this.startDate);
+      console.log(this.endDate);
+
       const start = new Date(this.startDate);
       const end = new Date(this.endDate);
       const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
@@ -32,10 +35,30 @@ export default {
       // 스토어에서 numberOfDays 업데이트
       const authStore = useAuthStore();
       if (days < 3 || days > 30) {
-    // 선택한 일수가 조건에 맞지 않으면 모달 내에 에러 메시지를 표시
-    alert("다시 선택해주세요. (3일 이상, 30일 이하)");
-    this.closeModal();
-  }
+      // 선택한 일수가 조건에 맞지 않으면 모달 내에 에러 메시지를 표시
+      alert("다시 선택해주세요. (3일 이상, 30일 이하)");
+      this.closeModal();
+      return;
+      //Retrun; 시 깨짐현상 
+      }
+      
+      console.log(start);
+      console.log(end);
+      console.log(days);
+
+      if (isNaN(start)) {
+        alert("시작 날짜를 정해주세요");
+        return;
+      }
+  
+      if (isNaN(end)) {
+        alert("끝나는 날짜를 정해주세요");
+        return;
+      }
+
+      
+      
+
       authStore.numberOfDays = days;
 
       // openNextModal 이벤트 발생
