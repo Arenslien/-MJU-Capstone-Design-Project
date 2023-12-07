@@ -126,6 +126,7 @@ export default {
         });
 
         this.workMarkers.push(marker);
+
       }
     },
 
