@@ -3,6 +3,7 @@ const BadRequestError = require('../components/exceptions/exceptions');
 
 const Bookmark = db.Bookmark;
 const Tourist = db.Tourist;
+const Workspace = db.Workspace;
 
 const createBookmarks = async (req, res) => {
     console.log('[START] POST/createBookmarks');
@@ -53,19 +54,29 @@ const getBookmarks = async (req, res) => {
                 })
                 .then(tourists => {
                     if (tourists) {
-                        var bookmarkInfo = {
-                            user_id: bookmark.user_id,
-                            boomark_id: bookmark.bookmark_id,
-                            tourists: tourists,
-                            workspaces: bookmark.workspace_ids
-                        }
-    
-                        console.log("[SUCCESS] GET/getBookmarks");
-                        return res.status(200).send({ res: true, message: 'Succeeded to get bookmarks', data: bookmarkInfo });
+                        Workspace.findAll({
+                            where: {
+                                workspace_id: bookmark.workspace_ids
+                            }
+                        }).then(workspaces => {
+                            if(workspaces) {
+                                var bookmarkInfo = {
+                                    user_id: bookmark.user_id,
+                                    boomark_id: bookmark.bookmark_id,
+                                    tourists: tourists,
+                                    workspaces: workspaces
+                                }
+            
+                                console.log("[SUCCESS] GET/getBookmarks");
+                                return res.status(200).send({ res: true, message: 'Succeeded to get bookmarks', data: bookmarkInfo });
+                            } else {
+                                console.log('[FAIL] GET/getBookmarks');
+                                return res.status(500).send({ res: false, message: "Failed to get bookmarks information." });
+                            }
+                        });
                     } else {
                         console.log('[FAIL] GET/getBookmarks');
                         return res.status(500).send({ res: false, message: "Failed to get bookmarks information." });
-
                     }
                 });
             }
@@ -80,7 +91,17 @@ const updateBookmarks = async (req, res) => {
     console.log('[START] PUT/updateBookmarks');
 
     try {
-        //
+        Bookmark.findOne({ where: { user_id: req.body.user_id }})
+        .then(bookmark => {
+            if (bookmark) {
+                // list 대조.
+
+
+            } else {
+                console.log('[FAIL PUT/updateBookmarks');
+                return res.status(500).send({ res: false, message: "Failed to update bookmarks."});
+            }
+        })
     } catch(err) {
         console.log('[FAIL PUT/updateBookmarks');
         return res.status(500).send({ res: false, message: `Failed to update bookmarks. The reason why ${err}`});
