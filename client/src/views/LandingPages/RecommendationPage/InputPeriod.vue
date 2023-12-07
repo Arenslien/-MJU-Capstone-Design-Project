@@ -31,6 +31,11 @@ export default {
 
       // 스토어에서 numberOfDays 업데이트
       const authStore = useAuthStore();
+      if (days < 3 || days > 30) {
+    // 선택한 일수가 조건에 맞지 않으면 모달 내에 에러 메시지를 표시
+    alert("다시 선택해주세요. (3일 이상, 30일 이하)");
+    this.closeModal();
+  }
       authStore.numberOfDays = days;
 
       // openNextModal 이벤트 발생
