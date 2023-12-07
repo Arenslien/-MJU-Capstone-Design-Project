@@ -45,8 +45,6 @@ const getBookmarks = async (req, res) => {
         Bookmark.findOne({ where: { user_id: req.query.user_id }})
         .then(bookmark => {
             if (bookmark) {
-
-                console.log("북마크!" + bookmark.tourist_ids);
                 Tourist.findAll({
                     where: {
                         tourist_id: bookmark.tourist_ids
