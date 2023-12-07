@@ -3,7 +3,7 @@ import { onMounted } from "vue";
 
 //material components
 import MaterialButton from "@/components/MaterialButton.vue";
-
+import { useAuthStore } from "@/stores/index.js";
 // material-input
 import setMaterialInput from "@/assets/js/material-input";
 
@@ -25,8 +25,15 @@ export default {
       this.$emit("closeModal");
     },
     openNextModal() {
-      console.log("startDate:", this.startDate);
-      console.log("endDate:", this.endDate);
+      const start = new Date(this.startDate);
+      const end = new Date(this.endDate);
+      const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+
+      // 스토어에서 numberOfDays 업데이트
+      const authStore = useAuthStore();
+      authStore.numberOfDays = days;
+
+      // openNextModal 이벤트 발생
       this.$emit('openNextModal');
     },
   },
