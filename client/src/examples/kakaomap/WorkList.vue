@@ -15,7 +15,8 @@
         <MaterialButton
           variant="gradient"
           color="success"
-          class="mt-2 mb-2">
+          class="mt-2 mb-2"
+          @click="sendSelectedSpotsToUserInfo">
           업무공간 저장
         </MaterialButton>
       </div>
@@ -87,11 +88,29 @@ export default {
       return this.selectedSpots.some(selectedSpace => selectedSpace.id === space.id);
     },
     sendSelectedSpotsToUserInfo() {
-      this.$emit('button-click');
-      useAuthStore.setUserInfo({
-        selectedSpots: this.selectedSpots,
-      });
-      this.sendSelectedSpotsToBackend();
+      const authStore = useAuthStore();
+  const numberOfDays = authStore.numberOfDays;
+
+  let minSelectedSpots;
+  if (numberOfDays >= 3 && numberOfDays <= 7) {
+    minSelectedSpots = 3;
+  } else if (numberOfDays >= 8 && numberOfDays <= 14) {
+    minSelectedSpots = 5;
+  } else if (numberOfDays >= 15 && numberOfDays <= 21) {
+    minSelectedSpots = 7;
+  } else if (numberOfDays >= 22 && numberOfDays <= 30) {
+    minSelectedSpots = 9;
+  } else {
+    // Handle other cases if needed
+    console.error('Invalid numberOfDays:', numberOfDays);
+    return;
+  }
+
+  if (this.selectedSpots.length !== minSelectedSpots) {
+    alert(`${minSelectedSpots}개의 업무공간을 선택해주세요.`);
+    return;
+  }
+
     },
     sendSelectedSpotsToBackend() {
       const selectedSpotsInfo = this.selectedSpots.map(space => ({
