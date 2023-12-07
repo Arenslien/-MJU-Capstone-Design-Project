@@ -2,6 +2,7 @@ const db = require("../models");
 const BadRequestError = require('../components/exceptions/exceptions');
 
 const Bookmark = db.Bookmark;
+const Tourist = db.Tourist;
 
 const createBookmarks = async (req, res) => {
     console.log('[START] POST/createBookmarks');
@@ -43,15 +44,30 @@ const getBookmarks = async (req, res) => {
         Bookmark.findOne({ where: { user_id: req.query.user_id }})
         .then(bookmark => {
             if (bookmark) {
-                var bookmarkInfo = {
-                    user_id: bookmark.user_id,
-                    boomark_id: bookmark.bookmark_id,
-                    tourist_ids: bookmark.tourist_ids,
-                    workspace_ids: bookmark.workspace_ids
-                }
 
-                console.log("[SUCCESS] GET/getBookmarks");
-                return res.status(200).send({ res: true, message: 'Succeeded to get bookmarks', data: bookmarkInfo });
+                console.log("북마크!" + bookmark.tourist_ids);
+                Tourist.findAll({
+                    where: {
+                        tourist_id: bookmark.tourist_ids
+                    }
+                })
+                .then(tourists => {
+                    if (tourists) {
+                        var bookmarkInfo = {
+                            user_id: bookmark.user_id,
+                            boomark_id: bookmark.bookmark_id,
+                            tourists: tourists,
+                            workspaces: bookmark.workspace_ids
+                        }
+    
+                        console.log("[SUCCESS] GET/getBookmarks");
+                        return res.status(200).send({ res: true, message: 'Succeeded to get bookmarks', data: bookmarkInfo });
+                    } else {
+                        console.log('[FAIL] GET/getBookmarks');
+                        return res.status(500).send({ res: false, message: "Failed to get bookmarks information." });
+
+                    }
+                });
             }
         });
     } catch(err) {
