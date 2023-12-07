@@ -10,7 +10,7 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLoggedIn: false,
     userInfo: null,
-    numberOfDays: 3,
+    numberOfDays: 0,
   }),
   actions: {
     setNumberOfDays(days) {
