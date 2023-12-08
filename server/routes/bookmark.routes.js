@@ -117,6 +117,7 @@ module.exports = function(BASE_URI, app) {
     app.post(BASE_URI + "bookmark", controller.createBookmarks);
     app.get(BASE_URI + "bookmark", controller.getBookmarks);
     app.post(BASE_URI + "bookmark/append", controller.appendPlaceToBookmarks);
+    app.post(BASE_URI + "bookmark/delete", controller.deletePlaceFromBookmark);
     app.put(BASE_URI + "bookmark", controller.updateBookmarks);
     app.delete(BASE_URI + "bookmark/:id", controller.deleteBookmarks);
 }
