@@ -160,8 +160,8 @@ const deletePlaceFromBookmark = async (req, res) => {
                             }
                         });
 
-                        console.log('[SUCCESS] POST/appendPlaceToBookmarks');
-                        return res.status(200).send({ res: true, message: "Succeeded to append tourist to bookmarks."});
+                        console.log('[SUCCESS] POST/deletePlaceFromBookmark');
+                        return res.status(200).send({ res: true, message: "Succeeded to delete tourist to bookmarks."});
                     case 'workspace':
                         var workspace_ids = Object.values(bookmark.workspace_ids);
                         workspace_ids.splice(workspace_ids.findIndex(id => id === req.body.place_id), 1);
@@ -175,17 +175,17 @@ const deletePlaceFromBookmark = async (req, res) => {
                             }
                         });
 
-                        console.log('[SUCCESS] POST/appendPlaceToBookmarks');
-                        return res.status(200).send({ res: true, message: "Succeeded to append workspace to bookmarks."});
+                        console.log('[SUCCESS] POST/deletePlaceFromBookmark');
+                        return res.status(200).send({ res: true, message: "Succeeded to delete workspace to bookmarks."});
                     default:
-                        console.log('[FAIL POST/appendPlaceToBookmarks');
-                        return res.status(500).send({ res: false, message: "Failed to append place to bookmarks."});
+                        console.log('[FAIL POST/deletePlaceFromBookmark');
+                        return res.status(500).send({ res: false, message: "Failed to delete place to bookmarks."});
                 }
 
 
             } else {
-                console.log('[FAIL POST/appendPlaceToBookmarks');
-                return res.status(500).send({ res: false, message: "Failed to append place to bookmarks."});
+                console.log('[FAIL POST/deletePlaceFromBookmark');
+                return res.status(500).send({ res: false, message: "Failed to delete place to bookmarks."});
             }
         });
     } catch(err) {
