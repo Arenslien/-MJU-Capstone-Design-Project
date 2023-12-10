@@ -85,6 +85,115 @@ const getBookmarks = async (req, res) => {
     }
 }
 
+const appendPlaceToBookmarks = async (req, res) => {
+    console.log('[START] POST/appendPlaceToBookmarks');
+
+    try {
+        Bookmark.findOne({ where: { user_id: req.body.user_id }})
+        .then(bookmark => {
+            if (bookmark) {
+                switch(req.body.type) {
+                    case 'tourist':
+                        var tourist_ids = Object.values(bookmark.tourist_ids);
+                        tourist_ids.push(req.body.place_id);
+
+                        bookmark.update({
+                            tourist_ids: tourist_ids,
+                        },
+                        {
+                            where: { 
+                                user_id: req.body.user_id
+                            }
+                        });
+
+                        console.log('[SUCCESS] POST/appendPlaceToBookmarks');
+                        return res.status(200).send({ res: true, message: "Succeeded to append tourist to bookmarks."});
+                    case 'workspace':
+                        var workspace_ids = Object.values(bookmark.workspace_ids);
+                        workspace_ids.push(req.body.place_id)
+
+                        bookmark.update({
+                            workspace_ids: workspace_ids,
+                        },
+                        {
+                            where: { 
+                                user_id: req.body.user_id
+                            }
+                        });
+
+                        console.log('[SUCCESS] POST/appendPlaceToBookmarks');
+                        return res.status(200).send({ res: true, message: "Succeeded to append workspace to bookmarks."});
+                    default:
+                        console.log('[FAIL POST/appendPlaceToBookmarks');
+                        return res.status(500).send({ res: false, message: "Failed to append place to bookmarks."});
+                }
+
+
+            } else {
+                console.log('[FAIL POST/appendPlaceToBookmarks');
+                return res.status(500).send({ res: false, message: "Failed to append place to bookmarks."});
+            }
+        });
+    } catch(err) {
+        console.log('[FAIL POST/appendPlaceToBookmarks');
+        return res.status(500).send({ res: false, message: `Failed to append place to bookmarks. The reason why ${err}`});
+    }
+}
+
+const deletePlaceFromBookmark = async (req, res) => {
+    console.log('[START] POST/deletePlaceFromBookmark');
+
+    try {Bookmark.findOne({ where: { user_id: req.body.user_id }})
+        .then(bookmark => {
+            if (bookmark) {
+                switch(req.body.type) {
+                    case 'tourist':
+                        var tourist_ids = Object.values(bookmark.tourist_ids);
+                        tourist_ids.splice(tourist_ids.findIndex(id => id === req.body.place_id), 1);
+
+                        bookmark.update({
+                            tourist_ids: tourist_ids,
+                        },
+                        {
+                            where: { 
+                                user_id: req.body.user_id
+                            }
+                        });
+
+                        console.log('[SUCCESS] POST/deletePlaceFromBookmark');
+                        return res.status(200).send({ res: true, message: "Succeeded to delete tourist to bookmarks."});
+                    case 'workspace':
+                        var workspace_ids = Object.values(bookmark.workspace_ids);
+                        workspace_ids.splice(workspace_ids.findIndex(id => id === req.body.place_id), 1);
+
+                        bookmark.update({
+                            workspace_ids: workspace_ids,
+                        },
+                        {
+                            where: { 
+                                user_id: req.body.user_id
+                            }
+                        });
+
+                        console.log('[SUCCESS] POST/deletePlaceFromBookmark');
+                        return res.status(200).send({ res: true, message: "Succeeded to delete workspace to bookmarks."});
+                    default:
+                        console.log('[FAIL POST/deletePlaceFromBookmark');
+                        return res.status(500).send({ res: false, message: "Failed to delete place to bookmarks."});
+                }
+
+
+            } else {
+                console.log('[FAIL POST/deletePlaceFromBookmark');
+                return res.status(500).send({ res: false, message: "Failed to delete place to bookmarks."});
+            }
+        });
+    } catch(err) {
+        console.log('[FAIL POST/deletePlaceFromBookmark');
+        return res.status(500).send({ res: false, message: `Failed to delete place from bookmark. The reason why ${err}`});
+    }
+}
+
 const updateBookmarks = async (req, res) => {
     console.log('[START] PUT/updateBookmarks');
 
@@ -135,6 +244,8 @@ const deleteBookmarks = async (req, res) => {
 module.exports = {
     createBookmarks,
     getBookmarks,
+    appendPlaceToBookmarks,
+    deletePlaceFromBookmark,
     updateBookmarks,
     deleteBookmarks
 }
