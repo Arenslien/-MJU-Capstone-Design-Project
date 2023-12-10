@@ -25,9 +25,6 @@ export default {
     closeModal() {
       this.$emit("closeModal");
     },
-    openModal() {
-      this.$emit("openModal");
-    },
     async moveToRecommend() {
   const authStore = useAuthStore();
   if (!this.user.category_1 || !this.user.category_2 || !this.user.category_3) {
@@ -36,63 +33,68 @@ export default {
     return;
   }
 
-  // 카테고리 값 변환 함수
-  let category1Value;
-  let category2Value;
-  let category3Value;
+  // // 카테고리 값 변환 함수
+  // let category1Value;
+  // let category2Value;
+  // let category3Value;
 
-  switch (this.user.category_1) {
-    case "A": // 자연
-      category1Value = 0;
-      break;
-    case "N": // 중립
-      category1Value = 1;
-      break;
-    case "B": // 도시
-      category1Value = 2;
-      break;
-    default:
-      location.reload();
-  }
+  // switch (this.user.category_1) {
+  //   case "A": // 자연
+  //     category1Value = 0;
+  //     break;
+  //   case "N": // 중립
+  //     category1Value = 1;
+  //     break;
+  //   case "B": // 도시
+  //     category1Value = 2;
+  //     break;
+  //   default:
+  //     location.reload();
+  // }
 
-  switch (this.user.category_2) {
-    case "A":
-      category2Value = 0;
-      break;
-    case "N": // 중립
-      category2Value = 1;
-      break;
-    case "B":
-      category2Value = 2;
-      break;
-    default:
-      location.reload();
-  }
+  // switch (this.user.category_2) {
+  //   case "A":
+  //     category2Value = 0;
+  //     break;
+  //   case "N": // 중립
+  //     category2Value = 1;
+  //     break;
+  //   case "B":
+  //     category2Value = 2;
+  //     break;
+  //   default:
+  //     location.reload();
+  // }
 
-  switch (this.user.category_3) {
-    case "A":
-      category3Value = 0;
-      break;
-    case "N": // 중립
-      category3Value = 1;
-      break;
-    case "B":
-      category3Value = 2;
-      break;
-    default:
-      location.reload();
-  }
+  // switch (this.user.category_3) {
+  //   case "A":
+  //     category3Value = 0;
+  //     break;
+  //   case "N": // 중립
+  //     category3Value = 1;
+  //     break;
+  //   case "B":
+  //     category3Value = 2;
+  //     break;
+  //   default:
+  //     location.reload();
+  // }
 
-  // 변환된 값 출력
-  console.log("변환된 값 - 카테고리 1:", category1Value);
-  console.log("변환된 값 - 카테고리 2:", category2Value);
-  console.log("변환된 값 - 카테고리 3:", category3Value);
+  // // 변환된 값 출력
+  // console.log("변환된 값 - 카테고리 1:", category1Value);
+  // console.log("변환된 값 - 카테고리 2:", category2Value);
+  // console.log("변환된 값 - 카테고리 3:", category3Value);
 
-  // Call the new action to save categories
+  // // Call the new action to save categories
+  // authStore.updateUserInformation({
+  //   category_1: category1Value,
+  //   category_2: category2Value,
+  //   category_3: category3Value,
+  // });
   authStore.updateUserInformation({
-    category_1: category1Value,
-    category_2: category2Value,
-    category_3: category3Value,
+    category_1: this.user.category_1,
+    category_2: this.user.category_2,
+    category_3: this.user.category_3,
   });
 
   authStore.saveCategory();
@@ -127,55 +129,73 @@ export default {
           <div class="row mb-4">
             <label class="bold-text">자연 vs 도시</label>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_1" value="A"> 자연
-              </label>
+              <label><input type="radio" v-model="user.category_1" value="-3">자연이 너무 좋아요</label>
             </div>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_1" value="N"> 중립
-              </label>
+              <label><input type="radio" v-model="user.category_1" value="-2">자연이 좋아요</label>
             </div>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_1" value="B"> 도시
-              </label>
+              <label><input type="radio" v-model="user.category_1" value="-1">자연이 조금 더 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_1" value="0">둘 다 괜찮아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_1" value="1">도시가 조금 더 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_1" value="2">도시가 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_1" value="3">도시가 너무 좋아요</label>
             </div>
           </div>
           <div class="row mb-4">
             <label class="bold-text">휴양/휴식 vs 체험활동</label>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_2" value="A"> 휴양/휴식
-              </label>
+              <label><input type="radio" v-model="user.category_2" value="-3">휴양/휴식이 너무 좋아요</label>
             </div>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_2" value="N"> 중립
-              </label>
+              <label><input type="radio" v-model="user.category_2" value="-2">휴양/휴식이 좋아요</label>
             </div>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_2" value="B"> 체험활동
-              </label>
+              <label><input type="radio" v-model="user.category_2" value="-1">휴양/휴식이 조금 더 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_2" value="0">둘 다 괜찮아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_2" value="1">체험활동이 조금 더 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_2" value="2">체험활동이 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_2" value="3">체험활동이 너무 좋아요</label>
             </div>
           </div>
           <div class="row mb-4">
             <label class="bold-text">잘 알려지지 않은 방문지 vs 알려진 방문지</label>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_3" value="A"> 잘 알려지지 않은 방문지
-              </label>
+              <label><input type="radio" v-model="user.category_3" value="-3">잘 알려지지 않은 방문지가 너무 좋아요</label>
             </div>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_3" value="N"> 중립
-              </label>
+              <label><input type="radio" v-model="user.category_3" value="-2">잘 알려지지 않은 방문지가 좋아요</label>
             </div>
             <div class="col-md-4">
-              <label>
-                <input type="radio" v-model="user.category_3" value="B"> 알려진 방문지
-              </label>
+              <label><input type="radio" v-model="user.category_3" value="-1">잘 알려지지 않은 방문지가 조금 더 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_3" value="0">둘 다 괜찮아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_3" value="1">알려진 방문지가 조금 더 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_3" value="2">알려진 방문지가 좋아요</label>
+            </div>
+            <div class="col-md-4">
+              <label><input type="radio" v-model="user.category_3" value="3">알려진 방문지가 너무 좋아요</label>
             </div>
           </div>
           <div class="row">
