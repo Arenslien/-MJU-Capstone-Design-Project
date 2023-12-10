@@ -10,9 +10,14 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLoggedIn: false,
     userInfo: null,
-    numberOfDays: 0,
+    numberOfDays: 3,
+    travelids: [],
   }),
   actions: {
+    setTravelIds(ids) {
+      this.travelids = ids;
+      console.log(ids);
+    },
     setNumberOfDays(days) {
       this.numberOfDays = days;
     },
