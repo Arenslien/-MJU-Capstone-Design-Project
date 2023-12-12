@@ -38,7 +38,7 @@ const createBookmarks = async (req, res) => {
 const getBookmarks = async (req, res) => {
     console.log('[START] GET/getBookmarks');
     console.log(req.query);
-
+    
     try {
         Bookmark.findOne({ where: { user_id: req.query.user_id }})
         .then(bookmark => {
