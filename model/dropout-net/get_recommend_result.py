@@ -145,7 +145,7 @@ def get_top_K_similar_user(new_user_vector, old_user_vectors, K):
   return top_K_similar_user_index
 
 # 3.3 get_top_K_travel_area method
-def get_top_K_travel_area(embedding_dir, top_K_similar_user_index, K):
+def get_top_K_travel_area(embedding_dir, top_K_similar_user_index, week):
   """
   Top K개의 추천 관광지 인덱스를 반환하는 메소드
 
@@ -171,24 +171,25 @@ def get_top_K_travel_area(embedding_dir, top_K_similar_user_index, K):
   V_embedding = torch.tensor(V_embedding)
 
   rating_matrix = torch.matmul(top_K_U_embedding, V_embedding.t())
+  print(rating_matrix)
 
-  # 3.3.3 top_K_similar_user_index에 해당하는 rating 값만 가져오기
-  for user_ratings in rating_matrix:
-    top_K_value, top_K_index = torch.topk(user_ratings, K)
+  # 3.3.3 Rating Matrix 중 Max 값 계산
+  max_rating_matrix, _ = torch.max(rating_matrix, dim=0)
 
-    # 3.3.4 각 similar_user 별 top K or threshold 이상의 visit area id 가져오기
-    for idx, value in enumerate(top_K_value):
-      threshold = 0.5
-      if value > threshold:
-        top_K_recommend_area_value.append(value.item())
-        top_K_recommend_area_index.append(top_K_index[idx].item())
+  # 3.3.4 AREA_GROUP 기준 JOIN 진행
+  max_rating_matrix_df = pd.DataFrame({'ITEM_ID': range(1, len(max_rating_matrix) + 1), 'RATING': max_rating_matrix.tolist()}) # 텐서를 DataFrame으로 변환
+  max_rating_matrix_df.index += 1 # 인덱스를 1부터 시작하도록 설정
+  print(max_rating_matrix_df)
 
-  # 3.3.5 visit_area_id 출력
-  # print(f"[Method: get_top_K_travel_area()] - Top K개 Recommended Area Index")
-  # for idx, value in enumerate(top_K_recommend_area_value):
-  #   print(f"- Similar User {top_K_recommend_area_index[idx]}: {value}")
+  area_information_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log\\tour-spot-information\\all-area-info.csv"
+  area_info_df = pd.read_csv(area_information_dir)
 
-  return top_K_recommend_area_index, top_K_recommend_area_value
+  joined_df = pd.merge(max_rating_matrix_df, area_info_df[["ITEM_ID", "AREA_GROUP"]], on="ITEM_ID")
+
+  # 3.3.5 Filtering
+  filtered_df = joined_df.groupby("AREA_GROUP").apply(lambda x: x.sort_values("RATING", ascending=False).head(3 * week))
+
+  return filtered_df
 
 # 3.4 combine_area_index_and_information method
 def combine_area_index_and_information(top_K_recommend_area_index, area_information_dir):
@@ -220,11 +221,15 @@ if __name__=="__main__":
   parser = argparse.ArgumentParser(
     description="Demo script to get Recommend Result on Trained DropoutNet", 
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-  parser.add_argument('--user-information', nargs='+', type=int, help='List of User information integers')
+  parser.add_argument('--user-information', nargs='+', type=int, required=True, help='List of User information integers')
+  parser.add_argument('--period', type=int, required=True, help="Workation Period")
   args = parser.parse_args()
 
   # 1. Input User Information --> libsvm format --> standardized vector로 변환
   new_user_raw_vector = args.user_information # list
+  week = 4 if ((args.period - 1) // 7 + 1) > 4 else ((args.period - 1) // 7 + 1)
+  print("week:", week)
+  
   new_user_libsvm_dir = convert_new_user_to_libsvm(new_user_raw_vector)
   new_user_vectors = create_standardized_user_vectors(new_user_libsvm_dir)
   new_user_vector = new_user_vectors[0].reshape(1, -1) # new_user 값만 추출
@@ -233,18 +238,20 @@ if __name__=="__main__":
   libsvm_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log/user_features_0based.txt"
   old_user_vectors = create_standardized_user_vectors(libsvm_dir)
 
-  # 3. Input User와 유사한 Old User 10명 추출
-  top_K_similar_user_index = get_top_K_similar_user(new_user_vector, old_user_vectors, 10)
+  # 3. Input User와 유사한 Old User 20명 추출
+  top_K_similar_user_index = get_top_K_similar_user(new_user_vector, old_user_vectors, 20)
 
   # 4. Similar Old User 기반 Tour Spot Index 추출
   embedding_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\checkpoint/Embedded-latent-factor"
-  top_K_recommend_area_index, _ = get_top_K_travel_area(embedding_dir, top_K_similar_user_index, 10) # index, rating(top_K_recommend_area_value)
+  filtered_df = get_top_K_travel_area(embedding_dir, top_K_similar_user_index, week) # index, rating(top_K_recommend_area_value)
+
+  print(filtered_df)
 
   # 5. Index에 대한 Tour-spot information 추가
-  area_information_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log\\tour-spot-information\\all-area-info.csv"
-  top_K_area_info_df = combine_area_index_and_information(top_K_recommend_area_index, area_information_dir)
+  # area_information_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log\\tour-spot-information\\all-area-info.csv"
+  # top_K_area_info_df = combine_area_index_and_information(top_K_recommend_area_index, area_information_dir)
 
   # 6. json 파일 저장
-  top_K_area_info_df.to_json("D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\recommend-result\\result.json", orient="records")
+  # top_K_area_info_df.to_json("D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\recommend-result\\result.json", orient="records")
 
   print("[FINISH : get_recommend_result.py]")
