@@ -111,6 +111,8 @@ export default {
     return;
   }
 
+  this.sendSelectedSpotsToBackend();
+
     },
     sendSelectedSpotsToBackend() {
       const selectedSpotsInfo = this.selectedSpots.map(space => ({
@@ -120,11 +122,28 @@ export default {
         lng: space.Y_COORD,
       }));
 
-      axios.post("http://localhost:8080/api/auth/save-selected-spots", {
-        selectedSpots: selectedSpotsInfo,
+      // 사용자 ID가 auth store에 있다고 가정합니다
+      const authStore = useAuthStore();
+      const userId = authStore.userInfo.user_id;
+      const travelIds = authStore.travelids;
+
+      // createBookmark API 호출
+      axios.post("http://localhost:8080/api/bookmark", {
+        user_id: userId,
+        workspace_ids: selectedSpotsInfo.map(space => space.id),
+        tourist_ids: travelIds,
       })
       .then((response) => {
-        console.log("선택된 업무공간이 성공적으로 백엔드로 전송되었습니다", response.data);
+        
+        const { res, message } = response.data;
+        if (res) {
+          console.log(message);
+          alert("저장이완료되었습니다!");
+          this.$router.push({ name: 'presentation' });
+        } else {
+          console.error(message);
+          alert("저장실패했습니다! 다시 시도해주세요");
+        }
       })
       .catch((error) => {
         console.error("선택된 업무공간을 백엔드로 전송 중 오류 발생", error.response);

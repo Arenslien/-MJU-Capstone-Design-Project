@@ -127,27 +127,15 @@ export default {
       }
 
       // 여기서부터는 선택된 여행지를 백엔드로 전송하는 로직입니다.
-      
+      this.sendSelectedSpotsToBackend();
       this.$emit('button-click');
 
     },
     sendSelectedSpotsToBackend() {
-      const selectedSpotsInfo = this.selectedSpots.map(spot => ({
-        id: spot.id,
-        name: spot.VISIT_AREA_NM,
-        lat: spot.X_COORD,
-        lng: spot.Y_COORD,
-      }));
-
-      axios.post("http://localhost:8080/api/auth/save-selected-spots", {
-        selectedSpots: selectedSpotsInfo,
-      })
-      .then((response) => {
-        console.log("선택된 여행지가 성공적으로 백엔드로 전송되었습니다", response.data);
-      })
-      .catch((error) => {
-        console.error("선택된 여행지를 백엔드로 전송 중 오류 발생", error.response);
-      });
+      const authStore = useAuthStore();
+      authStore.setTravelIds(this.selectedSpots.map(spot => spot.id));
+      console.log(this.selectedSpots.map(spot => spot.id));
+      
     },
   },
 };
