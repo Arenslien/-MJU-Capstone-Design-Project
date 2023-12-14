@@ -181,27 +181,21 @@ export default {
           </p>
           <div>
             <MaterialButton
-            variant="gradient"
-            color="success"
-            class="mt-2 mb-2"
-            @click.prevent="openModal"
-            v-if="!isLoggedIn">
-            추천페이지
-          </MaterialButton>
-            <!-- <Button v-if="isLoggedIn" class="styled-button" @click="openModal"
-              >추천페이지</Button
-            > -->
+              variant="gradient"
+              color="success"
+              class="mt-2 mb-2"
+              @click.prevent="openModal"
+              v-if="isLoggedIn">
+              추천페이지
+            </MaterialButton>
             <MaterialButton
-            variant="gradient"
-            color="success"
-            class="mt-2 mb-2"
-            @click.prevent="kakaoLogin"
-            v-if="isLoggedIn">
-            추천페이지
-          </MaterialButton>
-            <!-- <Button v-if="!isLoggedIn" class="styled-button" @click="kakaoLogin"
-              >추천페이지</Button
-            > -->
+              variant="gradient"
+              color="success"
+              class="mt-2 mb-2"
+              @click.prevent="kakaoLogin"
+              v-if="!isLoggedIn">
+              추천페이지
+            </MaterialButton>
           </div>
         </div>
         <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 right">

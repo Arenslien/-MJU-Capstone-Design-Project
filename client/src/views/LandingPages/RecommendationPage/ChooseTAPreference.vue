@@ -128,73 +128,73 @@ export default {
         <div class="card-body p-0 my-3">
           <div class="row mb-4">
             <label class="bold-text">자연 vs 도시</label>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="-3">자연이 너무 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="-2">자연이 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="-1">자연이 조금 더 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="0">둘 다 괜찮아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="1">도시가 조금 더 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="2">도시가 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_1" value="3">도시가 너무 좋아요</label>
             </div>
           </div>
           <div class="row mb-4">
             <label class="bold-text">휴양/휴식 vs 체험활동</label>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="-3">휴양/휴식이 너무 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="-2">휴양/휴식이 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="-1">휴양/휴식이 조금 더 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="0">둘 다 괜찮아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="1">체험활동이 조금 더 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="2">체험활동이 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_2" value="3">체험활동이 너무 좋아요</label>
             </div>
           </div>
           <div class="row mb-4">
             <label class="bold-text">잘 알려지지 않은 방문지 vs 알려진 방문지</label>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="-3">잘 알려지지 않은 방문지가 너무 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="-2">잘 알려지지 않은 방문지가 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="-1">잘 알려지지 않은 방문지가 조금 더 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="0">둘 다 괜찮아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="1">알려진 방문지가 조금 더 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="2">알려진 방문지가 좋아요</label>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label><input type="radio" v-model="user.category_3" value="3">알려진 방문지가 너무 좋아요</label>
             </div>
           </div>
