@@ -150,6 +150,7 @@ export default {
     this.travelMarkers.splice(existingMarkerIndex, 1);
   } else {
     console.log('Creating new marker at:', x, y);
+    console.log(markerPosition);
 
     // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
     const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 노란색 마커 이미지 URL을 지정
