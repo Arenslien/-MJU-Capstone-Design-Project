@@ -134,11 +134,40 @@ watch(
       >
         일멍쉬멍
       </RouterLink>
-      <a
-        href="https://www.creative-tim.com/product/vue-material-kit-pro"
-        class="btn btn-sm bg-gradient-success mb-0 ms-auto d-lg-none d-block"
-        >카카오 로그인</a
-      >
+      <a class="navbar-brand d-block d-md-none" id="custom-login-btn">
+        <Button
+          v-if="!isLoggedIn"
+          style="
+            background-color: rgba(254, 229, 0);
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 180px;
+            width: 80px;
+            height: 30px;
+            font-size: 10px;
+          "
+          @click="kakaoLogin()"
+          >카카오 로그인</Button
+        >
+      </a>
+      <a class="navbar-brand d-block d-md-none" id="custom-login-btn">
+        <Button
+          v-if="isLoggedIn"
+          style="
+            background-color: rgba(254, 229, 0);
+            border: none;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 180px;
+            width: 80px;
+            height: 30px;
+            font-size: 10px;
+          "
+          @click="kakaoLogout()"
+          >로그아웃</Button
+        >
+      </a>
       <button
         class="navbar-toggler shadow-none ms-2"
         type="button"

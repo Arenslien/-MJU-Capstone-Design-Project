@@ -37,6 +37,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DOUBLE
       },
+      area_group: {
+        allowNull: false,
+        type: Sequelize.CHAR(50)
+      },
     });
   },
   async down(queryInterface) {
