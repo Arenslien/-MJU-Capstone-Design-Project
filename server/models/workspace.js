@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     address_name: DataTypes.CHAR(50),
     img_url: DataTypes.CHAR(100),
     x: DataTypes.DOUBLE,
-    y: DataTypes.DOUBLE
+    y: DataTypes.DOUBLE,
+    area_group: DataTypes.CHAR(50),
   }, {
     sequelize,
     timestamps: false,
