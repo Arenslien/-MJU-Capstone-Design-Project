@@ -179,31 +179,63 @@ const deletePlaceFromBookmark = async (req, res) => {
                 switch(req.body.type) {
                     case 'tourist':
                         var tourist_ids = Object.values(bookmark.tourist_ids);
-                        tourist_ids.splice(tourist_ids.findIndex(id => id === req.body.place_id), 1);
+                        if (typeof(req.body.place_id) == 'object') {
+                            for (var t_id of req.body.place_id) {
+                                tourist_ids.splice(tourist_ids.findIndex(id => id === t_id), 1);
+                                console.log(tourist_ids)
 
-                        bookmark.update({
-                            tourist_ids: tourist_ids,
-                        },
-                        {
-                            where: { 
-                                user_id: req.body.user_id
+                                bookmark.update({
+                                    tourist_ids: tourist_ids,
+                                },
+                                {
+                                    where: { 
+                                        user_id: req.body.user_id
+                                    }
+                                });
                             }
-                        });
+                        } else {
+                            tourist_ids.splice(tourist_ids.findIndex(id => id === req.body.place_id), 1);
+
+                            bookmark.update({
+                                tourist_ids: tourist_ids,
+                            },
+                            {
+                                where: { 
+                                    user_id: req.body.user_id
+                                }
+                            });
+                        }
+                        
 
                         console.log('[SUCCESS] POST/deletePlaceFromBookmark');
                         return res.status(200).send({ res: true, message: "Succeeded to delete tourist to bookmarks."});
                     case 'workspace':
                         var workspace_ids = Object.values(bookmark.workspace_ids);
-                        workspace_ids.splice(workspace_ids.findIndex(id => id === req.body.place_id), 1);
+                        if (typeof(req.body.place_id) == 'object') {
+                            for (var w_id of req.body.place_id) {
+                                workspace_ids.splice(workspace_ids.findIndex(id => id === w_id), 1);
 
-                        bookmark.update({
-                            workspace_ids: workspace_ids,
-                        },
-                        {
-                            where: { 
-                                user_id: req.body.user_id
+                                bookmark.update({
+                                    workspace_ids: workspace_ids,
+                                },
+                                {
+                                    where: { 
+                                        user_id: req.body.user_id
+                                    }
+                                });
                             }
-                        });
+                        } else {
+                            workspace_ids.splice(workspace_ids.findIndex(id => id === req.body.place_id), 1);
+    
+                            bookmark.update({
+                                workspace_ids: workspace_ids,
+                            },
+                            {
+                                where: { 
+                                    user_id: req.body.user_id
+                                }
+                            });
+                        }
 
                         console.log('[SUCCESS] POST/deletePlaceFromBookmark');
                         return res.status(200).send({ res: true, message: "Succeeded to delete workspace to bookmarks."});
