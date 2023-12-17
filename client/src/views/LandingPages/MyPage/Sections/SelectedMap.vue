@@ -58,12 +58,15 @@ export default {
 
       const marginOfError = 0.00001;
 
-      const existingMarkerIndex = this.travelMarkers.findIndex(marker => {
+      const existingMarkerIndex = this.travelMarkers.findIndex((marker) => {
         const markerPosition = marker.getPosition();
         const markerY = markerPosition.getLat();
         const markerX = markerPosition.getLng();
 
-        return Math.abs(markerX - x) < marginOfError && Math.abs(markerY - y) < marginOfError;
+        return (
+          Math.abs(markerX - x) < marginOfError &&
+          Math.abs(markerY - y) < marginOfError
+        );
       });
 
       if (existingMarkerIndex !== -1) {
@@ -73,38 +76,36 @@ export default {
       } else {
         console.log('Creating new marker at:', x, y);
 
-        // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
-        const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 노란색 마커 이미지 URL을 지정
-        const imageSize = new kakao.maps.Size(20, 30); // 마커 이미지 크기 (20x30)
-        const imageOption = { offset: new kakao.maps.Point(10, 30) }; // 마커 이미지 오프셋 설정
+        const imageSrc =
+          'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png';
+        const imageSize = new kakao.maps.Size(20, 30);
+        const imageOption = { offset: new kakao.maps.Point(10, 30) };
 
-        // 마커 이미지를 활용하여 마커 객체 생성
         const marker = new kakao.maps.Marker({
           position: markerPosition,
           image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
           map: toRaw(this.map),
         });
 
-        // 인포윈도우를 생성합니다.
-        const infowindow = new kakao.maps.InfoWindow({
+        // Attach the infowindow to the marker
+        marker.infowindow = new kakao.maps.InfoWindow({
           content: name,
           removable: true,
         });
 
-        // 마커에 마우스오버 이벤트를 등록합니다
-        kakao.maps.event.addListener(marker, 'mouseover', () => {
-          infowindow.open(this.map, markerPosition);
+        // Mouseover event
+        kakao.maps.event.addListener(marker, 'mouseover', function () {
+          marker.infowindow.open(toRaw(this.map), marker);
         });
 
-        // 마커에 마우스아웃 이벤트를 등록합니다
-        kakao.maps.event.addListener(marker, 'mouseout', () => {
-          infowindow.close();
+        // Mouseout event
+        kakao.maps.event.addListener(marker, 'mouseout', function () {
+          marker.infowindow.close();
         });
 
         this.travelMarkers.push(marker);
       }
     },
-
     // 하위컴포넌트에서 클릭시 사이드바 토글 관리
     handleButtonClick() {
       // 클릭 시 사이드바2의 상태를 토글

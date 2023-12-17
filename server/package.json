@@ -4,7 +4,7 @@
   "description": "Workation Area Recommendation Web Service Backend",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/app.js --exec \"npm run lint && node\"",
+    "start": "nodemon ./src/app.js ",
     "lint": "eslint **/*.js"
   },
   "keywords": [],
