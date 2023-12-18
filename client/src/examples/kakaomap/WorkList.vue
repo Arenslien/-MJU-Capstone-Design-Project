@@ -1,45 +1,32 @@
 <template>
-  <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
-    <ul>
-      <li
-        v-for="spot in workSpaces"
-        :key="spot.id"
-        @click="handleClick(spot)"
-        :class="{ selected: isSelected(spot) }"
-      >
-        <div
-          style="
-            display: flex;
-            align-items: flex-start;
-            padding: 8px;
-            margin-top: 10px;
-          "
-        >
-          <div>
-            <span style="color: black">{{ spot.NAME }}</span>
-            <span style="color: gray; font-size: 0.8em">{{
-              spot.ADDRESS
-            }}</span>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div style="margin-top: 5px">
-    <MaterialButton
-      variant="gradient"
-      color="success"
-      class="mt-2 mb-2"
-      @click="sendSelectedSpotsToUserInfo"
-    >
-      업무공간 저장
-    </MaterialButton>
+  <div>
+    <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
+      <div v-for="(groupedSpaces, areaGroup) in groupedWorkSpaces" :key="areaGroup">
+        <div>{{ areaGroup }}</div>
+        <ul>
+          <li v-for="space in groupedSpaces" :key="space.id" @click="handleClick(space)" :class="{ selected: isSelected(space) }">
+            <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
+              <div>
+                <span style="color: black">{{ space.NAME }}</span>
+                <span style="color: gray; font-size: 0.8em">{{ space.ADDRESS }}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top: 5px">
+      <MaterialButton variant="gradient" color="success" class="mt-2 mb-2" @click="sendSelectedSpotsToUserInfo">
+        업무공간 저장
+      </MaterialButton>
+    </div>
   </div>
 </template>
 
 <script setup>
 import MaterialButton from "@/components/MaterialButton.vue";
 </script>
+
 <script>
 import axios from "axios";
 import { useAuthStore } from "../../stores/index.js";
@@ -48,26 +35,36 @@ export default {
   data() {
     return {
       selectedSpots: [],
-      workSpaces: [], // 변경된 부분: 여행지 정보를 나타내는 변수명을 workSpaces로 변경
+      workSpaces: [],
     };
   },
   mounted() {
-    this.fetchWorkSpaces(); // 변경된 부분: 여행지 정보를 가져오는 함수명을 fetchWorkSpaces로 변경
+    this.fetchWorkSpaces();
+  },
+  computed: {
+    groupedWorkSpaces() {
+      return this.workSpaces.reduce((grouped, space) => {
+        const areaGroup = space.AREA_GROUP;
+        if (!grouped[areaGroup]) {
+          grouped[areaGroup] = [];
+        }
+        grouped[areaGroup].push(space);
+        return grouped;
+      }, {});
+    },
   },
   methods: {
     async fetchWorkSpaces() {
-      // 변경된 부분: 여행지 정보를 가져오는 함수명을 fetchWorkSpaces로 변경
       await axios
         .get("http://localhost:8080/api/workspace")
         .then((response) => {
-          this.workSpaces = this.extractWorkSpaces(response.data); // 변경된 부분: 여행지 정보를 처리하는 함수명을 extractWorkSpaces로 변경
+          this.workSpaces = this.extractWorkSpaces(response.data);
         })
         .catch((error) => {
           console.error("업무공간 데이터를 불러오는 중 오류 발생", error);
         });
     },
     extractWorkSpaces(data) {
-      // 변경된 부분: 여행지 정보를 처리하는 함수명을 extractWorkSpaces로 변경
       const workSpaces = [];
       for (const areaGroup in data) {
         for (const idx in data[areaGroup]) {
@@ -121,7 +118,6 @@ export default {
       } else if (numberOfDays >= 22 && numberOfDays <= 30) {
         minSelectedSpots = 9;
       } else {
-        // Handle other cases if needed
         console.error("Invalid numberOfDays:", numberOfDays);
         return;
       }
@@ -141,12 +137,10 @@ export default {
         lng: space.Y_COORD,
       }));
 
-      // 사용자 ID가 auth store에 있다고 가정합니다
       const authStore = useAuthStore();
       const userId = authStore.userInfo.user_id;
       const travelIds = authStore.travelids;
 
-      // createBookmark API 호출
       await axios
         .post("http://localhost:8080/api/bookmark", {
           user_id: userId,
@@ -157,11 +151,11 @@ export default {
           const { res, message } = response.data;
           if (res) {
             console.log(message);
-            alert("저장이완료되었습니다!");
+            alert("저장이 완료되었습니다!");
             this.$router.push({ name: "presentation" });
           } else {
             console.error(message);
-            alert("저장실패했습니다! 다시 시도해주세요");
+            alert("저장 실패했습니다! 다시 시도해주세요");
           }
         })
         .catch((error) => {
@@ -174,6 +168,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 div {
@@ -222,3 +217,5 @@ li:hover {
   background-color: #dcdcdc;
 }
 </style>
+
+//http://localhost:8080/api/workspace
