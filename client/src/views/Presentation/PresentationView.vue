@@ -161,7 +161,7 @@ export default {
         </div>
       </div>
       <div class="black-bg" v-if="isTAPreferenceOpen">
-        <div id="modal">
+        <div id="modal2">
           <ChooseTAPreference
             @closeModal="closeTAPreference"
             @openNextModal="openLoading"
@@ -253,6 +253,13 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+#modal2 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 65%;
 }
 .black-bg {
   width: 100%;
