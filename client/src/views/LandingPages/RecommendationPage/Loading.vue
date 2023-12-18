@@ -55,7 +55,7 @@ export default {
     async fetchData() {
       const authStore = useAuthStore();
       const gender = authStore.userInfo.gender === "male" ? 0 : 1;
-      const age_group = 20;
+      const age_group = authStore.agerange;
       const travel_style1 = authStore.travelStyle1;
       const travel_style5 = authStore.travelStyle5;
       const travel_style6 = authStore.travelStyle6;

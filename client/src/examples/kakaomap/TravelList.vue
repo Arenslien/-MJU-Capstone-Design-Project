@@ -2,7 +2,7 @@
   <div>
     <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
       <div v-for="(groupedSpots, areaGroup) in groupedTourSpots" :key="areaGroup">
-        <div>{{ areaGroup }}</div>
+        <div style="font-size: 1.2em; color: black;">{{ areaGroup }}</div>
         <ul>
           <li v-for="spot in groupedSpots" :key="spot.id" @click="handleClick(spot)" :class="{ selected: isSelected(spot) }">
             <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
