@@ -1,34 +1,55 @@
 <template>
   <div>
     <!-- 사이드바 -->
-    <div class="sidebar sidebar1 active text-center" style="background-color: white; box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); transform: translateX(0%);">
+    <div
+      class="sidebar sidebar1 active text-center"
+      style="
+        background-color: white;
+        box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(0%);
+      "
+    >
       <div class="row g-1 text-center">
-        <div class="col text-center ">
-          <img src="@/assets/img/travel.png" style="width: 40px; height: 40px;">
-          <p style="font-size: 13px;">관광지</p>
+        <div class="col text-center">
+          <img
+            src="@/assets/img/travel.png"
+            style="width: 40px; height: 40px"
+          />
+          <p style="font-size: 13px">관광지</p>
         </div>
       </div>
       <div class="menu-separator"></div>
       <div>
         <!-- 사이드바1리스트 -->
-        <div style="height: 450px; border-bottom: 1px solid #ccc;">
-          <TravelList @button-click="handleButtonClick" @tourist-spot-click="handleTravelSpotClick" />
+        <div style="height: 450px; border-bottom: 1px solid #ccc">
+          <TravelList
+            @button-click="handleButtonClick"
+            @tourist-spot-click="handleTravelSpotClick"
+          />
         </div>
       </div>
     </div>
 
     <!-- 사이드바2 -->
-    <div class="sidebar sidebar2 active text-center" style="background-color: rgb(245, 245, 245); box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); transform: translateX(0%);" :class="{ active: sidebar2Visible }">
+    <div
+      class="sidebar sidebar2 active text-center"
+      style="
+        background-color: rgb(245, 245, 245);
+        box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(0%);
+      "
+      :class="{ active: sidebar2Visible }"
+    >
       <div class="row g-1 text-center">
-        <div class="col text-center ">
-          <img src="@/assets/img/study.png" style="width: 40px; height: 40px;">
-          <p style="font-size: 13px;">업무공간</p>
+        <div class="col text-center">
+          <img src="@/assets/img/study.png" style="width: 40px; height: 40px" />
+          <p style="font-size: 13px">업무공간</p>
         </div>
       </div>
       <div class="menu-separator"></div>
       <div>
         <!-- 사이드바2리스트 -->
-        <div style="height: 450px; border-bottom: 1px solid #ccc;">
+        <div style="height: 450px; border-bottom: 1px solid #ccc">
           <WorkList @work-click="handleWorkSpotClick" />
         </div>
       </div>
@@ -43,7 +64,7 @@
 import { toRaw } from "vue";
 import TravelList from "./TravelList.vue";
 import WorkList from "./WorkList.vue";
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   components: {
@@ -69,7 +90,8 @@ export default {
     } else {
       const script = document.createElement("script");
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
+      script.src =
+        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
       document.head.appendChild(script);
     }
   },
@@ -84,7 +106,7 @@ export default {
       // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
       // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
       if (!this.sidebar2Visible) {
-        document.querySelector('.sidebar2').style.left = '250px';
+        document.querySelector(".sidebar2").style.left = "250px";
       }
     },
 
@@ -94,12 +116,15 @@ export default {
 
       const marginOfError = 0.00001;
 
-      const existingMarkerIndex = this.workMarkers.findIndex(marker => {
+      const existingMarkerIndex = this.workMarkers.findIndex((marker) => {
         const markerPosition = marker.getPosition();
         const markerY = markerPosition.getLng();
         const markerX = markerPosition.getLat();
 
-        return Math.abs(markerX - x) < marginOfError && Math.abs(markerY - y) < marginOfError;
+        return (
+          Math.abs(markerX - x) < marginOfError &&
+          Math.abs(markerY - y) < marginOfError
+        );
       });
 
       if (existingMarkerIndex !== -1) {
@@ -107,10 +132,11 @@ export default {
         existingMarker.setMap(null);
         this.workMarkers.splice(existingMarkerIndex, 1);
       } else {
-        console.log('Creating new marker at:', x, y);
+        console.log("Creating new marker at:", x, y);
 
         // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
-        const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'; // 노란색 마커 이미지 URL을 지정
+        const imageSrc =
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; // 노란색 마커 이미지 URL을 지정
         const imageSize = new kakao.maps.Size(20, 30); // 마커 이미지 크기
         const imageOption = { offset: new kakao.maps.Point(15, 45) }; // 마커 이미지 오프셋 설정
 
@@ -121,57 +147,59 @@ export default {
           map: toRaw(this.map),
         });
 
-        kakao.maps.event.addListener(marker, 'click', () => {
+        kakao.maps.event.addListener(marker, "click", () => {
           this.displayInfoWindow(markerPosition);
         });
 
         this.workMarkers.push(marker);
-
       }
     },
 
     handleTravelSpotClick(coordinates) {
-  const { x, y, selectedSpots } = coordinates;
-  const markerPosition = new kakao.maps.LatLng(x, y);
+      const { x, y, selectedSpots } = coordinates;
+      const markerPosition = new kakao.maps.LatLng(x, y);
 
-  const marginOfError = 0.00001;
+      const marginOfError = 0.00001;
 
-  const existingMarkerIndex = this.travelMarkers.findIndex(marker => {
-    const markerPosition = marker.getPosition();
-    const markerY = markerPosition.getLng();
-    const markerX = markerPosition.getLat();
+      const existingMarkerIndex = this.travelMarkers.findIndex((marker) => {
+        const markerPosition = marker.getPosition();
+        const markerY = markerPosition.getLng();
+        const markerX = markerPosition.getLat();
 
-    return Math.abs(markerX - x) < marginOfError && Math.abs(markerY - y) < marginOfError;
-  });
+        return (
+          Math.abs(markerX - x) < marginOfError &&
+          Math.abs(markerY - y) < marginOfError
+        );
+      });
 
-  if (existingMarkerIndex !== -1) {
-    const existingMarker = this.travelMarkers[existingMarkerIndex];
-    existingMarker.setMap(null);
-    this.travelMarkers.splice(existingMarkerIndex, 1);
-  } else {
-    console.log('Creating new marker at:', x, y);
-    console.log(markerPosition);
+      if (existingMarkerIndex !== -1) {
+        const existingMarker = this.travelMarkers[existingMarkerIndex];
+        existingMarker.setMap(null);
+        this.travelMarkers.splice(existingMarkerIndex, 1);
+      } else {
+        console.log("Creating new marker at:", x, y);
+        console.log(markerPosition);
 
-    // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
-    const imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 노란색 마커 이미지 URL을 지정
-    const imageSize = new kakao.maps.Size(20, 30); // 마커 이미지 크기 (20x30)
-    const imageOption = { offset: new kakao.maps.Point(10, 30) }; // 마커 이미지 오프셋 설정
+        // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
+        const imageSrc =
+          "http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png"; // 노란색 마커 이미지 URL을 지정
+        const imageSize = new kakao.maps.Size(20, 30); // 마커 이미지 크기 (20x30)
+        const imageOption = { offset: new kakao.maps.Point(10, 30) }; // 마커 이미지 오프셋 설정
 
-    // 마커 이미지를 활용하여 마커 객체 생성
-    const marker = new kakao.maps.Marker({
-      position: markerPosition,
-      image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
-      map: toRaw(this.map),
-    });
+        // 마커 이미지를 활용하여 마커 객체 생성
+        const marker = new kakao.maps.Marker({
+          position: markerPosition,
+          image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+          map: toRaw(this.map),
+        });
 
-    kakao.maps.event.addListener(marker, 'click', () => {
-      this.displayInfoWindow(markerPosition);
-    });
+        kakao.maps.event.addListener(marker, "click", () => {
+          this.displayInfoWindow(markerPosition);
+        });
 
-    this.travelMarkers.push(marker);
-  }
-},
-
+        this.travelMarkers.push(marker);
+      }
+    },
 
     initMap() {
       const container = document.getElementById("map");
@@ -213,7 +241,7 @@ button {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   display: flex;
 }
 
@@ -248,7 +276,8 @@ nav ul li {
   border-bottom: 1px solid #555;
 }
 
-.sidebar p, .sidebar a {
+.sidebar p,
+.sidebar a {
   color: black; /* 또는 검정색 코드를 사용합니다. */
   font-size: 13px;
   text-align: center;

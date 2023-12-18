@@ -7,7 +7,7 @@ import json
 
 def get_workspace_result(tour_spot_df, work_space_df, week):
     # 0. 변수 초기화 & 준비
-    column_name = ["NAME", "VISIT_AREA_NM", "DISTANCE", "ADDRESS", "X_COORD", "Y_COORD", "AREA_GROUP"]
+    column_name = ["WORK_SPACE_ID", "NAME", "VISIT_AREA_NM", "DISTANCE", "ADDRESS", "X_COORD", "Y_COORD", "AREA_GROUP"]
     all_result = pd.DataFrame(columns=column_name)
     area_group_list = tour_spot_df["AREA_GROUP"].unique().tolist()
     k = week-1 if week > 1 else week+1
@@ -32,6 +32,7 @@ def get_workspace_result(tour_spot_df, work_space_df, week):
                 distance = haversine(work_space_coordinate, tour_spot_coordinate, unit = 'km')
 
                 new_row = {
+                    "WORK_SPACE_ID": work_space_row["WORK_SPACE_ID"],
                     "NAME": work_space_row["NAME"],
                     "VISIT_AREA_NM": tour_spot_row["VISIT_AREA_NM"],
                     "DISTANCE": distance,
