@@ -23,9 +23,9 @@ import { useAuthStore } from "../../../stores/index.js"; // 실제 경로로 대
 import MaterialInput from "@/components/MaterialInput.vue";
 export default {
   components: {
-    'mate':MaterialInput,
+    mate: MaterialInput,
   },
-  data: function() {
+  data: function () {
     const authStore = useAuthStore();
     return {
       nicknameInput: "",
@@ -51,7 +51,7 @@ export default {
       return authStore.userInfo;
     },
   },
-  
+
   methods: {
     updateNickname(value) {
       this.nicknameInput = value;
@@ -62,35 +62,34 @@ export default {
     saveChanges() {
       const authStore = useAuthStore();
 
-    if (!this.user.nickname) {
-      alert("닉네임을 입력해주세요.");
-      return; // 함수 종료
-    }
+      if (!this.user.nickname) {
+        alert("닉네임을 입력해주세요.");
+        return; // 함수 종료
+      }
 
-    if (!this.user.email) {
-      alert("이메일을 입력해주세요.");
-      return; // 함수 종료
-    }
+      if (!this.user.email) {
+        alert("이메일을 입력해주세요.");
+        return; // 함수 종료
+      }
 
-    if (!this.user.gender) {
-      alert("성별을 선택해주세요.");
-      return; // 함수 종료
-    }
+      if (!this.user.gender) {
+        alert("성별을 선택해주세요.");
+        return; // 함수 종료
+      }
 
-    // 스토어에서 사용자 정보 업데이트
-    authStore.updateUserInformation({
-      nickname: this.user.nickname,
-      email: this.user.email,
-      gender: this.user.gender,
-    });
-    // 백엔드에서 사용자 정보 업데이트
-    authStore.updateUser();
-    this.$router.push({ name: 'presentation' });
+      // 스토어에서 사용자 정보 업데이트
+      authStore.updateUserInformation({
+        nickname: this.user.nickname,
+        email: this.user.email,
+        gender: this.user.gender,
+      });
+      // 백엔드에서 사용자 정보 업데이트
+      authStore.updateUser();
+      this.$router.push({ name: "presentation" });
     },
   },
 };
 </script>
-
 
 <template>
   <div>
@@ -98,9 +97,7 @@ export default {
       <div class="container position-sticky z-index-sticky top-0">
         <div class="row">
           <div class="col-12">
-            <DefaultNavbar
-              :sticky="true"
-            />
+            <DefaultNavbar :sticky="true" />
           </div>
         </div>
       </div>
@@ -108,7 +105,8 @@ export default {
     <section>
       <div
         class="page-header min-vh-100"
-        :style="{ backgroundImage: `url(${image})` }">
+        :style="{ backgroundImage: `url(${image})` }"
+      >
         <div class="container">
           <div class="row">
             <div
@@ -127,56 +125,69 @@ export default {
                   </div>
                 </div>
 
-                
                 <div class="card-body">
                   <p class="pb-3">
                     더 정확한 맞춤 추천을 위해 정보를 입력해주세요!
                   </p>
                   <form id="contact-form" method="post" autocomplete="off">
-      <div class="card-body p-0 my-3">
-        <div class="mb-4">
-          <label for="nicknameInput" class="form-label">닉네임</label>
-          <input
-            id="nicknameInput"
-            class="input-group-static"
-            type="text"
-            v-model="user.nickname"
-          />
-        </div>
-        <hr>
-        <!-- 이메일 수정 모드 -->
-        <div class="mb-4">
-          <label for="emailInput" class="form-label">이메일</label> : {{user.email}}
-          
-        </div>
-        <hr>
-        <!-- 성별 수정 모드 -->
-        <div class="pb-3">
-          성별
-          <div>
-            <label id="radio">
-              <input type="radio" name="gender" value="male" v-model="user.gender">
-              남성
-            </label>
-            <label id="radio">
-              <input type="radio" name="gender" value="female" v-model="user.gender">
-              여성
-            </label>
-          </div>
-        </div>
-        <div class="col-md-12 text-center">
-          <!-- 저장 모드 버튼 -->
-          <MaterialButton
-            variant="gradient"
-            color="success"
-            class="mt-3 mb-0"
-            @click.prevent="saveChanges"
-          >
-            저장
-          </MaterialButton>
-        </div>
-      </div>
-    </form>
+                    <div class="card-body p-0 my-3">
+                      <div class="mb-4">
+                        <label for="nicknameInput" class="form-label"
+                          >닉네임</label
+                        >
+                        <input
+                          id="nicknameInput"
+                          class="input-group-static"
+                          type="text"
+                          v-model="user.nickname"
+                        />
+                      </div>
+                      <hr />
+                      <!-- 이메일 수정 모드 -->
+                      <div class="mb-4">
+                        <label for="emailInput" class="form-label"
+                          >이메일</label
+                        >
+                        : {{ user.email }}
+                      </div>
+                      <hr />
+                      <!-- 성별 수정 모드 -->
+                      <div class="pb-3">
+                        성별
+                        <div>
+                          <label id="radio">
+                            <input
+                              type="radio"
+                              name="gender"
+                              value="male"
+                              v-model="user.gender"
+                            />
+                            남성
+                          </label>
+                          <label id="radio">
+                            <input
+                              type="radio"
+                              name="gender"
+                              value="female"
+                              v-model="user.gender"
+                            />
+                            여성
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-12 text-center">
+                        <!-- 저장 모드 버튼 -->
+                        <MaterialButton
+                          variant="gradient"
+                          color="success"
+                          class="mt-3 mb-0"
+                          @click.prevent="saveChanges"
+                        >
+                          저장
+                        </MaterialButton>
+                      </div>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>

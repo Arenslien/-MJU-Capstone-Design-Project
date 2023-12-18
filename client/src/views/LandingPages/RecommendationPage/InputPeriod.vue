@@ -21,12 +21,24 @@ export default {
     };
   },
   methods: {
+    handleStartDateChange(event) {
+      const startDateValue = event.target.value;
+      // 처리할 로직 추가
+      console.log("시작 날짜:", startDateValue);
+      this.startDate = startDateValue;
+    },
+    handleEndDateChange(event) {
+      const endDateValue = event.target.value;
+      // 처리할 로직 추가
+      console.log("종료 날짜:", endDateValue);
+      this.endDate = endDateValue;
+    },
     closeModal() {
       this.$emit("closeModal");
     },
     openNextModal() {
-      console.log(this.startDate);
-      console.log(this.endDate);
+      console.log("startDate: ", this.startDate);
+      console.log("endDate", this.endDate);
 
       const start = new Date(this.startDate);
       const end = new Date(this.endDate);
@@ -42,9 +54,9 @@ export default {
         //Retrun; 시 깨짐현상
       }
 
-      console.log(start);
-      console.log(end);
-      console.log(days);
+      console.log("start: ", start);
+      console.log("end: ", end);
+      console.log("period: ", days);
 
       if (isNaN(start)) {
         alert("시작 날짜를 정해주세요");
@@ -88,7 +100,7 @@ export default {
                   type="date"
                   class="form-control"
                   id="startDate"
-                  v-model="startDate"
+                  @change="handleStartDateChange"
                   required
                 />
               </div>
@@ -98,7 +110,7 @@ export default {
                   type="date"
                   class="form-control"
                   id="endDate"
-                  v-model="endDate"
+                  @change="handleEndDateChange"
                   required
                 />
               </div>
