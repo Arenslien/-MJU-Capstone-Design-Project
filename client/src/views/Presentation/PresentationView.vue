@@ -187,8 +187,10 @@ export default {
             일도 하고 휴가도 즐기고!<br/>
             워케이션을 위한 관광지와 업무 공간을 맞춤 추천해드려요!<br/>
             <br/>
-            오른쪽 지도의 마커에 마우스를 올려서 랜덤으로 추천되는 관광지들을 확인해보세요!<br/>
-            아래의 '추천 받기' 버튼을 클릭하면 관광지와 업무 공간을 추천받으실 수 있어요!<br/>
+            <span style="font-size: smaller;">
+              오른쪽 지도의 마커에 마우스를 올려서 랜덤으로 추천되는 관광지들을 확인해보세요!<br/>
+              아래의 '추천 받기' 버튼을 클릭하면 관광지와 업무 공간을 추천받으실 수 있어요!<br/>
+            </span>
           </p>
           <div>
             <MaterialButton
@@ -198,7 +200,7 @@ export default {
               @click.prevent="openModal"
               v-if="isLoggedIn"
             >
-              추천페이지
+              추천 받기
             </MaterialButton>
             <MaterialButton
               variant="gradient"
@@ -207,7 +209,7 @@ export default {
               @click.prevent="kakaoLogin"
               v-if="!isLoggedIn"
             >
-              추천페이지
+              추천 받기
             </MaterialButton>
           </div>
         </div>
