@@ -18,6 +18,7 @@ onMounted(() => {
   </div>
 
   <div>
-    <KakaoMap /> <!-- 변경된 부분 -->
+    <!-- 변경된 부분 -->
+    <KakaoMap />
   </div>
 </template>

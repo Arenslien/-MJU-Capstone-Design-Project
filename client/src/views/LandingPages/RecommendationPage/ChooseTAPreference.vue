@@ -44,28 +44,9 @@ export default {
     closeModal() {
       this.$emit("closeModal");
     },
-    async moveToRecommend() {
-      // const authStore = useAuthStore();
-      if (
-        this.travel_style1 == 0 ||
-        this.travel_style5 == 0 ||
-        this.travel_style6 == 0
-      ) {
-        alert("카테고리를 모두 선택해주세요.");
-        this.closeModal();
-        return;
-      }
-
-      // authStore.updateUserInformation({
-      //   category_1: this.travel_style1,
-      //   category_2: this.travel_style5,
-      //   category_3: this.travel_style6,
-      // });
-
-      // authStore.saveCategory();
-
-      // Wait for the router to complete the navigation
-      this.$router.push({ name: "recommend" });
+    openNextModel() {
+      // openNextModal 이벤트 발생
+      this.$emit("openNextModal");
     },
   },
 };
@@ -87,7 +68,12 @@ export default {
         좋아하는 관광지 유형을 선택해보세요!<br />
         더 정확하게 맞춤 추천해드려요!
       </p>
-      <form id="contact-form" method="post" autocomplete="off">
+      <form
+        id="contact-form"
+        method="post"
+        autocomplete="off"
+        onsubmit="return false"
+      >
         <div class="card-body p-0 my-3">
           <div class="row mb-4">
             <label class="bold-text">자연 vs 도시</label>
@@ -275,7 +261,7 @@ export default {
                 variant="gradient"
                 color="success"
                 class="mt-3 mb-0 ms-2"
-                @click="moveToRecommend"
+                @click="openNextModel"
                 >추천</MaterialButton
               >
             </div>
