@@ -34,16 +34,14 @@ export default {
     }
   },
   methods: {
-    fetchTouristSpots() {
-      axios
-        .get("/travellist.json")
-        .then((response) => {
-          this.touristSpots = this.extractTouristSpots(response.data);
-          this.addMarkers();
-        })
-        .catch((error) => {
+    async fetchTouristSpots() {
+      try {
+        const response = await axios.get("http://localhost:8080/api/tourist");
+        this.touristSpots = this.extractTouristSpots(response.data);
+        this.addMarkers();
+      } catch (error) {
           console.error("여행지 데이터를 불러오는 중 오류 발생", error);
-        });
+        }
     },
     initMap() {
       const container = document.getElementById("map");
@@ -118,23 +116,22 @@ export default {
     },
     extractTouristSpots(data) {
       const touristSpots = [];
-      for (const city in data) {
-        if (data.hasOwnProperty(city)) {
-          const citySpots = data[city];
-          for (const spot of citySpots) {
-            if (spot.hasOwnProperty("VISIT_AREA_NM")) {
-              touristSpots.push({
-                id: spot.ITEM_ID,
-                VISIT_AREA_NM: spot.VISIT_AREA_NM,
-                ADDRESS: spot.ADDRESS,
-                X_COORD: spot.X_COORD,
-                Y_COORD: spot.Y_COORD,
-                IMG_URL: spot.IMG_URL,
-              });
-            }
-          }
-        }
+      for (const idx in data) {
+        const tourSpot = data[idx];
+        // 이미지 경로를 절대 경로로
+        const imgURL = `http://localhost:8080${tourSpot.ITEM_ID}.jpg`;
+        // const imgURL = "@/assets/img/tour-spots/" + tourSpot.ITEM_ID + ".jpg";
+
+        touristSpots.push({
+          id: tourSpot.ITEM_ID,
+          VISIT_AREA_NM: tourSpot.VISIT_AREA_NM,
+          ADDRESS: tourSpot.ADDRESS,
+          X_COORD: tourSpot.X_COORD,
+          Y_COORD: tourSpot.Y_COORD,
+          IMG_URL: imgURL,
+        });
       }
+
       return touristSpots;
     },
   },
