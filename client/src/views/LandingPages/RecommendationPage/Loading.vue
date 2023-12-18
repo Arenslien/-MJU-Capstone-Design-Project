@@ -8,6 +8,10 @@
   </div>
 </template>
 
+<script setup>
+import { useAuthStore } from "@/stores/index.js";
+</script>
+
 <script>
 import axios from "axios";
 
@@ -49,9 +53,23 @@ export default {
       this.$router.push({ name: "recommend" });
     },
     async fetchData() {
+      const authStore = useAuthStore();
+      const gender = authStore.userInfo.gender === "male" ? 0 : 1;
+      const age_group = 20;
+      const travel_style1 = authStore.travelStyle1;
+      const travel_style5 = authStore.travelStyle5;
+      const travel_style6 = authStore.travelStyle6;
+      const period = authStore.period;
+      console.log(gender);
+      console.log(age_group);
+      console.log(travel_style1);
+      console.log(travel_style5);
+      console.log(travel_style6);
+      console.log(period);
+
       await axios
         .get(
-          "http://localhost:8080/api/recommend-request?gender=0&age_group=20&travel_style1=4&travel_style5=4&travel_style6=3&period=12"
+          `http://localhost:8080/api/recommend-request?gender=${gender}&age_group=${age_group}&travel_style1=${travel_style1}&travel_style5=${travel_style5}&travel_style6=${travel_style6}&period=${period}`
         )
         .then((response) => {
           // 응답을 받았을 때 isLoading을 false로 변경하여 로딩 표시를 종료

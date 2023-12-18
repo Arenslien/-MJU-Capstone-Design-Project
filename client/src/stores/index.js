@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import bootstrap from "bootstrap/dist/js/bootstrap.min.js";
 import axios from "axios";
+
 export const useAppStore = defineStore("storeId", {
   state: () => ({
     bootstrap,
@@ -10,8 +11,11 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     isLoggedIn: false,
     userInfo: null,
-    numberOfDays: 3,
+    period: 3,
     travelids: [],
+    travelStyle1: 0,
+    travelStyle5: 0,
+    travelStyle6: 0,
   }),
   actions: {
     setTravelIds(ids) {

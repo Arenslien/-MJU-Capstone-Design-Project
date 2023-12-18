@@ -42,11 +42,12 @@ export default {
 
       const start = new Date(this.startDate);
       const end = new Date(this.endDate);
-      const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+      const period = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
-      // 스토어에서 numberOfDays 업데이트
+      // 스토어에서 numberOfperiod 업데이트
       const authStore = useAuthStore();
-      if (days < 3 || days > 30) {
+
+      if (period < 3 || period > 30) {
         // 선택한 일수가 조건에 맞지 않으면 모달 내에 에러 메시지를 표시
         alert("다시 선택해주세요. (3일 이상, 30일 이하)");
         this.closeModal();
@@ -54,7 +55,7 @@ export default {
         //Retrun; 시 깨짐현상
       }
 
-      console.log("period: ", days);
+      console.log("period: ", period);
 
       if (isNaN(start)) {
         alert("시작 날짜를 정해주세요");
@@ -66,7 +67,7 @@ export default {
         return;
       }
 
-      authStore.numberOfDays = days;
+      authStore.period = period;
 
       // openNextModal 이벤트 발생
       this.$emit("openNextModal");

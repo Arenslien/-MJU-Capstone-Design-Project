@@ -3,6 +3,7 @@ import { onMounted } from "vue";
 
 //material components
 import MaterialButton from "@/components/MaterialButton.vue";
+import { useAuthStore } from "@/stores/index.js";
 
 // material-input
 import setMaterialInput from "@/assets/js/material-input";
@@ -13,7 +14,6 @@ onMounted(() => {
 </script>
 
 <script>
-import { useAuthStore } from "../../../stores/index.js";
 export default {
   data() {
     return {
@@ -44,8 +44,15 @@ export default {
     closeModal() {
       this.$emit("closeModal");
     },
-    openNextModel() {
+    async openNextModel() {
       // openNextModal 이벤트 발생
+      const authStore = useAuthStore();
+      authStore.travelStyle1 = this.travel_style1;
+      authStore.travelStyle5 = this.travel_style5;
+      authStore.travelStyle6 = this.travel_style6;
+
+      await authStore.saveCategory();
+
       this.$emit("openNextModal");
     },
   },

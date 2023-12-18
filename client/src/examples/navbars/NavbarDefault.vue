@@ -65,7 +65,6 @@ const getTextColor = () => {
   return color;
 };
 
-
 let textDark = ref(props.darkText);
 const { type } = useWindowsWidth();
 
@@ -87,7 +86,6 @@ watch(
 );
 </script>
 <template>
-  
   <nav
     class="navbar navbar-expand-lg top-0"
     :class="{
@@ -188,9 +186,7 @@ watch(
         id="navigation"
       >
         <ul class="navbar-nav navbar-nav-hover ms-auto">
-          <li class="nav-item dropdown dropdown-hover mx-2">
-            
-          </li>
+          <li class="nav-item dropdown dropdown-hover mx-2"></li>
           <li class="nav-item dropdown dropdown-hover mx-2">
             <a
               role="button"
@@ -228,14 +224,12 @@ watch(
                       <RouterLink
                         :to="{ name: 'my-information' }"
                         class="dropdown-item border-radius-md"
-                        
                       >
                         <span>내 정보</span>
                       </RouterLink>
                       <RouterLink
                         :to="{ name: 'selected-places' }"
                         class="dropdown-item border-radius-md"
-                        
                       >
                         <span>내가 선택한 장소</span>
                       </RouterLink>
@@ -262,7 +256,7 @@ watch(
             </div>
           </li>
         </ul>
-        
+
         <!-- 카카오 버튼 -->
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
@@ -305,11 +299,10 @@ watch(
       </div>
     </div>
   </nav>
-  
 </template>
 <!-- 카카오 스크립트 -->
 <script>
-import { useAuthStore } from '../../stores/index.js';
+import { useAuthStore } from "../../stores/index.js";
 export default {
   data() {
     return {
@@ -330,10 +323,10 @@ export default {
   methods: {
     logincheck() {
       const authStore = useAuthStore();
-      if(!authStore.isLoggedIn){
+      if (!authStore.isLoggedIn) {
         alert("로그인 해주세요!");
         return false;
-      }else{
+      } else {
         return true;
       }
     },
@@ -342,52 +335,49 @@ export default {
       const isKakaoAuthorized = window.Kakao.Auth.getAccessToken() !== null;
 
       window.Kakao.Auth.login({
-        scope: 'profile_nickname, account_email, gender',
+        scope: "profile_nickname, account_email, gender",
         success: this.getKakaoAccount,
       });
-      
     },
 
     getKakaoAccount() {
-  const authStore = useAuthStore();
+      const authStore = useAuthStore();
 
-  window.Kakao.API.request({
-    url: "/v2/user/me",
-    success: async (res) => {
-      const properties = res.properties; 
-      const nickname = properties.nickname;
-      const kakao_account = res.kakao_account;
-      const gender = kakao_account.gender; 
-      const email = kakao_account.email; 
+      window.Kakao.API.request({
+        url: "/v2/user/me",
+        success: async (res) => {
+          const properties = res.properties;
+          const nickname = properties.nickname;
+          const kakao_account = res.kakao_account;
+          const gender = kakao_account.gender;
+          const email = kakao_account.email;
 
+          // authStore.loginWithKakao가 Promise를 반환하므로, 해당 Promise가 완료될 때까지 기다림
+          await authStore
+            .loginWithKakao(email)
+            .then(() => {
+              // post 요청이 완료된 후에 실행되는 로직
+              if (!authStore.isLoggedIn) {
+                // 처음 로그인하는 경우
+                alert("첫 로그인 입니다! 환영해요");
+                authStore.setUserInfo({ email, nickname, gender });
+                this.$router.push({ name: "getinformation" });
+              } else {
+                // 이미 로그인한 경우
+                alert("로그인 완료");
+              }
 
-      // authStore.loginWithKakao가 Promise를 반환하므로, 해당 Promise가 완료될 때까지 기다림
-      await authStore.loginWithKakao(email)
-        .then(() => {
-          // post 요청이 완료된 후에 실행되는 로직
-          if (!authStore.isLoggedIn) {
-            // 처음 로그인하는 경우
-            alert("첫 로그인 입니다! 환영해요");
-            authStore.setUserInfo({ email, nickname, gender });
-            this.$router.push({ name: 'getinformation' });
-          } else {
-            // 이미 로그인한 경우
-            alert("로그인 완료");
-          }
-
-          authStore.setLoggedIn(true);
-        })
-        .catch((error) => {
-          console.error('Error during login', error);
-        });
-
-      
+              authStore.setLoggedIn(true);
+            })
+            .catch((error) => {
+              console.error("Error during login", error);
+            });
+        },
+        fail: (error) => {
+          console.log(error);
+        },
+      });
     },
-    fail: (error) => {
-      console.log(error);
-    },
-  });
-},
 
     kakaoLogout() {
       const authStore = useAuthStore();
