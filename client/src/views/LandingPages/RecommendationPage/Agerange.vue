@@ -54,14 +54,10 @@ export default {
       class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent"
     >
       <div class="bg-gradient-success shadow-success border-radius-lg p-3">
-        <h3 class="text-white text-success mb-0">관광지 취향 선택</h3>
+        <h3 class="text-white text-success mb-0">워케이션 연령 선택</h3>
       </div>
     </div>
     <div class="card-body">
-      <p class="pb-3">
-        좋아하는 관광지 유형을 선택해보세요!<br />
-        더 정확하게 맞춤 추천해드려요!
-      </p>
       <form
         id="contact-form"
         method="post"
