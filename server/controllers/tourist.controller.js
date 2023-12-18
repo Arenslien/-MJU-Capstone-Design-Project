@@ -1,5 +1,6 @@
 const db = require("../models");
 const { spawnSync } = require("node:child_process");
+const fs = require('fs');
 
 // const Tourist = db.Tourist;
 const User = db.User;
@@ -41,19 +42,23 @@ const saveCategory = async (req, res) => {
     }
 }
 
-// const getTourists = async (req, res) => {
-//     console.log('[START] GET/getTourists');
+const getTourists = async (req, res) => {
+    console.log('[START] GET/getTourists');
 
-//     try {
-//         //
-//     } catch(err) {
-//         console.log('[FAIL] GET/getTourists');
-//         return res.status(500).send({ res: false, message: `Failed to get tourists information. The reason why ${err}` });
-//     }
+    try {
+        // json 파일 읽어오기
+        const filePath = './../model/recommended-result/tour-spot-result.json';
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const jsonData = JSON.parse(fileContents);
 
-//     console.log("[SUCCESS] Connected Well.");
-//     res.status(200).send({ res: true, message: "Connected Well."});
-// }
+        // json 파일 전달하기
+        console.log("[SUCCESS] Connected Well.");
+        res.status(200).json(jsonData)
+    } catch(err) {
+        console.log('[FAIL] GET/getTourists');
+        return res.status(500).send({ res: false, message: `Failed to get tourists information. The reason why ${err}` });
+    }
+}
 
 const getRecommendRequest = async (req, res) => {
     console.log('[START] GET/postRecommendResult');
@@ -96,14 +101,14 @@ const getRecommendRequest = async (req, res) => {
             console.log(result2.stdout.toString().trim());
 
             console.log("[SUCCESS] GET/postRecommendResult.");
-            res.status(200).send({ res: true, message: "Succeed to get Recommend"});
+            res.status(200).send({ res: true, message: "Succeed to create recommended result."});
         } else {
             // Error!
             console.log("Error!");
             console.log(result2.stderr.toString().trim());
 
             console.log('[FAIL] GET/postRecommendResult');
-            return res.status(500).send({ res: false, message: "Failed to get Recommend Result." });
+            return res.status(500).send({ res: false, message: "Failed to create recommended result." });
         }
 
     } catch(err) {
@@ -114,8 +119,10 @@ const getRecommendRequest = async (req, res) => {
 
 
 
+
+
 module.exports = {
     saveCategory,
-    // getTourists,
+    getTourists,
     getRecommendRequest
 }

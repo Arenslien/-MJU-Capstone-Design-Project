@@ -73,6 +73,6 @@ const controller = require("../controllers/tourist.controller")
 
 module.exports = function(BASE_URI, app) {
     app.put(BASE_URI + "category", controller.saveCategory);
-    // app.get(BASE_URI + "tourist", controller.getTourists);
+    app.get(BASE_URI + "tourist", controller.getTourists);
     app.get(BASE_URI + "recommend-request", controller.getRecommendRequest);
 }
