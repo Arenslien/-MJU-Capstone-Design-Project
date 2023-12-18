@@ -61,7 +61,7 @@ const getTourists = async (req, res) => {
 }
 
 const getRecommendRequest = async (req, res) => {
-    console.log('[START] GET/postRecommendResult');
+    console.log('[START] GET/getRecommendResult');
 
     try {
         //
@@ -71,6 +71,7 @@ const getRecommendRequest = async (req, res) => {
         const travel_style5 = req.query.travel_style5;
         const travel_style6 = req.query.travel_style6;
         const period = req.query.period;
+        console.log(period);
 
         console.log("\n[Query Parameters]")
         const user_information = ["100000", gender, age_group, travel_style1, travel_style5, travel_style6, period].join(" ");
@@ -100,19 +101,19 @@ const getRecommendRequest = async (req, res) => {
             console.log("Success!");
             console.log(result2.stdout.toString().trim());
 
-            console.log("[SUCCESS] GET/postRecommendResult.");
+            console.log("[SUCCESS] GET/getRecommendResult.");
             res.status(200).send({ res: true, message: "Succeed to create recommended result."});
         } else {
             // Error!
             console.log("Error!");
             console.log(result2.stderr.toString().trim());
 
-            console.log('[FAIL] GET/postRecommendResult');
+            console.log('[FAIL] GET/getRecommendResult');
             return res.status(500).send({ res: false, message: "Failed to create recommended result." });
         }
 
     } catch(err) {
-        console.log('[FAIL] GET/postRecommendResult');
+        console.log('[FAIL] GET/getRecommendResult');
         return res.status(500).send({ res: false, message: `Failed to get Recommend Result. The reason why ${err}` });
     }
 }

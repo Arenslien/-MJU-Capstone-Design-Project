@@ -89,7 +89,7 @@ export default {
       this.initMap();
     } else {
       const script = document.createElement("script");
-      script.onload = () => kakao.maps.load(this.initMap);
+      script.onload = () => window.kakao.maps.load(this.initMap);
       script.src =
         "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
       document.head.appendChild(script);
@@ -111,15 +111,15 @@ export default {
     },
 
     handleWorkSpotClick(coordinates) {
-      const { x, y, selectedSpots } = coordinates;
-      const markerPosition = new kakao.maps.LatLng(x, y);
+      const { x, y } = coordinates;
+      const markerPosition = new kakao.maps.LatLng(y, x);
 
       const marginOfError = 0.00001;
 
       const existingMarkerIndex = this.workMarkers.findIndex((marker) => {
         const markerPosition = marker.getPosition();
-        const markerY = markerPosition.getLng();
-        const markerX = markerPosition.getLat();
+        const markerY = markerPosition.getLat();
+        const markerX = markerPosition.getLng();
 
         return (
           Math.abs(markerX - x) < marginOfError &&
@@ -134,21 +134,15 @@ export default {
       } else {
         console.log("Creating new marker at:", x, y);
 
-        // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
         const imageSrc =
-          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; // 노란색 마커 이미지 URL을 지정
-        const imageSize = new kakao.maps.Size(20, 30); // 마커 이미지 크기
-        const imageOption = { offset: new kakao.maps.Point(15, 45) }; // 마커 이미지 오프셋 설정
+          "http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png";
+        const imageSize = new kakao.maps.Size(20, 30);
+        const imageOption = { offset: new kakao.maps.Point(10, 30) };
 
-        // 마커 이미지를 활용하여 마커 객체 생성
         const marker = new kakao.maps.Marker({
           position: markerPosition,
           image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
           map: toRaw(this.map),
-        });
-
-        kakao.maps.event.addListener(marker, "click", () => {
-          this.displayInfoWindow(markerPosition);
         });
 
         this.workMarkers.push(marker);
@@ -156,15 +150,15 @@ export default {
     },
 
     handleTravelSpotClick(coordinates) {
-      const { x, y, selectedSpots } = coordinates;
-      const markerPosition = new kakao.maps.LatLng(x, y);
+      const { x, y } = coordinates;
+      const markerPosition = new kakao.maps.LatLng(y, x);
 
       const marginOfError = 0.00001;
 
       const existingMarkerIndex = this.travelMarkers.findIndex((marker) => {
         const markerPosition = marker.getPosition();
-        const markerY = markerPosition.getLng();
-        const markerX = markerPosition.getLat();
+        const markerY = markerPosition.getLat();
+        const markerX = markerPosition.getLng();
 
         return (
           Math.abs(markerX - x) < marginOfError &&
@@ -178,23 +172,16 @@ export default {
         this.travelMarkers.splice(existingMarkerIndex, 1);
       } else {
         console.log("Creating new marker at:", x, y);
-        console.log(markerPosition);
 
-        // 사용자 정의 마커 이미지를 만들어 노란색 마커를 사용
         const imageSrc =
-          "http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png"; // 노란색 마커 이미지 URL을 지정
-        const imageSize = new kakao.maps.Size(20, 30); // 마커 이미지 크기 (20x30)
-        const imageOption = { offset: new kakao.maps.Point(10, 30) }; // 마커 이미지 오프셋 설정
+          "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+        const imageSize = new kakao.maps.Size(20, 30);
+        const imageOption = { offset: new kakao.maps.Point(10, 30) };
 
-        // 마커 이미지를 활용하여 마커 객체 생성
         const marker = new kakao.maps.Marker({
           position: markerPosition,
           image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
           map: toRaw(this.map),
-        });
-
-        kakao.maps.event.addListener(marker, "click", () => {
-          this.displayInfoWindow(markerPosition);
         });
 
         this.travelMarkers.push(marker);
@@ -204,11 +191,11 @@ export default {
     initMap() {
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(35.458081, 126.10936),
+        center: new window.kakao.maps.LatLng(35.458081, 126.10936),
         level: 13,
       };
 
-      this.map = new kakao.maps.Map(container, options);
+      this.map = new window.kakao.maps.Map(container, options);
     },
 
     changeSize(size) {

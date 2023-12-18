@@ -109,7 +109,7 @@ export default {
     },
     sendSelectedSpotsToUserInfo() {
       const authStore = useAuthStore();
-      const numberOfDays = authStore.numberOfDays;
+      const numberOfDays = authStore.period;
 
       let minSelectedSpots;
       if (numberOfDays >= 3 && numberOfDays <= 7) {
@@ -133,7 +133,7 @@ export default {
 
       this.sendSelectedSpotsToBackend();
     },
-    sendSelectedSpotsToBackend() {
+    async sendSelectedSpotsToBackend() {
       const selectedSpotsInfo = this.selectedSpots.map((space) => ({
         id: space.id,
         name: space.NAME,
@@ -147,7 +147,7 @@ export default {
       const travelIds = authStore.travelids;
 
       // createBookmark API 호출
-      axios
+      await axios
         .post("http://localhost:8080/api/bookmark", {
           user_id: userId,
           workspace_ids: selectedSpotsInfo.map((space) => space.id),

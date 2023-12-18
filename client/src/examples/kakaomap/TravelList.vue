@@ -90,6 +90,7 @@ export default {
           X_COORD: tourSpot.X_COORD,
           Y_COORD: tourSpot.Y_COORD,
           IMG_URL: imgURL,
+          AREA_GROUP: tourSpot.AREA_GROUP,
         });
       }
 
@@ -122,7 +123,7 @@ export default {
     },
     sendSelectedSpotsToUserInfo() {
       const authStore = useAuthStore();
-      const numberOfDays = authStore.numberOfDays;
+      const numberOfDays = authStore.period;
 
       let minSelectedSpots;
       let maxSelectedSpots;
