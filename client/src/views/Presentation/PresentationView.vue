@@ -1,19 +1,19 @@
 <script setup>
 import { onMounted, onUnmounted } from "vue";
 
-//example components
+// 예제 컴포넌트
 import NavbarDefault from "../..//examples/navbars/NavbarDefault.vue";
 import InputPeriod from "../LandingPages/RecommendationPage/InputPeriod.vue";
 import ChooseTAPreference from "../LandingPages/RecommendationPage/ChooseTAPreference.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
-
-// sections
+import Agerange from "../LandingPages/RecommendationPage/Agerange.vue";
+// 섹션
 import PresentationCounter from "./Sections/PresentationCounter.vue";
 
-//images
+// 이미지
 import vueMkHeader from "@/assets/img/sea.jpg";
 
-//hooks
+// 훅
 const body = document.getElementsByTagName("body")[0];
 onMounted(() => {
   body.classList.add("presentation-page");
@@ -48,11 +48,19 @@ export default {
     return {
       isInputPeriodOpen: false,
       isTAPreferenceOpen: false,
+      isAgerangeOpen: false,
       isLoadingOpen: false,
     };
   },
   methods: {
     openModal() {
+      this.isAgerangeOpen = true;
+    },
+    closeAgerange() {
+      this.isAgerangeOpen = false;
+    },
+    openInputPeriod() {
+      this.isAgerangeOpen = false;
       this.isInputPeriodOpen = true;
     },
     closeInputPeriod() {
@@ -113,7 +121,7 @@ export default {
               authStore.setLoggedIn(true);
             })
             .catch((error) => {
-              console.error("Error during login", error);
+              console.error("로그인 중 오류 발생", error);
             });
         },
         fail: (error) => {
@@ -152,6 +160,14 @@ export default {
       :style="`background-image: url(${vueMkHeader})`"
       loading="lazy"
     >
+      <div class="black-bg" v-if="isAgerangeOpen">
+        <div id="modal">
+          <Agerange
+            @closeModal="closeAgerange"
+            @openNextModal="openInputPeriod"
+          />
+        </div>
+      </div>
       <div class="black-bg" v-if="isInputPeriodOpen">
         <div id="modal">
           <InputPeriod

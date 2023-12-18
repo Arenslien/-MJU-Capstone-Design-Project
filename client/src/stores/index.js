@@ -16,6 +16,7 @@ export const useAuthStore = defineStore("auth", {
     travelStyle1: 0,
     travelStyle5: 0,
     travelStyle6: 0,
+    agerange: 0,
   }),
   actions: {
     setTravelIds(ids) {
