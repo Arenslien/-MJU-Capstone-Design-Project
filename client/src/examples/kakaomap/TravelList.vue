@@ -1,55 +1,33 @@
 <template>
-  <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
-    <ul>
-      <li
-        v-for="spot in tourSpots"
-        :key="spot.id"
-        @click="handleClick(spot)"
-        :class="{ selected: isSelected(spot) }"
-      >
-        <div
-          style="
-            display: flex;
-            align-items: flex-start;
-            padding: 8px;
-            margin-top: 10px;
-          "
-        >
-          <img
-            :src="`${spot.IMG_URL}`"
-            alt="Spot Image"
-            style="
-              width: 50px;
-              height: 50px;
-              margin-right: 10px;
-              border-radius: 5px;
-            "
-          />
-          <div>
-            <span style="color: black">{{ spot.VISIT_AREA_NM }}</span>
-            <span style="color: gray; font-size: 0.8em">{{
-              spot.ADDRESS
-            }}</span>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div style="margin-top: 5px">
-    <MaterialButton
-      variant="gradient"
-      color="success"
-      class="mt-2 mb-2"
-      @click="sendSelectedSpotsToUserInfo"
-    >
-      관광지 저장
-    </MaterialButton>
+  <div>
+    <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
+      <div v-for="(groupedSpots, areaGroup) in groupedTourSpots" :key="areaGroup">
+        <div>{{ areaGroup }}</div>
+        <ul>
+          <li v-for="spot in groupedSpots" :key="spot.id" @click="handleClick(spot)" :class="{ selected: isSelected(spot) }">
+            <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
+              <img :src="`${spot.IMG_URL}`" alt="Spot Image" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 5px;" />
+              <div>
+                <span style="color: black">{{ spot.VISIT_AREA_NM }}</span>
+                <span style="color: gray; font-size: 0.8em">{{ spot.ADDRESS }}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top: 5px">
+      <MaterialButton variant="gradient" color="success" class="mt-2 mb-2" @click="sendSelectedSpotsToUserInfo">
+        관광지 저장
+      </MaterialButton>
+    </div>
   </div>
 </template>
 
 <script setup>
 import MaterialButton from "@/components/MaterialButton.vue";
 </script>
+
 <script>
 import axios from "axios";
 import { useAuthStore } from "../../stores/index.js";
@@ -64,6 +42,18 @@ export default {
   mounted() {
     this.fetchTouristSpots();
   },
+  computed: {
+    groupedTourSpots() {
+      return this.tourSpots.reduce((grouped, spot) => {
+        const areaGroup = spot.AREA_GROUP;
+        if (!grouped[areaGroup]) {
+          grouped[areaGroup] = [];
+        }
+        grouped[areaGroup].push(spot);
+        return grouped;
+      }, {});
+    },
+  },
   methods: {
     async fetchTouristSpots() {
       await axios
@@ -77,7 +67,6 @@ export default {
         });
     },
     extractTouristSpots(data) {
-      // 변경된 부분: 여행지 정보를 처리하는 함수명을 extractWorkSpaces로 변경
       const tourSpotList = [];
       for (const idx in data) {
         const tourSpot = data[idx];
@@ -95,9 +84,6 @@ export default {
       }
 
       return tourSpotList;
-    },
-    emitButtonClick() {
-      this.$emit("button-click");
     },
     handleClick(spot) {
       const index = this.selectedSpots.findIndex(
@@ -140,7 +126,6 @@ export default {
         minSelectedSpots = 16;
         maxSelectedSpots = 20;
       } else {
-        // Handle other cases if needed
         console.error("Invalid numberOfDays:", numberOfDays);
         return;
       }
@@ -155,7 +140,6 @@ export default {
         return;
       }
 
-      // 여기서부터는 선택된 여행지를 백엔드로 전송하는 로직입니다.
       this.sendSelectedSpotsToBackend();
       this.$emit("button-click");
     },
