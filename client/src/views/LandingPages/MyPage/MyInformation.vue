@@ -38,7 +38,7 @@ export default {
 
     // 로그인 여부 확인
     if (!authStore.isLoggedIn) {
-      // 로그아웃 상태일 때 이전 페이지로 리디렉션
+      // 로그아웃 상태일 진입 불가
       alert("로그인 후 이용해주세요.");
     } else {
       // 로그인 상태일 때 계속 페이지 진입

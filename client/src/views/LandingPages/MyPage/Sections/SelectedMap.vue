@@ -11,7 +11,7 @@
       <div>
         <!-- 사이드바 리스트 -->
         <div>
-          <SelectedPlacesList @button-click="handleButtonClick" />
+          <SelectedPlacesList @spot-click="handleTravelSpotClick" @button-click="handleButtonClick" />
         </div>
       </div>
     </div>
@@ -35,6 +35,8 @@ export default {
       markers: [],
       infowindow: null,
       sidebar2Visible: false,
+      travelMarkers: [],
+      
     };
   },
   mounted() {
@@ -50,16 +52,70 @@ export default {
     }
   },
   methods: {
-    //하위컴포넌트에서 클릭시 사이드바토글관리
+    handleTravelSpotClick(coordinates) {
+      const { x, y, name } = coordinates;
+      const markerPosition = new kakao.maps.LatLng(y, x);
+
+      const marginOfError = 0.00001;
+
+      const existingMarkerIndex = this.travelMarkers.findIndex((marker) => {
+        const markerPosition = marker.getPosition();
+        const markerY = markerPosition.getLat();
+        const markerX = markerPosition.getLng();
+
+        return (
+          Math.abs(markerX - x) < marginOfError &&
+          Math.abs(markerY - y) < marginOfError
+        );
+      });
+
+      if (existingMarkerIndex !== -1) {
+        const existingMarker = this.travelMarkers[existingMarkerIndex];
+        existingMarker.setMap(null);
+        this.travelMarkers.splice(existingMarkerIndex, 1);
+      } else {
+        console.log('Creating new marker at:', x, y);
+
+        const imageSrc =
+          'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png';
+        const imageSize = new kakao.maps.Size(20, 30);
+        const imageOption = { offset: new kakao.maps.Point(10, 30) };
+
+        const marker = new kakao.maps.Marker({
+          position: markerPosition,
+          image: new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+          map: toRaw(this.map),
+        });
+
+        // Attach the infowindow to the marker
+        marker.infowindow = new kakao.maps.InfoWindow({
+          content: name,
+          removable: true,
+        });
+
+        // Mouseover event
+        kakao.maps.event.addListener(marker, 'mouseover', function () {
+          marker.infowindow.open(toRaw(this.map), marker);
+        });
+
+        // Mouseout event
+        kakao.maps.event.addListener(marker, 'mouseout', function () {
+          marker.infowindow.close();
+        });
+
+        this.travelMarkers.push(marker);
+      }
+    },
+    // 하위컴포넌트에서 클릭시 사이드바 토글 관리
     handleButtonClick() {
       // 클릭 시 사이드바2의 상태를 토글
-    this.sidebar2Visible = !this.sidebar2Visible;
+      this.sidebar2Visible = !this.sidebar2Visible;
 
-    // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
-    // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
-    if (!this.sidebar2Visible) {
-      document.querySelector('.sidebar2').style.left = '250px';
-    } 
+      // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
+      // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
+      if (!this.sidebar2Visible) {
+        document.querySelector('.sidebar2').style.left = '250px';
+      } 
     },
     initMap() {
       const container = document.getElementById("map");
@@ -68,8 +124,8 @@ export default {
         level: 13,
       };
 
-      //지도 객체를 등록합니다.
-      //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
+      // 지도 객체를 등록합니다.
+      // 지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
     },
     changeSize(size) {
@@ -78,55 +134,11 @@ export default {
       container.style.height = `${size}px`;
       toRaw(this.map).relayout();
     },
-    displayMarker(markerPositions) {
-      if (this.markers.length > 0) {
-        this.markers.forEach((marker) => marker.setMap(null));
-      }
-
-      const positions = markerPositions.map(
-        (position) => new kakao.maps.LatLng(...position)
-      );
-
-      if (positions.length > 0) {
-        this.markers = positions.map(
-          (position) =>
-            new kakao.maps.Marker({
-              map: toRaw(this.map),
-              position,
-            })
-        );
-
-        const bounds = positions.reduce(
-          (bounds, latlng) => bounds.extend(latlng),
-          new kakao.maps.LatLngBounds()
-        );
-
-        toRaw(this.map).setBounds(bounds);
-      }
-    },
-    displayInfoWindow() {
-      if (this.infowindow && this.infowindow.getMap()) {
-        //이미 생성한 인포윈도우가 있기 때문에 지도 중심좌표를 인포윈도우 좌표로 이동시킨다.
-        toRaw(this.map).setCenter(this.infowindow.getPosition());
-        return;
-      }
-
-      var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-        iwPosition = new kakao.maps.LatLng(33.450701, 126.570667), //인포윈도우 표시 위치입니다
-        iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-      this.infowindow = new kakao.maps.InfoWindow({
-        map: toRaw(this.map), // 인포윈도우가 표시될 지도
-        position: iwPosition,
-        content: iwContent,
-        removable: iwRemoveable,
-      });
-
-      toRaw(this.map).setCenter(iwPosition);
-    },
   },
 };
 </script>
+
+
 
 <style scoped>
 #map {
