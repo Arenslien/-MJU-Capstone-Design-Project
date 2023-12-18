@@ -5,15 +5,12 @@
 </template>
 
 <script>
-import { toRaw } from "vue";
+import axios from "axios";
 
 export default {
-  name: "KakaoMap",
+  name: "RandomMap",
   data() {
     return {
-      location: [
-        [37.5666, 126.9774], [37, 128], [37.24, 131.865], [35.1, 129], [36, 126.8]
-      ],
       touristSpots: [],
       markers: [],
       infowindow: null,
@@ -22,25 +19,32 @@ export default {
   mounted() {
     if (window.kakao && window.kakao.maps) {
       this.initMap();
-      // Always add initial marker on page load
+      this.fetchTouristSpots();
     } else {
       const script = document.createElement("script");
-      script.onload = () => kakao.maps.load(this.initMap);
+      script.onload = () => {
+        kakao.maps.load(() => {
+          this.initMap();
+          this.fetchTouristSpots();
+        });
+      };
       script.src =
         "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
       document.head.appendChild(script);
     }
-
-    // 랜덤 데이터로 수정해야 돼!!!
-    // axios.get("/travellist.json")
-    //   .then(response => {
-    //     this.touristSpots = this.extractTouristSpots(response.data);
-    //   })
-    //   .catch(error => {
-    //     console.error("여행지 데이터를 불러오는 중 오류 발생", error);
-    //   });
   },
   methods: {
+    fetchTouristSpots() {
+      axios
+        .get("/travellist.json")
+        .then((response) => {
+          this.touristSpots = this.extractTouristSpots(response.data);
+          this.addMarkers();
+        })
+        .catch((error) => {
+          console.error("여행지 데이터를 불러오는 중 오류 발생", error);
+        });
+    },
     initMap() {
       const container = document.getElementById("map");
       const options = {
@@ -49,29 +53,56 @@ export default {
       };
 
       this.map = new kakao.maps.Map(container, options);
+    },
+    addMarkers() {
+      // 랜덤으로 5개의 관광지 선택
+      const randomSpots = this.getRandomLocations(5);
 
-      this.addInitialMarker();
+      randomSpots.forEach((spot) => {
+        const position = new kakao.maps.LatLng(spot.X_COORD, spot.Y_COORD);
+        this.addMarker(position, spot);
+      });
+    },
+    getRandomLocations(count) {
+      // 랜덤으로 5개의 관광지 선택
+      const randomLocations = [];
+      const availableSpots = [...this.touristSpots];
+
+      for (let i = 0; i < count; i++) {
+        const randomIndex = Math.floor(Math.random() * availableSpots.length);
+        randomLocations.push(availableSpots.splice(randomIndex, 1)[0]);
+      }
+
+      return randomLocations;
     },
     addMarker(position, markerInfo) {
-      const marker = new kakao.maps.Marker({
-        map: this.map,
-        position: position,
-      });
+      if (window.kakao && window.kakao.maps) {
+        const marker = new kakao.maps.Marker({
+          map: this.map,
+          position: position,
+        });
 
-      this.markers.push(marker);
+        this.markers.push(marker);
 
-      // 마커에 마우스오버 이벤트를 등록합니다
-      kakao.maps.event.addListener(marker, "mouseover", () => {
-        this.displayInfoWindow(position, markerInfo);
-      });
+        // 마커에 마우스오버 이벤트를 등록합니다
+        kakao.maps.event.addListener(marker, "mouseover", () => {
+          this.displayInfoWindow(position, markerInfo);
+        });
 
-      // 마커에 마우스아웃 이벤트를 등록합니다
-      kakao.maps.event.addListener(marker, "mouseout", () => {
-        this.infowindow.close();
-      });
+        // 마커에 마우스아웃 이벤트를 등록합니다
+        kakao.maps.event.addListener(marker, "mouseout", () => {
+          this.infowindow.close();
+        });
+      } else {
+        console.error('Kakao maps SDK가 로드되지 않았습니다.');
+      }
     },
     displayInfoWindow(position, markerInfo) {
-      const iwContent = `<div style="padding:5px;">(${markerInfo[0]}, ${markerInfo[1]})</div>`;
+      const iwContent = `<div style="padding:5px;">
+        <img src="${markerInfo.IMG_URL}" alt="${markerInfo.VISIT_AREA_NM}" style="max-width: 100%;">
+        <p>${markerInfo.VISIT_AREA_NM}</p>
+        <p>${markerInfo.ADDRESS}</p>
+      </div>`;
       const iwRemoveable = true;
 
       if (this.infowindow) {
@@ -85,33 +116,27 @@ export default {
         removable: iwRemoveable,
       });
     },
-    addInitialMarker() {
-      this.location.forEach((loc) => {
-        const initialPosition = new kakao.maps.LatLng(loc[0], loc[1]);
-        this.addMarker(initialPosition, loc);
-      });
+    extractTouristSpots(data) {
+      const touristSpots = [];
+      for (const city in data) {
+        if (data.hasOwnProperty(city)) {
+          const citySpots = data[city];
+          for (const spot of citySpots) {
+            if (spot.hasOwnProperty("VISIT_AREA_NM")) {
+              touristSpots.push({
+                id: spot.ITEM_ID,
+                VISIT_AREA_NM: spot.VISIT_AREA_NM,
+                ADDRESS: spot.ADDRESS,
+                X_COORD: spot.X_COORD,
+                Y_COORD: spot.Y_COORD,
+                IMG_URL: spot.IMG_URL,
+              });
+            }
+          }
+        }
+      }
+      return touristSpots;
     },
-    // extractTouristSpots(data) {
-    //   const touristSpots = [];
-    //   for (const city in data) {
-    //     if (data.hasOwnProperty(city)) {
-    //       const citySpots = data[city];
-    //       for (const spot of citySpots) {
-    //         if (spot.hasOwnProperty("VISIT_AREA_NM")) {
-    //           touristSpots.push({
-    //             id: spot.ITEM_ID,
-    //             VISIT_AREA_NM: spot.VISIT_AREA_NM,
-    //             ADDRESS: spot.ADDRESS,
-    //             X_COORD: spot.X_COORD,
-    //             Y_COORD: spot.Y_COORD,
-    //             IMG_URL: spot.IMG_URL,
-    //           });
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return touristSpots;
-    // },
   },
 };
 </script>
