@@ -27,6 +27,7 @@ onUnmounted(() => {
 
 <script>
 import { useAuthStore } from "../../stores/index.js";
+import Loading from "../LandingPages/RecommendationPage/Loading.vue";
 
 export default {
   computed: {
@@ -41,11 +42,13 @@ export default {
   components: {
     InputPeriod,
     ChooseTAPreference,
+    Loading,
   },
   data() {
     return {
       isInputPeriodOpen: false,
       isTAPreferenceOpen: false,
+      isLoadingOpen: false,
     };
   },
   methods: {
@@ -61,6 +64,12 @@ export default {
     },
     closeTAPreference() {
       this.isTAPreferenceOpen = false;
+    },
+    openLoading() {
+      this.isLoadingOpen = true;
+    },
+    closeLoading() {
+      this.isLoadingOpen = false;
     },
     goToRecommend() {
       this.isInputPeriodOpen = true;
@@ -153,7 +162,15 @@ export default {
       </div>
       <div class="black-bg" v-if="isTAPreferenceOpen">
         <div id="modal">
-          <ChooseTAPreference @closeModal="closeTAPreference" />
+          <ChooseTAPreference
+            @closeModal="closeTAPreference"
+            @openNextModal="openLoading"
+          />
+        </div>
+      </div>
+      <div class="black-bg" v-if="isLoadingOpen">
+        <div id="modal">
+          <Loading @closeModal="closeLoading" />
         </div>
       </div>
 

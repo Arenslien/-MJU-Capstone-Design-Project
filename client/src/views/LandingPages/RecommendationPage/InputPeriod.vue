@@ -54,8 +54,6 @@ export default {
         //Retrun; 시 깨짐현상
       }
 
-      console.log("start: ", start);
-      console.log("end: ", end);
       console.log("period: ", days);
 
       if (isNaN(start)) {
@@ -91,7 +89,12 @@ export default {
       </div>
       <div class="card-body">
         <p class="pb-3">워케이션을 진행할 기간을 입력해주세요!</p>
-        <form id="contact-form" method="post" autocomplete="off">
+        <form
+          id="contact-form"
+          method="post"
+          autocomplete="off"
+          onsubmit="return false"
+        >
           <div class="card-body p-0 my-3">
             <div class="row">
               <div class="col-md-6 mb-3">
