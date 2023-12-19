@@ -62,8 +62,10 @@ export default {
       console.log(randomSpots);
 
       randomSpots.forEach((spot) => {
-        const position = new kakao.maps.LatLng(spot.X_COORD, spot.Y_COORD);
+        const position = new kakao.maps.LatLng(spot.Y_COORD, spot.X_COORD); // 위도, 경도 순
         console.log("Before addMarker, position:", position);
+        console.log("spot.X_COORD:", spot.X_COORD);
+        console.log("spot.Y_COORD:", spot.Y_COORD);
         this.addMarker(position, spot);
       });
     },
@@ -84,22 +86,11 @@ export default {
         console.log("addMarker 들어오나요?");
         console.log("position:", position);
         console.log("makerInfo:", markerInfo);
-
-        if (!position || typeof position.getLat !== 'function' || typeof position.getLng !== 'function') {
-          console.error('Invalid position:', position);
-          return;
-        }
-
-        const markerPosition = position.getPosition();
-        console.log("markerPosition:", markerPosition);
         
         const marker = new kakao.maps.Marker({
           map: this.map,
-          position: markerPosition,
+          position: position,
         });
-
-        console.log("marker.position.getLat():", marker.position.getLat());
-        console.log("marker.position.getLng():", marker.position.getLng());
 
         this.markers.push(marker);
         console.log("markers:", this.markers);
@@ -119,7 +110,8 @@ export default {
     },
     displayInfoWindow(position, markerInfo) {
       const iwContent = `<div style="padding:5px;">
-        <p>${markerInfo.VISIT_AREA_NM}</p>
+        <img src="${markerInfo.IMG_URL}" alt="${markerInfo.VISIT_AREA_NM}">
+        <p style="font-size: smaller">${markerInfo.VISIT_AREA_NM}</p>
       </div>`;
       console.log("iwContent:", iwContent);
       const iwRemoveable = true;
@@ -139,14 +131,14 @@ export default {
       const touristSpots = [];
       for (const idx in data) {
         const tourSpot = data[idx];
-        // const imgURL = `@/assets/img/tour-spots/${tourSpot.ITEM_ID}.jpg`;
+        const imgURL = `@/assets/img/tour-spots/${tourSpot.ITEM_ID}.jpg`;
 
         touristSpots.push({
           id: tourSpot.ITEM_ID,
           VISIT_AREA_NM: tourSpot.VISIT_AREA_NM,
-          X_COORD: tourSpot.X_COORD,
-          Y_COORD: tourSpot.Y_COORD,
-          // IMG_URL: imgURL,
+          X_COORD: tourSpot.X_COORD,  // 경도
+          Y_COORD: tourSpot.Y_COORD,  // 위도
+          IMG_URL: imgURL,
         });
       }
 
