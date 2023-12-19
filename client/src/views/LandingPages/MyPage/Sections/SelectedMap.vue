@@ -1,7 +1,14 @@
 <template>
   <div>
     <!-- 사이드바 -->
-    <div class="sidebar sidebar1 active text-center" style="background-color: white; box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1); transform: translateX(0%);">
+    <div
+      class="sidebar sidebar1 active text-center"
+      style="
+        background-color: white;
+        box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(0%);
+      "
+    >
       <div class="row g-1 text-center">
         <div class="col text-center">
           <h3 class="text-success">내가 선택한 장소</h3>
@@ -11,7 +18,10 @@
       <div>
         <!-- 사이드바 리스트 -->
         <div>
-          <SelectedPlacesList @spot-click="handleTravelSpotClick" @button-click="handleButtonClick" />
+          <SelectedPlacesList
+            @spot-click="handleTravelSpotClick"
+            @button-click="handleButtonClick"
+          />
         </div>
       </div>
     </div>
@@ -36,7 +46,6 @@ export default {
       infowindow: null,
       sidebar2Visible: false,
       travelMarkers: [],
-      
     };
   },
   mounted() {
@@ -74,10 +83,10 @@ export default {
         existingMarker.setMap(null);
         this.travelMarkers.splice(existingMarkerIndex, 1);
       } else {
-        console.log('Creating new marker at:', x, y);
+        console.log("Creating new marker at:", x, y);
 
         const imageSrc =
-          'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png';
+          "http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png";
         const imageSize = new kakao.maps.Size(20, 30);
         const imageOption = { offset: new kakao.maps.Point(10, 30) };
 
@@ -94,12 +103,12 @@ export default {
         });
 
         // Mouseover event
-        kakao.maps.event.addListener(marker, 'mouseover', function () {
+        kakao.maps.event.addListener(marker, "mouseover", function () {
           marker.infowindow.open(toRaw(this.map), marker);
         });
 
         // Mouseout event
-        kakao.maps.event.addListener(marker, 'mouseout', function () {
+        kakao.maps.event.addListener(marker, "mouseout", function () {
           marker.infowindow.close();
         });
 
@@ -114,8 +123,8 @@ export default {
       // 애니메이션 효과를 추가하려면 CSS 클래스를 추가/제거하면 됩니다.
       // 여기서는 간단히 left 값을 변경하여 애니메이션을 효과를 줬습니다.
       if (!this.sidebar2Visible) {
-        document.querySelector('.sidebar2').style.left = '250px';
-      } 
+        document.querySelector(".sidebar2").style.left = "250px";
+      }
     },
     initMap() {
       const container = document.getElementById("map");
@@ -138,8 +147,6 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
 #map {
   width: 100%;
@@ -157,7 +164,7 @@ button {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   display: flex;
 }
 .sidebar {
@@ -186,26 +193,27 @@ nav ul li {
   padding: 10px;
   border-bottom: 1px solid #555;
 }
-.sidebar p, .sidebar a {
-color: black; /* 또는 검정색 코드를 사용합니다. */
-font-size: 13px;
-text-align: center;
+.sidebar p,
+.sidebar a {
+  color: black; /* 또는 검정색 코드를 사용합니다. */
+  font-size: 13px;
+  text-align: center;
 }
 .menu-separator {
   margin-top: 10px; /* 원하는 여백 설정 */
   margin-bottom: 10px;
 }
 .sidebar1 {
-z-index: 3; /* 첫 번째 사이드바의 z-index를 더 높게 설정 */
+  z-index: 3; /* 첫 번째 사이드바의 z-index를 더 높게 설정 */
 }
 .sidebar2 {
-transition: left 0.3s ease; /* 애니메이션 효과를 줄 수 있도록 설정 */
-z-index: 2;
+  transition: left 0.3s ease; /* 애니메이션 효과를 줄 수 있도록 설정 */
+  z-index: 2;
 }
 .styled-button {
-width: 100px; /* 가로 크기 */
-height: 35px; /* 세로 크기 */
-padding: 5px 0; 
+  width: 100px; /* 가로 크기 */
+  height: 35px; /* 세로 크기 */
+  padding: 5px 0;
   background-color: rgba(12, 222, 187, 0.873);
   color: white;
   border: none;
@@ -214,7 +222,7 @@ padding: 5px 0;
   text-align: center;
 }
 .parent-container {
-position: relative;
-/* 다른 스타일 설정 */
+  position: relative;
+  /* 다른 스타일 설정 */
 }
 </style>

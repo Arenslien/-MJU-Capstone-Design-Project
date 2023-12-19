@@ -1,15 +1,41 @@
 <template>
   <div>
     <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
-      <div v-for="(groupedSpots, areaGroup) in groupedTourSpots" :key="areaGroup">
+      <div
+        v-for="(groupedSpots, areaGroup) in groupedTourSpots"
+        :key="areaGroup"
+      >
         <div>{{ areaGroup }}</div>
         <ul>
-          <li v-for="spot in groupedSpots" :key="spot.id" @click="handleClick(spot)" :class="{ selected: isSelected(spot) }">
-            <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
-              <img :src="`${spot.IMG_URL}`" alt="Spot Image" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 5px;" />
+          <li
+            v-for="spot in groupedSpots"
+            :key="spot.id"
+            @click="handleClick(spot)"
+            :class="{ selected: isSelected(spot) }"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: flex-start;
+                padding: 8px;
+                margin-top: 10px;
+              "
+            >
+              <img
+                :src="`${spot.IMG_URL}`"
+                alt="Spot Image"
+                style="
+                  width: 50px;
+                  height: 50px;
+                  margin-right: 10px;
+                  border-radius: 5px;
+                "
+              />
               <div>
                 <span style="color: black">{{ spot.VISIT_AREA_NM }}</span>
-                <span style="color: gray; font-size: 0.8em">{{ spot.ADDRESS }}</span>
+                <span style="color: gray; font-size: 0.8em">{{
+                  spot.ADDRESS
+                }}</span>
               </div>
             </div>
           </li>
@@ -17,7 +43,12 @@
       </div>
     </div>
     <div style="margin-top: 5px">
-      <MaterialButton variant="gradient" color="success" class="mt-2 mb-2" @click="sendSelectedSpotsToUserInfo">
+      <MaterialButton
+        variant="gradient"
+        color="success"
+        class="mt-2 mb-2"
+        @click="sendSelectedSpotsToUserInfo"
+      >
         관광지 저장
       </MaterialButton>
     </div>

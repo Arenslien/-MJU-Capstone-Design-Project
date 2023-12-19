@@ -51,6 +51,12 @@ export default {
       authStore.travelStyle5 = this.travel_style5;
       authStore.travelStyle6 = this.travel_style6;
 
+      authStore.updateUserInformation({
+        category_1: this.travel_style1,
+        category_2: this.travel_style5,
+        category_3: this.travel_style6,
+      });
+
       await authStore.saveCategory();
 
       this.$emit("openNextModal");
