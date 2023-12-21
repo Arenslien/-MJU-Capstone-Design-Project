@@ -52,10 +52,10 @@ export default {
       // Wait for the router to complete the navigation
       this.$router.push({ name: "recommend" });
     },
-    async fetchData() {
+     async fetchData() {
       const authStore = useAuthStore();
       const gender = authStore.userInfo.gender === "male" ? 0 : 1;
-      const age_group = 20;
+      const age_group = authStore.agerange;
       const travel_style1 = authStore.travelStyle1;
       const travel_style5 = authStore.travelStyle5;
       const travel_style6 = authStore.travelStyle6;
@@ -69,7 +69,7 @@ export default {
 
       await axios
         .get(
-          `http://localhost:8080/api/recommend-request?gender=${gender}&age_group=${age_group}&travel_style1=${travel_style1}&travel_style5=${travel_style5}&travel_style6=${travel_style6}&period=${period}`
+          `http://18.224.246.126:8080/api/recommend-request?gender=${gender}&age_group=${age_group}&travel_style1=${travel_style1}&travel_style5=${travel_style5}&travel_style6=${travel_style6}&period=${period}`
         )
         .then((response) => {
           // 응답을 받았을 때 isLoading을 false로 변경하여 로딩 표시를 종료

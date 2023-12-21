@@ -82,8 +82,8 @@ def convert_new_user_to_libsvm(new_user):
     libsvm_format += f"{i+1}:{feature_value} "
   libsvm_format = libsvm_format.strip()
 
-  output_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\recommended-result\\new_user_libsvm.txt" # 저장할 경로
-  origin_libsvm_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log\\user_features_0based.txt"
+  output_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/recommended-result//new_user_libsvm.txt" # 저장할 경로
+  origin_libsvm_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/dropout-net/travel-log/user_features_0based.txt"
 
   # 결과 출력
   with open(output_dir, "w") as output_file:
@@ -170,7 +170,7 @@ def get_top_K_travel_area(embedding_dir, top_K_similar_user_index, week):
   max_rating_matrix_df.index += 1 # 인덱스를 1부터 시작하도록 설정
   print(max_rating_matrix_df)
 
-  area_information_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log\\tour-spot-information\\all-area-info-photo.csv"
+  area_information_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/dropout-net/travel-log/tour-spot-information/all-area-info-photo.csv"
   area_info_df = pd.read_csv(area_information_dir)
 
   joined_df = pd.merge(max_rating_matrix_df, area_info_df[["ITEM_ID", "VISIT_AREA_NM","AREA_GROUP", "X_COORD", "Y_COORD"]], on="ITEM_ID")
@@ -202,19 +202,19 @@ if __name__=="__main__":
   new_user_vector = new_user_vectors[0].reshape(1, -1) # new_user 값만 추출
 
   # 2. Old User Information --> libsvm format --> standardized vector로 변환
-  libsvm_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\travel-log/user_features_0based.txt"
+  libsvm_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/dropout-net/travel-log/user_features_0based.txt"
   old_user_vectors = create_standardized_user_vectors(libsvm_dir)
 
   # 3. Input User와 유사한 Old User 20명 추출
   top_K_similar_user_index = get_top_K_similar_user(new_user_vector, old_user_vectors, 20)
 
   # 4. Similar Old User 기반 지역별 Top K개 Tour Spot 추출
-  embedding_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\dropout-net\\checkpoint/Embedded-latent-factor"
+  embedding_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/dropout-net/checkpoint/Embedded-latent-factor"
   filtered_df = get_top_K_travel_area(embedding_dir, top_K_similar_user_index, week) # index, rating(top_K_recommend_area_value)
 
   print(filtered_df)
 
   # 6. json 파일 저장
-  filtered_df.to_json("D:\\Programming\\MJU-CapstoneDesign-Project\\model\\recommended-result\\tour-spot-result.json", orient="records")
+  filtered_df.to_json("/home/ubuntu/MJU-CapstoneDesign-Project/model/recommended-result/tour-spot-result.json", orient="records")
 
   print("[FINISH : get_recommend_result.py]")

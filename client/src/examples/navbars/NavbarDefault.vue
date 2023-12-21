@@ -382,7 +382,7 @@ export default {
     kakaoLogout() {
       const authStore = useAuthStore();
       authStore.logout();
-      alert("로그아웃 된거심");
+      alert("로그아웃 완료");
     },
     checkTokenOnLoad() {
       const authStore = useAuthStore();

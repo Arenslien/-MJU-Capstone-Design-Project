@@ -201,8 +201,8 @@ export default {
           console.log(response.data);
           //this.book_id = response.data.boomark_id;
           //console.log(book_id);
-          this.touristSpots = this.extractTouristSpots(response.data);
-          this.workSpaces = this.extractWorkSpaces(response.data);
+          this.touristSpots = this.extractTouristSpots(response.data.data);
+          this.workSpaces = this.extractWorkSpaces(response.data.data);
           // this.places = [...this.touristSpots, ...this.workSpaces];
 
           console.log(this.places);
@@ -215,77 +215,48 @@ export default {
     extractWorkSpaces(data) {
       const workSpaces = [];
       console.log("workspace: ", data);
-      // for (const city in data) {
-      //   if (data.hasOwnProperty(city)) {
-      //     const cityData = data[city];
-      //     // 데이터 구조에 따라서 cityData가 객체이며, workspaces 배열을 가지고 있는지 확인
-      //     if (cityData && Array.isArray(cityData.workspaces)) {
-      //       const cityWorkSpaces = cityData.workspaces;
-      //       for (const space of cityWorkSpaces) {
-      //         // 'space'가 객체이며 필요한 속성을 가지고 있는지 확인
-      //         if (space && space.hasOwnProperty("name")) {
-      //           workSpaces.push({
-      //             id: space.workspace_id,
-      //             NAME: space.name,
-      //             ADDRESS: space.road_address, // 적절한 주소 속성으로 변경
-      //             X_COORD: space.x,
-      //             Y_COORD: space.y,
-      //           });
-      //           console.log(workSpaces);
-      //           console.log("흠냐뀽2141141414");
-      //         } else {
-      //           console.error(
-      //             "워크스페이스 데이터의 구조가 잘못되었습니다:",
-      //             space
-      //           );
-      //         }
-      //       }
-      //     } else {
-      //       console.error(
-      //         "도시 워크스페이스 데이터의 구조가 잘못되었습니다:",
-      //         cityData
-      //       );
-      //     }
-      //   }
-      // }
+      
+      const workspaces = data.workspaces;
+      console.log(workspaces);
+      for (const idx in workspaces) {
+        const workspace = workspaces[idx];
+        
+  	workSpaces.push({
+          id: workspace.workspace_id,
+          NAME: workspace.name,
+          ADDRESS: workspace.road_address, // 적절한 주소 속성으로 변경
+          X_COORD: workspace.x,
+          Y_COORD: workspace.y,
+          TYPE: workspace.type,
+        });
+      }
+
       return workSpaces;
     },
-
     extractTouristSpots(data) {
       const touristSpots = [];
       console.log("tour spot: ", data);
-
-      // for (const city in data) {
-      //   if (data.hasOwnProperty(city)) {
-      //     const cityData = data[city];
-      //     // 데이터 구조에 따라서 cityData가 객체이며, tourists 배열을 가지고 있는지 확인
-      //     if (cityData && Array.isArray(cityData.tourists)) {
-      //       const citySpots = cityData.tourists;
-      //       for (const spot of citySpots) {
-      //         if (spot && spot.hasOwnProperty("name")) {
-      //           touristSpots.push({
-      //             NAME: spot.name, // 수정된 부분
-      //             ADDRESS: spot.road_address, // 수정된 부분
-      //             X_COORD: spot.x, // 수정된 부분
-      //             Y_COORD: spot.y, // 수정된 부분
-      //           });
-      //           console.log("흠냐뀽213313");
-      //           console.log(touristSpots);
-      //         } else {
-      //           console.error("관광지 데이터의 구조가 잘못되었습니다:", spot);
-      //         }
-      //       }
-      //     } else {
-      //       console.error(
-      //         "도시 관광지 데이터의 구조가 잘못되었습니다:",
-      //         cityData
-      //       );
-      //     }
-      //   }
-      // }
+      const tourists = data.tourists;
+      console.log(tourists);
+      
+      for (const idx in data) {
+        console.log("idx: ", idx);
+      }
+ 
+      for (const idx in tourists) {
+        const tourSpot = tourists[idx];
+        
+	touristSpots.push({
+          id: tourSpot.tourist_id,
+	  NAME: tourSpot.name, // 수정된 부분
+          ADDRESS: tourSpot.road_address, // 수정된 부분
+          X_COORD: tourSpot.x, // 수정된 부분
+          Y_COORD: tourSpot.y, // 수정된 부분
+          TYPE: tourSpot.type,
+        });
+      }
       return touristSpots;
     },
-
     filterall(a) {
       this.selectedFilter = a;
     },

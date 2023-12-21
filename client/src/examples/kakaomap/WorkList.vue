@@ -2,7 +2,7 @@
   <div>
     <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
       <div v-for="(groupedSpaces, areaGroup) in groupedWorkSpaces" :key="areaGroup">
-        <div>{{ areaGroup }}</div>
+	<div><b style="color: black;">{{ areaGroup }}</b></div>
         <ul>
           <li v-for="space in groupedSpaces" :key="space.id" @click="handleClick(space)" :class="{ selected: isSelected(space) }">
             <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
@@ -56,7 +56,7 @@ export default {
   methods: {
     async fetchWorkSpaces() {
       await axios
-        .get("http://localhost:8080/api/workspace")
+        .get("http://18.224.246.126:8080/api/workspace")
         .then((response) => {
           this.workSpaces = this.extractWorkSpaces(response.data);
         })
@@ -142,7 +142,7 @@ export default {
       const travelIds = authStore.travelids;
 
       await axios
-        .post("http://localhost:8080/api/bookmark", {
+        .post("http://18.224.246.126:8080/api/bookmark", {
           user_id: userId,
           workspace_ids: selectedSpotsInfo.map((space) => space.id),
           tourist_ids: travelIds,
@@ -218,4 +218,3 @@ li:hover {
 }
 </style>
 
-//http://localhost:8080/api/workspace
