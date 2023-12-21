@@ -31,14 +31,14 @@ export default {
         });
       };
       script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
+        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=fdf15a73f0d1ae486766b611bc61f897";
       document.head.appendChild(script);
     }
   },
   methods: {
     async fetchTouristSpots() {
       try {
-        const response = await axios.get("http://localhost:8080/api/tourist");
+        const response = await axios.get("http://18.224.246.126:8080/api/tourist");
         // console.log(response.data);
         this.touristSpots = this.extractTouristSpots(response.data);
         // console.log(this.touristSpots);
@@ -130,7 +130,9 @@ export default {
       const touristSpots = [];
       for (const idx in data) {
         const tourSpot = data[idx];
-        const imgURL = `http://localhost:8080/${tourSpot.ITEM_ID}.jpg`;
+        // 이미지 경로를 절대 경로로
+        const imgURL = `http://18.224.246.126:8080${tourSpot.ITEM_ID}.jpg`;
+        // const imgURL = "@/assets/img/tour-spots/" + tourSpot.ITEM_ID + ".jpg";
 
         touristSpots.push({
           id: tourSpot.ITEM_ID,

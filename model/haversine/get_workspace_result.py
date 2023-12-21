@@ -59,7 +59,7 @@ def get_workspace_result(tour_spot_df, work_space_df, week):
         print()
 
     # 4. 결과값 json으로 저장
-    output_dir = "D:\\Programming\\MJU-CapstoneDesign-Project\\model\\recommended-result\\"
+    output_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/recommended-result/"
     with open(output_dir + "work-space-result.json", "w") as json_file:
         json.dump(group_workspace_dict, json_file)
 
@@ -78,7 +78,7 @@ if __name__=="__main__":
     week = 4 if ((args.period - 1) // 7 + 1) > 4 else ((args.period - 1) // 7 + 1)
 
     # 1. 업무 공간 파일 로드
-    work_space_df = pd.read_csv('D:\\Programming\\MJU-CapstoneDesign-Project\\model\\haversine\\Dataset\\workspace-all.csv', header=0)
+    work_space_df = pd.read_csv('/home/ubuntu/MJU-CapstoneDesign-Project/model/haversine/Dataset/workspace-all.csv', header=0)
 
     # 2. result.json 파일 로드
     result_json_dir = args.tour_spot_result_dir

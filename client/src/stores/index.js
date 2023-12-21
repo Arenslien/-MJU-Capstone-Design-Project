@@ -73,7 +73,7 @@ export const useAuthStore = defineStore("auth", {
       };
 
       axios
-        .post("http://localhost:8080/api/auth/signup", userInfoToSend, {
+        .post("http://18.224.246.126:8080/api/auth/signup", userInfoToSend, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -100,7 +100,7 @@ export const useAuthStore = defineStore("auth", {
         };
 
         const response = await axios.post(
-          "http://localhost:8080/api/auth/login",
+          "http://18.224.246.126:8080/api/auth/login",
           userInfoToSend,
           {
             headers: {
@@ -135,7 +135,7 @@ export const useAuthStore = defineStore("auth", {
       };
       try {
         const response = await axios.put(
-          "http://localhost:8080/api/category",
+          "http://18.224.246.126:8080/api/category",
           categoryData,
           {
             headers: {
@@ -171,7 +171,7 @@ export const useAuthStore = defineStore("auth", {
 
       try {
         const response = await axios.put(
-          "http://localhost:8080/api/user",
+          "http://18.224.246.126:8080/api/user",
           userInfoToUpdate,
           {
             headers: {

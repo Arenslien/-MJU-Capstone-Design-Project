@@ -2,11 +2,11 @@
   <div>
     <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
       <div v-for="(groupedSpots, areaGroup) in groupedTourSpots" :key="areaGroup">
-        <div style="font-size: 1.2em; color: black;">{{ areaGroup }}</div>
+        <div><b style="color: black;">{{ areaGroup }}</b></div>
         <ul>
           <li v-for="spot in groupedSpots" :key="spot.id" @click="handleClick(spot)" :class="{ selected: isSelected(spot) }">
             <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">
-              <img :src="`${spot.IMG_URL}`" alt="Spot Image" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 5px;" />
+              <!--<img :src="getImagePath(spot.id)" alt="Spot Image" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 5px;" /> -->
               <div>
                 <span style="color: black">{{ spot.VISIT_AREA_NM }}</span>
                 <span style="color: gray; font-size: 0.8em">{{ spot.ADDRESS }}</span>
@@ -55,9 +55,20 @@ export default {
     },
   },
   methods: {
+    async getImagePath(spotId) {
+      try {
+	const imageModule = await import(`/assets/img/tour-spots/${spotId}.jpg`)
+	return imageModule.default;
+      } catch (error) {
+	// Hand error (e.g., image not found)
+	console.error(error);
+	return null;
+      }
+
+    },
     async fetchTouristSpots() {
       await axios
-        .get("http://localhost:8080/api/tourist")
+        .get("http://18.224.246.126:8080/api/tourist")
         .then((response) => {
           console.log(response.data);
           this.tourSpots = this.extractTouristSpots(response.data);

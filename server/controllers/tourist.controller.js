@@ -78,8 +78,8 @@ const getRecommendRequest = async (req, res) => {
         console.log(user_information)
         
         // 1. Tour Spot 코드 실행
-        const pyFileDirectory1 = "./../model/dropout-net/get_recommend_result.py";
-        const result1 = spawnSync("python", [pyFileDirectory1, "--user-information", "100000", gender, age_group, travel_style1, travel_style5, travel_style6, "--period", period]);
+        const pyFileDirectory1 = "/home/ubuntu/MJU-CapstoneDesign-Project/model/dropout-net/get_recommend_result.py";
+        const result1 = spawnSync("python3", [pyFileDirectory1, "--user-information", "100000", gender, age_group, travel_style1, travel_style5, travel_style6, "--period", period]);
 
         if (result1.status === 0) {
             // Success!
@@ -92,9 +92,9 @@ const getRecommendRequest = async (req, res) => {
         }
 
         // 2. Haversine 코드 실행
-        const pyFileDirectory2 = "./../model/haversine/get_workspace_result.py";
-        const result_json_dir = "./../model/recommended-result/tour-spot-result.json"
-        const result2 = spawnSync("python", [pyFileDirectory2, "--tour-spot-result-dir", result_json_dir, "--period", period]);
+        const pyFileDirectory2 = "/home/ubuntu/MJU-CapstoneDesign-Project/model/haversine/get_workspace_result.py";
+        const result_json_dir = "/home/ubuntu/MJU-CapstoneDesign-Project/model/recommended-result/tour-spot-result.json"
+        const result2 = spawnSync("python3", [pyFileDirectory2, "--tour-spot-result-dir", result_json_dir, "--period", period]);
 
         if (result2.status === 0) {
             // Success!

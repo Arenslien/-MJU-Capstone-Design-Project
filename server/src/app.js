@@ -12,6 +12,9 @@ const app = express();
 app.use(morgan("combined"));
 app.use(express.json()); // Body-Parser 대용, Express에 body-parser가 내장됨.
 app.use(cors());
+app.use(cors({
+  origin: 'http://18.224.246.126:8080',
+}));
 
 // Swagger Setting
 const { swaggerUI, swaggerSpec } = require("../config/swagger.js");
