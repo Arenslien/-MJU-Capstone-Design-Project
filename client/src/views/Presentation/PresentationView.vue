@@ -275,7 +275,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 65%;
+  width: 70%;
 }
 .black-bg {
   width: 100%;

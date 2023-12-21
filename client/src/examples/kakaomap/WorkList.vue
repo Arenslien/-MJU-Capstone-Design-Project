@@ -2,7 +2,7 @@
   <div>
     <div style="height: 450px; overflow-y: auto; border-bottom: 1px solid #ccc">
       <div v-for="(groupedSpaces, areaGroup) in groupedWorkSpaces" :key="areaGroup">
-	<div><b style="color: black;">{{ areaGroup }}</b></div>
+	      <div><b style="color: black;">{{ areaGroup }}</b></div>
         <ul>
           <li v-for="space in groupedSpaces" :key="space.id" @click="handleClick(space)" :class="{ selected: isSelected(space) }">
             <div style="display: flex; align-items: flex-start; padding: 8px; margin-top: 10px;">

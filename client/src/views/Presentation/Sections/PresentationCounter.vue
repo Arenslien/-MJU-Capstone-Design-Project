@@ -18,9 +18,11 @@ export default {
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
+      // console.log("if");
       this.initMap();
       this.fetchTouristSpots();
     } else {
+      // console.log("else");
       const script = document.createElement("script");
       script.onload = () => {
         kakao.maps.load(() => {
@@ -37,7 +39,9 @@ export default {
     async fetchTouristSpots() {
       try {
         const response = await axios.get("http://18.224.246.126:8080/api/tourist");
+        // console.log(response.data);
         this.touristSpots = this.extractTouristSpots(response.data);
+        // console.log(this.touristSpots);
         this.addMarkers();
       } catch (error) {
           console.error("여행지 데이터를 불러오는 중 오류 발생", error);
@@ -55,14 +59,17 @@ export default {
     addMarkers() {
       // 랜덤으로 5개의 관광지 선택
       const randomSpots = this.getRandomLocations(5);
+      // console.log(randomSpots);
 
       randomSpots.forEach((spot) => {
-        const position = new kakao.maps.LatLng(spot.X_COORD, spot.Y_COORD);
+        const position = new kakao.maps.LatLng(spot.Y_COORD, spot.X_COORD); // 위도, 경도 순
+        // console.log("Before addMarker, position:", position);
+        // console.log("spot.X_COORD:", spot.X_COORD);
+        // console.log("spot.Y_COORD:", spot.Y_COORD);
         this.addMarker(position, spot);
       });
     },
     getRandomLocations(count) {
-      // 랜덤으로 5개의 관광지 선택
       const randomLocations = [];
       const availableSpots = [...this.touristSpots];
 
@@ -75,12 +82,17 @@ export default {
     },
     addMarker(position, markerInfo) {
       if (window.kakao && window.kakao.maps) {
+        // console.log("addMarker 들어오나요?");
+        // console.log("position:", position);
+        // console.log("makerInfo:", markerInfo);
+        
         const marker = new kakao.maps.Marker({
           map: this.map,
           position: position,
         });
 
         this.markers.push(marker);
+        // console.log("markers:", this.markers);
 
         // 마커에 마우스오버 이벤트를 등록합니다
         kakao.maps.event.addListener(marker, "mouseover", () => {
@@ -97,10 +109,10 @@ export default {
     },
     displayInfoWindow(position, markerInfo) {
       const iwContent = `<div style="padding:5px;">
-        <img src="${markerInfo.IMG_URL}" alt="${markerInfo.VISIT_AREA_NM}" style="max-width: 100%;">
-        <p>${markerInfo.VISIT_AREA_NM}</p>
-        <p>${markerInfo.ADDRESS}</p>
+        <img src="${markerInfo.IMG_URL}" alt="${markerInfo.VISIT_AREA_NM}">
+        <p style="font-size: smaller">${markerInfo.VISIT_AREA_NM}</p>
       </div>`;
+      // console.log("iwContent:", iwContent);
       const iwRemoveable = true;
 
       if (this.infowindow) {
@@ -125,9 +137,8 @@ export default {
         touristSpots.push({
           id: tourSpot.ITEM_ID,
           VISIT_AREA_NM: tourSpot.VISIT_AREA_NM,
-          ADDRESS: tourSpot.ADDRESS,
-          X_COORD: tourSpot.X_COORD,
-          Y_COORD: tourSpot.Y_COORD,
+          X_COORD: tourSpot.X_COORD,  // 경도
+          Y_COORD: tourSpot.Y_COORD,  // 위도
           IMG_URL: imgURL,
         });
       }
